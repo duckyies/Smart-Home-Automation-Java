@@ -17,8 +17,19 @@ public class LinkedList {
             this.next = null;
         }
     }
+
+    LinkedList() {
+        this.head = null;
+    }
+
+    LinkedList(int val) {
+        this.head = new Node(val);
+    }
+
+
 // methods to add for now
     // add to the front
+    // linkedlist from array
     // add to the end
     // add at a specific index
     // remove from the front
