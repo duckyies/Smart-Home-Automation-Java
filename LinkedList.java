@@ -41,8 +41,7 @@ public class LinkedList<T> {
     }
 
     public void addFront(T val) {
-        Node<T> newNode = new Node<T>(val);
-        newNode.next = head;
+        Node<T> newNode = new Node<T>(val, head);
         head = newNode;
     }
 
@@ -96,7 +95,7 @@ public class LinkedList<T> {
         System.out.println();
     }
 
-    //oopsies
+    //very useless im dumb
     public void extendFromArray(T[] arr) {
         for (T val : arr) {
             addEnd(val);
@@ -115,14 +114,55 @@ public class LinkedList<T> {
         return size;
     }
 
+    public void removeFront() {
+        if(head == null) {
+            throw new Error("List is empty!");
+        }
+
+        head = head.next;
+    }
+
+    public void removeEnd() {
+        if(head == null) {
+            throw new Error("List is empty!");
+        }
+
+        Node<T> temp = head;
+
+        while(temp.next.next != null) {
+            temp = temp.next;
+        }
+
+        temp.next = null;
+    }
+
+    public Boolean isEmpty() {
+        if(head == null) return true;
+        return false;
+    }
+
+    //use for other methods because easy and im lazy
+    public ArrayList<T> makeArrayList() {
+        ArrayList<T> List = new ArrayList<T>();
+        Node<T> temp = head;
+
+        while(temp.next != null) {
+            List.add(temp.val);
+            temp = temp.next;
+        }
+        List.add(temp.val);
+        return List;
+    }
+
+    public void clear() {
+        head = null;        
+    }
+
+    
 
 // methods to add for now
-    // remove from the front
-    // remove from the end
     // remove from a specific index
     // get the value at a specific index
-    // check if the list is empty
-    // clear the list
     // reverse the list
     // sort the list
     // check if the list contains a value
