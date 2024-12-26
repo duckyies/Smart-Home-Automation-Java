@@ -28,6 +28,18 @@ public class LinkedList<T> {
         this.head = new Node<T>(val);
     }
 
+    LinkedList(T[] arr) {
+        for (T val : arr) {
+            addEnd(val);
+        }
+    }
+
+    LinkedList(ArrayList<T> arr) {
+        for (T val : arr) {
+            addEnd(val);
+        }
+    }
+
     public void addFront(T val) {
         Node<T> newNode = new Node<T>(val);
         newNode.next = head;
@@ -84,14 +96,30 @@ public class LinkedList<T> {
         System.out.println();
     }
 
-    pu
+    //oopsies
+    public void extendFromArray(T[] arr) {
+        for (T val : arr) {
+            addEnd(val);
+        }
+    }
+
+    public int getSize() {
+        Node<T> temp = head;
+        int size = 0;
+
+        while (temp != null) {
+            size++;
+            temp = temp.next;
+        }
+
+        return size;
+    }
+
 
 // methods to add for now
-    // linkedlist from array
     // remove from the front
     // remove from the end
     // remove from a specific index
-    // get the size of the list
     // get the value at a specific index
     // check if the list is empty
     // clear the list
