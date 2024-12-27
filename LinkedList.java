@@ -5,7 +5,6 @@ import java.util.List;
 public class LinkedList<T extends Comparable<T>> {
 
     private Node<T> head;
-
     private class Node<U> {
 
         private U val;
@@ -46,6 +45,23 @@ public class LinkedList<T extends Comparable<T>> {
         for (T val : arr) {
             addEnd(val);
         }
+    }
+
+    public T peek() {
+        return head.val;
+    }   
+
+    public T peekEnd() {
+        if(head == null) {
+            throw new Error("List is empty!");
+        }
+
+        Node<T> temp = head;
+
+        while(temp.next != null) {
+            temp = temp.next;
+        }
+        return temp.val;
     }
 
     public void addFront(T val) {
@@ -122,6 +138,29 @@ public class LinkedList<T extends Comparable<T>> {
         return size;
     }
 
+    public void set(int index, T value) {
+        if(head == null) {
+            throw new Error("List is empty!");
+        }
+
+        if(index == 0) {
+            head.val = value;
+            return;
+        }
+        Node<T> tempNode = head;
+
+        while(index != 1) {
+            if(tempNode.next.next == null) {
+                throw new Error("Index out of bounds");
+            }
+            tempNode = tempNode.next;
+            index--;
+        }
+
+        tempNode.next.val = value;
+
+    }
+
     public void removeFront() {
         if(head == null) {
             throw new Error("List is empty!");
@@ -194,7 +233,7 @@ public class LinkedList<T extends Comparable<T>> {
         return -1;
     }
 
-    public T valueAt(int index) {
+    public T get(int index) {
         if(head == null) {
             throw new Error("List is empty!");
         }
@@ -265,3 +304,7 @@ public class LinkedList<T extends Comparable<T>> {
     }
 
 }
+
+
+// more to add :(
+    //remove

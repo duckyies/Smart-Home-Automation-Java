@@ -1,6 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
+/*Smart Home Automation Control
 
+a. Use Priority Queue for device management
+
+b. Implement Linked List for automation rules
+
+c. Energy-efficient device coordination */
 public class Main {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
@@ -30,7 +36,6 @@ public class Main {
         System.out.println(ll.makeArrayList());
 
         System.out.println(ll.contains(1000));
-
         ll.addIndex(0,1);
         ll.addIndex(69, 4);
         ll.addIndex(420,1);
@@ -41,6 +46,10 @@ public class Main {
         ll.reverse();
         ll.printList();
         ll.sort();
+        ll.printList();
+        System.out.println(ll.peek());
+        System.out.println(ll.peekEnd());
+        ll.set(0,1);
         ll.printList();
     }
 }
