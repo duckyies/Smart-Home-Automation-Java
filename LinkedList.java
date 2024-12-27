@@ -158,13 +158,59 @@ public class LinkedList<T> {
         head = null;        
     }
 
-    
+    public boolean contains(T value) {
+        Node<T> temp = head;
 
-// methods to add for now
+        while (temp != null) {
+            if (temp.val == value) {
+                return true;
+            }
+            temp = temp.next;
+        
+        }
+        return false;
+    }
+
+    public int indexOf(T value) {
+        Node<T> temp = head;
+        int index = 0;
+
+        while (temp != null) {
+            if (temp.val == value) {
+                return index;
+            }
+            index++;
+            temp = temp.next;
+        
+        }
+        return -1;
+    }
+
+    public T valueAt(int index) {
+        if(head == null) {
+            throw new Error("List is empty!");
+        }
+
+        if(index == 0) {
+            return head.val;
+        }
+
+        Node<T> tempNode = head.next;
+
+        while(index != 1) {
+
+            if(tempNode.next == null) {
+                throw new Error("Index out of bounds");
+            }
+            tempNode = tempNode.next;
+            index--;
+        }
+        
+        return tempNode.val;
+    }
+
+// methods left to add
     // remove from a specific index
-    // get the value at a specific index
     // reverse the list
     // sort the list
-    // check if the list contains a value
-    // get the index of a value
 }

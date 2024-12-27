@@ -20,7 +20,7 @@ public class Main {
         ll.addFront(10);
         ll.printList();
         System.out.println();
-        System.out.println();
+        System.out.println(ll.isEmpty());
 
         ll.addFront(34);
         ll.addFront(2);
@@ -28,5 +28,13 @@ public class Main {
         ll.addEnd(100);
         ll.printList();
         System.out.println(ll.makeArrayList());
+
+        System.out.println(ll.contains(1000));
+
+        ll.addIndex(0,1);
+        ll.addIndex(69, 4);
+        ll.addIndex(420,7);
+        ll.printList();
+        System.out.println(ll.valueAt(7));
     }
 }
