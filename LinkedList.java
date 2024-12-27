@@ -1,6 +1,8 @@
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
-public class LinkedList<T> {
+public class LinkedList<T extends Comparable<T>> {
 
     private Node<T> head;
 
@@ -34,6 +36,12 @@ public class LinkedList<T> {
         }
     }
 
+    LinkedList(List<T> arr) {
+        for (T val : arr) {
+            addEnd(val);
+        }
+    }
+ 
     LinkedList(ArrayList<T> arr) {
         for (T val : arr) {
             addEnd(val);
@@ -208,9 +216,52 @@ public class LinkedList<T> {
         
         return tempNode.val;
     }
+    
+    public void removeIndex(int index) {
 
-// methods left to add
-    // remove from a specific index
-    // reverse the list
-    // sort the list
+        if(index == 0) {
+            removeFront();
+            return;
+        }
+        Node<T> tempNode = head;
+
+        while(index != 1) {
+            if(tempNode.next.next == null) {
+                throw new Error("Index out of bounds");
+            }
+            index--;
+            tempNode = tempNode.next;
+        }
+
+        if (tempNode.next.next == null) {
+            removeEnd();
+            return;
+        }
+
+        tempNode.next = tempNode.next.next;
+
+    }
+
+    //not that efficient but im lazy and it works
+    public void reverse() {
+        ArrayList<T> tempArray = makeArrayList();
+        List<T> temp = tempArray.reversed();
+        clear();
+
+        for (T val: temp) {
+            addEnd(val);
+        }
+    }
+       
+    public void sort() {
+
+        ArrayList<T> tempArray = makeArrayList();
+        tempArray.sort(Comparator.naturalOrder());
+        clear();
+
+        for (T val: tempArray) {
+            addEnd(val);
+        }
+    }
+
 }

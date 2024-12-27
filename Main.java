@@ -24,7 +24,7 @@ public class Main {
 
         ll.addFront(34);
         ll.addFront(2);
-        ll.addFront("Y");
+        //ll.addFront("Y");
         ll.addEnd(100);
         ll.printList();
         System.out.println(ll.makeArrayList());
@@ -33,8 +33,14 @@ public class Main {
 
         ll.addIndex(0,1);
         ll.addIndex(69, 4);
-        ll.addIndex(420,7);
+        ll.addIndex(420,1);
         ll.printList();
-        System.out.println(ll.valueAt(7));
+        //System.out.println(ll.valueAt(7));
+        ll.removeIndex(1);
+        ll.printList();
+        ll.reverse();
+        ll.printList();
+        ll.sort();
+        ll.printList();
     }
 }
