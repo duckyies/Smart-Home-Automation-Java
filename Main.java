@@ -51,5 +51,11 @@ public class Main {
         System.out.println(ll.peekEnd());
         ll.set(0,1);
         ll.printList();
+
+        System.out.println();
+        System.out.println();
+
+        ll.removeIndex(ll.indexOf(69));
+        ll.printList();
     }
 }
