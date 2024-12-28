@@ -14,8 +14,23 @@ public class PriorityQueue<T> {
     }
 
     public void enqueue(Task<T> newTask) {
-        for(Task<T> task : queue) {
+
+        if(newTask.priority < queue.getFirst().priority) {
+            queue.addFirst(newTask);
+            return;
+        }
+
+        if(newTask.priority >= queue.getLast().priority) {
+            queue.addLast(newTask);
+            return;
+        }
+
+        for(int i = 0; i < queue.size(); i++) {
             
+            if(queue.get(i).priority > newTask.priority) {
+                queue.add(i - 1, newTask);
+                break;
+            }
         }
     }
 
