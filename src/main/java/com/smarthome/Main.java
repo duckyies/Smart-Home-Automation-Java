@@ -2,7 +2,6 @@ package com.smarthome;
 
 /**
  * Entry point for the Smart Home Automation project.
- *
  * Automates smart home devices using data structures
  *
  * @author Abhinav Variyath
@@ -17,6 +16,7 @@ import com.smarthome.PriorityQueue;
 import com.smarthome.Task;
 
 public class Main {
+  @SuppressWarnings("unchecked")
   public static void main(String[] args) {
     PriorityQueue test = new PriorityQueue();
     test.enqueue(new Task<>("a",1));

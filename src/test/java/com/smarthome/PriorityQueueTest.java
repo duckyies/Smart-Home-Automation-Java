@@ -1,5 +1,7 @@
 package com.smarthome;
 
+import com.smarthome.PriorityQueue;
+import com.smarthome.Task;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;

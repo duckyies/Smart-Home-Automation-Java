@@ -1,5 +1,6 @@
 package com.smarthome;
 
+import com.smarthome.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;

@@ -1,0 +1,47 @@
+-J-Duser.language=
+-J-Duser.country=
+@options
+@packages
+-encoding
+'UTF-8'
+-protected
+-source
+'21'
+-sourcepath
+'C:/Users/lenovo/Documents/GitHub/Smart-Home-Automation-Java/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2024. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/lenovo/Documents/GitHub/Smart-Home-Automation-Java/target/reports/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'Smart-home-Automation 1.0 API'
+-use
+-version
+-windowtitle
+'Smart-home-Automation 1.0 API'
+com.smarthome
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java = 1735477156738
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\allclasses-index.html = 1735483682690
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\allpackages-index.html = 1735483682695
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\copy.svg = 1735483682778
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\element-list = 1735483682608
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\help-doc.html = 1735483682771
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\index-all.html = 1735483682735
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\index.html = 1735483682742
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\link.svg = 1735483682781
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\member-search-index.js = 1735483682703
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\module-search-index.js = 1735483682698
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\overview-tree.html = 1735483682670
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\package-search-index.js = 1735483682699
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\script.js = 1735483682777
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\search-page.js = 1735483682787
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\search.html = 1735483682739
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\search.js = 1735483682784
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\stylesheet.css = 1735483682774
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\tag-search-index.js = 1735483682705
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\reports\apidocs\type-search-index.js = 1735483682701
