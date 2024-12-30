@@ -18,17 +18,6 @@ import com.smarthome.Task;
 public class Main {
   @SuppressWarnings("unchecked")
   public static void main(String[] args) {
-    PriorityQueue test = new PriorityQueue();
-    test.enqueue(new Task<>("a",1));
-    test.enqueue(new Task<>("a",3));
-    test.enqueue(new Task<>("a",5));
-    test.enqueue(new Task<>("a",7));
-    test.enqueue(new Task<>("a",2));
-    test.enqueue(new Task<>("a",4));
-    test.enqueue(new Task<>("b",1));
-    test.enqueue(new Task<>("b",2));
-    test.enqueue(new Task<>("b",3));
-    test.enqueue(new Task<>("b",7));
-    test.print();
+
   }
 }
