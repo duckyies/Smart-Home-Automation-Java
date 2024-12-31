@@ -4,15 +4,17 @@ public class Device {
 
     public String deviceName;
     public String deviceType;
+    public String deviceGroup;
     private Boolean isTurnedOn = false;
     private int batteryLevel;
     private int powerConsumption;
     private int batteryConsumption;
     private int batteryCapacity;
 
-    Device(String deviceName, String deviceType, Boolean isTurnedOn, int batteryLevel, int powerConsumption, int batteryConsumption, int batteryCapacity) {
+    Device(String deviceName, String deviceType, String deviceGroup, Boolean isTurnedOn, int batteryLevel, int powerConsumption, int batteryConsumption, int batteryCapacity) {
         this.deviceName = deviceName;
         this.deviceType = deviceType;
+        this.deviceGroup = deviceGroup;
         this.isTurnedOn = isTurnedOn;
         this.batteryLevel = batteryLevel;
         this.powerConsumption = powerConsumption;

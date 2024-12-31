@@ -23,14 +23,14 @@ public class Main {
 
 
     private HashMap<String, DeviceGroup> groupMap;
-    private HashMap<String, Integer> typeMap;
+    private HashMap<String, DeviceType> typeMap;
     private ArrayList<String> deviceGroupList;
     private ArrayList<String> deviceTypeList;
 
     public void initialize() {
 
         deviceGroupList = new ArrayList<>(List.of("Lights", "Fans", "Alarms", "Cameras", "AirConditioners", "Heaters", "Appliances", "Gardening", "Others"));
-        deviceTypeList = new ArrayList<>(List.of("Decorative", "Necessary", "Health", "Entertainment", "Security"));
+        deviceTypeList = new ArrayList<>(List.of("Decorative", "Necessary", "Health", "Entertainment", "Security", "Others"));
 
         groupMap = new HashMap<>();
         typeMap = new HashMap<>();
@@ -39,16 +39,24 @@ public class Main {
             groupMap.put(deviceGroup, new DeviceGroup(deviceGroup));
         }
         for (String deviceType : deviceTypeList) {
-            typeMap.put(deviceType, 0);
+            typeMap.put(deviceType, new DeviceType(deviceType));
         }
 
-
-        .
     }
 
-    public Device addDevice(String deviceName) {
+    public void  addToGroupAndType(Device device) {
+        groupMap.get(device.deviceGroup).devices.add(device);
+        typeMap.get(device.deviceType).devices.add(device);
+    }
 
+    public Device addDevice(String deviceName, String deviceType, String deviceGroup) {
+        return new Device(deviceName, deviceType, deviceGroup, false, 0, 0, 0, 0);
     };
+
+    public Device addDevice(String deviceName, String deviceType, String deviceGroup, boolean isTurnedOn, int batteryLevel, int powerComsumption, int batteryConsumption, int batteryCapacity) {
+        return new Device(deviceName, deviceType, deviceGroup, isTurnedOn, batteryLevel, powerComsumption, batteryConsumption, batteryCapacity);
+    }
+
 
     public static void main(String[] args) {
 
