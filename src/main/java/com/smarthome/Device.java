@@ -59,6 +59,6 @@ public class Device {
         return batteryCapacity;
     }
 
-    
+
 
 }
