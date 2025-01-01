@@ -45,16 +45,16 @@ public class Main {
     }
 
     public void  addToGroupAndType(Device device) {
-        groupMap.get(device.deviceGroup).devices.add(device);
-        typeMap.get(device.deviceType).devices.add(device);
+        groupMap.get(device.deviceGroup).addDevice(device);
+        typeMap.get(device.deviceType).addDevice(device);
     }
 
     public Device addDevice(String deviceName, String deviceType, String deviceGroup) {
         return new Device(deviceName, deviceType, deviceGroup, false, 0, 0, 0, 0);
     };
 
-    public Device addDevice(String deviceName, String deviceType, String deviceGroup, boolean isTurnedOn, int batteryLevel, int powerComsumption, int batteryConsumption, int batteryCapacity) {
-        return new Device(deviceName, deviceType, deviceGroup, isTurnedOn, batteryLevel, powerComsumption, batteryConsumption, batteryCapacity);
+    public Device addDevice(String deviceName, String deviceType, String deviceGroup, boolean isTurnedOn, int batteryLevel, int powerConsumption, int batteryConsumption, int batteryCapacity) {
+        return new Device(deviceName, deviceType, deviceGroup, isTurnedOn, batteryLevel, powerConsumption, batteryConsumption, batteryCapacity);
     }
 
 
