@@ -27,6 +27,8 @@ public class Main {
     private ArrayList<String> deviceGroupList;
     private ArrayList<String> deviceTypeList;
 
+    private int threshold =
+
     public void initialize() {
 
         deviceGroupList = new ArrayList<>(List.of("Lights", "Fans", "Alarms", "Cameras", "AirConditioners", "Heaters", "Appliances", "Gardening", "Others"));
@@ -41,7 +43,6 @@ public class Main {
         for (String deviceType : deviceTypeList) {
             typeMap.put(deviceType, new DeviceType(deviceType));
         }
-
     }
 
     public void  addToGroupAndType(Device device) {
@@ -49,13 +50,14 @@ public class Main {
         typeMap.get(device.deviceType).addDevice(device);
     }
 
-    public Device addDevice(String deviceName, String deviceType, String deviceGroup) {
-        return new Device(deviceName, deviceType, deviceGroup, false, 0, 0, 0, 0);
+    public Device createDevice(String deviceName, String deviceType, String deviceGroup, String location) {
+        return new Device(deviceName, deviceType, deviceGroup, location, false, 0, 0, 0, 0);
     };
 
-    public Device addDevice(String deviceName, String deviceType, String deviceGroup, boolean isTurnedOn, int batteryLevel, int powerConsumption, int batteryConsumption, int batteryCapacity) {
-        return new Device(deviceName, deviceType, deviceGroup, isTurnedOn, batteryLevel, powerConsumption, batteryConsumption, batteryCapacity);
+    public Device createDevice(String deviceName, String deviceType, String deviceGroup, String location, boolean isTurnedOn, int batteryLevel, int powerConsumption, int batteryConsumption, int batteryCapacity) {
+        return new Device(deviceName, deviceType, deviceGroup, location, isTurnedOn, batteryLevel, powerConsumption, batteryConsumption, batteryCapacity);
     }
+
 
 
     public static void main(String[] args) {

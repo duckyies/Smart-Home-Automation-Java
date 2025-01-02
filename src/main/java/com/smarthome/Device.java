@@ -2,8 +2,12 @@ package com.smarthome;
 
 public class Device {
 
+    static int deviceNum = 0;
+
     public String deviceName;
     public String deviceType;
+    public String location;
+    private int deviceID;
     public String deviceGroup;
     private Boolean isTurnedOn = false;
     private int batteryLevel;
@@ -11,10 +15,12 @@ public class Device {
     private int batteryConsumption;
     private int batteryCapacity;
 
-    Device(String deviceName, String deviceType, String deviceGroup, Boolean isTurnedOn, int batteryLevel, int powerConsumption, int batteryConsumption, int batteryCapacity) {
+    Device(String deviceName, String deviceType, String deviceGroup, String location, Boolean isTurnedOn, int batteryLevel, int powerConsumption, int batteryConsumption, int batteryCapacity) {
         this.deviceName = deviceName;
+        this.deviceID = deviceNum++;
         this.deviceType = deviceType;
         this.deviceGroup = deviceGroup;
+        this.location = location;
         this.isTurnedOn = isTurnedOn;
         this.batteryLevel = batteryLevel;
         this.powerConsumption = powerConsumption;
@@ -60,7 +66,5 @@ public class Device {
     public int getBatteryCapacity() {
         return batteryCapacity;
     }
-
-
 
 }
