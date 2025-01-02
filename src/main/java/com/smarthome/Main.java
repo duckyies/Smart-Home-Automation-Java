@@ -1,5 +1,5 @@
 package com.smarthome;
-
+import java.util.concurrent.*;
 /**
  * Entry point for the Smart Home Automation project.
  * Automates smart home devices using data structures
@@ -27,7 +27,7 @@ public class Main {
     private ArrayList<String> deviceGroupList;
     private ArrayList<String> deviceTypeList;
 
-    private int threshold =
+    private int threshold = 2;
 
     public void initialize() {
 
@@ -45,6 +45,15 @@ public class Main {
         }
     }
 
+    private void startTicks() {
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.scheduleAtFixedRate(this::tick, 0, 1, TimeUnit.SECONDS);
+    }
+
+    private void tick() {
+        
+    }
+
     public void  addToGroupAndType(Device device) {
         groupMap.get(device.deviceGroup).addDevice(device);
         typeMap.get(device.deviceType).addDevice(device);
@@ -57,8 +66,6 @@ public class Main {
     public Device createDevice(String deviceName, String deviceType, String deviceGroup, String location, boolean isTurnedOn, int batteryLevel, int powerConsumption, int batteryConsumption, int batteryCapacity) {
         return new Device(deviceName, deviceType, deviceGroup, location, isTurnedOn, batteryLevel, powerConsumption, batteryConsumption, batteryCapacity);
     }
-
-
 
     public static void main(String[] args) {
 
