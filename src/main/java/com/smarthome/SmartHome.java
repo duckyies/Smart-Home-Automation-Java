@@ -54,8 +54,8 @@ public class SmartHome {
     }
 
     public void  addToGroupAndType(Device device) {
-        groupMap.get(device.deviceGroup).addDevice(device);
-        typeMap.get(device.deviceType).addDevice(device);
+        groupMap.get(device.getDeviceGroup()).addDevice(device);
+        typeMap.get(device.getDeviceType()).addDevice(device);
     }
 
     public Device createDevice(String deviceName, String deviceType, String deviceGroup, String location) {
