@@ -15,14 +15,17 @@ import java.util.concurrent.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
+import java.util.logging.*;
 
 public class SmartHome {
 
 
     private ConcurrentHashMap<String, DeviceGroup> groupMap;
     private ConcurrentHashMap<String, DeviceType> typeMap;
-    private ArrayList<String> deviceLocationList;
+    private ConcurrentHashMap<String, DeviceLocation> locationMap;
+    private ArrayList<Device> poweredOnDevices;
+    private ArrayList<Device> poweredOffDevices;
+
 
     private int threshold = 2;
 
@@ -42,6 +45,19 @@ public class SmartHome {
         }
 
         startTick();
+    }
+
+    private void initializeLogger() {
+        Logger logger = Logger.getLogger(SmartHome.class.getName());
+        FileHandler logFileHandler;
+        try {
+            logFileHandler = new FileHandler("SmartHome.log");
+            logger.addHandler(logFileHandler);
+            SimpleFormatter formatter = new SimpleFormatter();
+            logFileHandler.setFormatter(formatter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void startTick() {
@@ -70,6 +86,10 @@ public class SmartHome {
         //so dont forget you made this
         // you planned to add stuff like adding power consumtion etc in every tick etc etc here
         // all the calculations and stuff yk? dont forget
+    }
+
+    public double calculateCurrentPowerUsage() {
+        return 0.0;
     }
 
     //another function i thought of but immediately forgot something to do with tick

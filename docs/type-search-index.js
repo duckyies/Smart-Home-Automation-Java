@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.smarthome","l":"LinkedList"},{"p":"com.smarthome","l":"Main"},{"p":"com.smarthome","l":"PriorityQueue"},{"p":"com.smarthome","l":"Task"}];updateSearchResults();
