@@ -4,18 +4,20 @@ public class Device {
 
     static int deviceNum = 0;
 
+    private int deviceID;
     public String deviceName;
     public String deviceType;
     public String location;
-    private int deviceID;
     public String deviceGroup;
     private Boolean isTurnedOn = false;
-    private int batteryLevel;
-    private int powerConsumption;
-    private int batteryConsumption;
-    private int batteryCapacity;
 
-    Device(String deviceName, String deviceType, String deviceGroup, String location, Boolean isTurnedOn, int batteryLevel, int powerConsumption, int batteryConsumption, int batteryCapacity) {
+    private int batteryLevel;
+    private int maxBatteryCapacity;
+    private int powerConsumption;
+    private boolean isOnBattery;
+    private int powerLevel;
+
+    Device(String deviceName, String deviceType, String deviceGroup, String location, Boolean isTurnedOn, int batteryLevel, int powerConsumption, int maxBatteryCapacity, int powerLevel) {
         this.deviceName = deviceName;
         this.deviceID = deviceNum++;
         this.deviceType = deviceType;
@@ -24,8 +26,10 @@ public class Device {
         this.isTurnedOn = isTurnedOn;
         this.batteryLevel = batteryLevel;
         this.powerConsumption = powerConsumption;
-        this.batteryConsumption = batteryConsumption;
-        this.batteryCapacity = batteryCapacity;
+        this.maxBatteryCapacity = maxBatteryCapacity;
+
+        this.isOnBattery = this.maxBatteryCapacity > 0;
+        this.powerLevel = powerLevel;
     };
 
     public Boolean isTurnedOn() {
@@ -52,19 +56,11 @@ public class Device {
         this.powerConsumption = powerConsumption;
     }
 
-    public int getBatteryConsumption() {
-        return batteryConsumption;
-    }
-
-    public void setBatteryConsumption(int batteryConsumption) {
-        this.batteryConsumption = batteryConsumption;
-    }
-
     public void setBatteryCapacity(int batteryCapacity) {
-        this.batteryCapacity = batteryCapacity;
+        this.maxBatteryCapacity = batteryCapacity;
     }
     public int getBatteryCapacity() {
-        return batteryCapacity;
+        return maxBatteryCapacity;
     }
 
 }
