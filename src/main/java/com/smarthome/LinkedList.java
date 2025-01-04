@@ -100,8 +100,14 @@ public class LinkedList<T extends Comparable<T>> {
      *
      * @param val the value to add to the front of the list.
      */
-    synchronized public void addFront(T val) {
-        head = new Node<>(val, head);
+    public void addFront(T val) {
+        lock.lock();
+        try {
+            head = new Node<>(val, head);
+        }
+        finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -109,9 +115,15 @@ public class LinkedList<T extends Comparable<T>> {
      *
      * @return the value of the first element.
      */
-    public T peek() {
-        return head.val;
-    }
+        public T peek() {
+            lock.lock();
+            try {
+                return head.val;
+            }
+            finally {
+                lock.unlock();
+            }
+        }
 
     /**
      * Retrieves and removes the value of the first element in the list.
@@ -120,12 +132,17 @@ public class LinkedList<T extends Comparable<T>> {
      */
     public T peekAndRemove() {
         T val;
-        synchronized (this) {
+        lock.lock();
+        try {
             val = head.val;
             head = head.next;
         }
+        finally {
+            lock.unlock();
+        }
         return val;
     }
+
 
     /**
      * Retrieves and removes the value of the last element in the list.
@@ -169,13 +186,17 @@ public class LinkedList<T extends Comparable<T>> {
 
         Node<T> temp = head;
 
-        synchronized (this) {
+        lock.lock();
+        try{
             while (temp.next != null) {
                 temp = temp.next;
             }
-        }
 
-        return temp.val;
+            return temp.val;
+        }
+        finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -246,11 +267,17 @@ public class LinkedList<T extends Comparable<T>> {
     public void printList() {
         Node<T> temp = head;
 
-        while (temp != null) {
-            System.out.print(temp.val + " ");
-            temp = temp.next;
+        lock.lock();
+        try {
+            while (temp != null) {
+                System.out.print(temp.val + " ");
+                temp = temp.next;
+            }
         }
-        System.out.println();
+        finally {
+            System.out.println();
+            lock.unlock();
+        }
     }
 
     /**
@@ -259,8 +286,14 @@ public class LinkedList<T extends Comparable<T>> {
      * @param arr the array of elements to add.
      */
     public void extendFromArray(T[] arr) {
-        for (T val : arr) {
-            addEnd(val);
+        lock.lock();
+        try {
+            for (T val : arr) {
+                addEnd(val);
+            }
+        }
+        finally {
+            lock.unlock();
         }
     }
 
@@ -273,12 +306,18 @@ public class LinkedList<T extends Comparable<T>> {
         Node<T> temp = head;
         int size = 0;
 
-        while (temp != null) {
-            size++;
-            temp = temp.next;
-        }
+        lock.lock();
+        try {
+            while (temp != null) {
+                size++;
+                temp = temp.next;
+            }
 
-        return size;
+            return size;
+        }
+        finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -322,12 +361,16 @@ public class LinkedList<T extends Comparable<T>> {
      *
      * @throws EmptyListAccessException if the list is empty.
      */
-    synchronized public void removeFront() {
+    public void removeFront() {
         if (head == null) {
             throw new EmptyListAccessException("List is empty!");
         }
-
-        head = head.next;
+        lock.lock();
+        try {
+            head = head.next;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -372,18 +415,30 @@ public class LinkedList<T extends Comparable<T>> {
         ArrayList<T> list = new ArrayList<>();
         Node<T> temp = head;
 
-        while (temp != null) {
-            list.add(temp.val);
-            temp = temp.next;
+        lock.lock();
+        try {
+            while (temp != null) {
+                list.add(temp.val);
+                temp = temp.next;
+            }
+            return list;
         }
-        return list;
+        finally {
+            lock.unlock();
+        }
     }
 
     /**
      * Removes all elements from the listy.
  */
     public void clear() {
-        head = null;
+        lock.lock();
+        try {
+            head = null;
+        }
+        finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -395,14 +450,20 @@ public class LinkedList<T extends Comparable<T>> {
     public boolean contains(T value) {
         Node<T> temp = head;
 
-        while (temp != null) {
-            if (temp.val.equals(value)) {
-                return true;
-            }
-            temp = temp.next;
+        lock.lock();
+        try {
+            while (temp != null) {
+                if (temp.val.equals(value)) {
+                    return true;
+                }
+                temp = temp.next;
 
+            }
+            return false;
         }
-        return false;
+        finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -415,15 +476,21 @@ public class LinkedList<T extends Comparable<T>> {
         Node<T> temp = head;
         int index = 0;
 
-        while (temp != null) {
-            if (temp.val.equals(value)) {
-                return index;
-            }
-            index++;
-            temp = temp.next;
+        lock.lock();
+        try {
+            while (temp != null) {
+                if (temp.val.equals(value)) {
+                    return index;
+                }
+                index++;
+                temp = temp.next;
 
+            }
+            return -1;
         }
-        return -1;
+        finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -446,15 +513,21 @@ public class LinkedList<T extends Comparable<T>> {
         Node<T> tempNode = head;
         int currentIndex = 0;
 
-        while (tempNode != null) {
-            if (currentIndex == index) {
-                return tempNode.val;
+        lock.lock();
+        try {
+            while (tempNode != null) {
+                if (currentIndex == index) {
+                    return tempNode.val;
+                }
+                tempNode = tempNode.next;
+                currentIndex++;
             }
-            tempNode = tempNode.next;
-            currentIndex++;
-        }
 
-        throw new IndexOutOfBoundsException("Index out of bounds");
+            throw new IndexOutOfBoundsException("Index out of bounds");
+        }
+        finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -493,7 +566,8 @@ public class LinkedList<T extends Comparable<T>> {
     /**
      * Reverses the order of the elements in the list.
      */
-    synchronized public void reverse() {
+    //these two should technically work synchronously but idk
+    public void reverse() {
         ArrayList<T> tempArray = makeArrayList();
         List<T> temp = tempArray.reversed();
         clear();
@@ -506,7 +580,7 @@ public class LinkedList<T extends Comparable<T>> {
     /**
      * Sorts the elements of the list in their natural ascending order.
      */
-    synchronized public void sort() {
+    public void sort() {
         ArrayList<T> tempArray = makeArrayList();
         tempArray.sort(Comparator.naturalOrder());
         clear();
