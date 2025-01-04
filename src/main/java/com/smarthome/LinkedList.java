@@ -14,6 +14,7 @@ public class LinkedList<T extends Comparable<T>> {
     private final ReentrantLock lock = new ReentrantLock();
     private Node<T> head;
 
+
     /**
      * A node in the linked list. Each node contains a value and a reference to the next node.
      *
@@ -135,6 +136,9 @@ public class LinkedList<T extends Comparable<T>> {
      */
     public T peekAndRemove() {
         T val;
+        if (head == null) {
+            return null;
+        }
         lock.lock();
         try {
             val = head.val;
@@ -153,6 +157,9 @@ public class LinkedList<T extends Comparable<T>> {
      * @return the value of the last element.
      */
     public T peekEndAndRemove() {
+        if (head == null) {
+            return null;
+        }
         Node<T> temp = head;
         Node<T> prev = null;
         T val;

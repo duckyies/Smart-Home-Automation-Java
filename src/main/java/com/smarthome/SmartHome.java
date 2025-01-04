@@ -28,6 +28,9 @@ public class SmartHome {
     private Logger logger;
 
     private LinkedList<LogTask> loggingList;
+    private LinkedList<Rule> ruleList;
+
+    z
 
     private int threshold = 2;
 
@@ -67,6 +70,11 @@ public class SmartHome {
     }
 
     private void log() {
+        LogTask task = loggingList.peekAndRemove();
+        while(task != null) {
+            logger.log(task.getLogLevel(), task.getMessage());
+            task = loggingList.peekAndRemove();
+        }
 
     }
 
