@@ -3,7 +3,7 @@ package com.smarthome;
 /**
  * The Rule class represents a set of actions to be performed on smart home devices.
  */
-public class Rule {
+public class Rule implements Comparable<Rule> {
 
     // ID of the device to which the rule applies
     private int deviceId;
@@ -297,5 +297,10 @@ public class Rule {
      */
     public void setLocationName(String locationName) {
         this.locationName = locationName;
+    }
+
+    @Override
+    public int compareTo(Rule o) {
+        return 0;
     }
 }
