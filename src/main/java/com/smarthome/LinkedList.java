@@ -116,6 +116,9 @@ public class LinkedList<T extends Comparable<T>> {
      * @return the value of the first element.
      */
         public T peek() {
+            if(head == null) {
+                return null;
+            }
             lock.lock();
             try {
                 return head.val;

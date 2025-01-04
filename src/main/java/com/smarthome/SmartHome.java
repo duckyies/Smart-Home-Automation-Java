@@ -19,13 +19,15 @@ import java.util.logging.*;
 
 public class SmartHome {
 
-
     private ConcurrentHashMap<String, DeviceGroup> groupMap;
     private ConcurrentHashMap<String, DeviceType> typeMap;
     private ConcurrentHashMap<String, DeviceLocation> locationMap;
     private ArrayList<Device> poweredOnDevices;
     private ArrayList<Device> poweredOffDevices;
     private ScheduledExecutorService scheduler;
+    private Logger logger;
+
+    private LinkedList<LogTask> loggingList;
 
     private int threshold = 2;
 
@@ -48,7 +50,7 @@ public class SmartHome {
     }
 
     private void initializeLogger() {
-        Logger logger = Logger.getLogger(SmartHome.class.getName());
+        logger = Logger.getLogger(SmartHome.class.getName());
         FileHandler logFileHandler;
         try {
             logFileHandler = new FileHandler("SmartHome.log");
@@ -60,14 +62,26 @@ public class SmartHome {
         }
     }
 
-    private void startTick() {
-        scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(this::tick, 0, 1, TimeUnit.SECONDS);
-        scheduler.shutdown();
+    private void startLogging() {
+        scheduler.scheduleAtFixedRate(this::log, 0, 2, TimeUnit.SECONDS);
     }
 
-    private void  stopTick() {
+    private void log() {
 
+    }
+
+    private void initializeScheduler() {
+        scheduler = Executors.newScheduledThreadPool(2);
+    }
+
+    private void startTick() {
+        scheduler.scheduleAtFixedRate(this::tick, 0, 1, TimeUnit.SECONDS);
+    }
+
+    private void stopTick() {
+        if(scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdown();
+        }
     }
 
     private void tick() {

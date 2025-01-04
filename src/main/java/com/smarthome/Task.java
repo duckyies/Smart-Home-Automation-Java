@@ -63,6 +63,10 @@ public class Task<T> {
     public int getPriority() {
         return priority;
     }
+
+    public String toString() {
+        return "Task: " + task + ", Priority: " + priority;
+    }
 }
 
 /**
