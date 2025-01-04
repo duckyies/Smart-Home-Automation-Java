@@ -25,7 +25,7 @@ public class SmartHome {
     private ConcurrentHashMap<String, DeviceLocation> locationMap;
     private ArrayList<Device> poweredOnDevices;
     private ArrayList<Device> poweredOffDevices;
-
+    private ScheduledExecutorService scheduler;
 
     private int threshold = 2;
 
@@ -61,8 +61,13 @@ public class SmartHome {
     }
 
     private void startTick() {
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(this::tick, 0, 1, TimeUnit.SECONDS);
+        scheduler.shutdown();
+    }
+
+    private void  stopTick() {
+
     }
 
     private void tick() {
@@ -84,7 +89,7 @@ public class SmartHome {
 
     public void tickTask() {
         //so dont forget you made this
-        // you planned to add stuff like adding power consumtion etc in every tick etc etc here
+        // you planned to add stuff like adding power consumption etc in every tick etc etc here
         // all the calculations and stuff yk? dont forget
     }
 

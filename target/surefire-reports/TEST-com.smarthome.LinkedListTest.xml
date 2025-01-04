@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.smarthome.LinkedListTest" time="0.033" tests="16" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.smarthome.LinkedListTest" time="0.054" tests="16" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
-    <property name="java.class.path" value="C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\test-classes;C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\classes;C:\Users\lenovo\.m2\repository\junit\junit\4.11\junit-4.11.jar;C:\Users\lenovo\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;"/>
+    <property name="java.class.path" value="C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\test-classes;C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\classes;C:\Users\lenovo\.m2\repository\junit\junit\4.11\junit-4.11.jar;C:\Users\lenovo\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;C:\Users\lenovo\.m2\repository\org\jetbrains\annotations\26.0.1\annotations-26.0.1.jar;"/>
     <property name="java.vm.vendor" value="Oracle Corporation"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="user.variant" value=""/>
@@ -15,9 +15,9 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="IN"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-21\bin"/>
-    <property name="sun.java.command" value="C:\Users\lenovo\AppData\Local\Temp\surefire12410889031630427019\surefirebooter2196229219314719916.jar C:\Users\lenovo\AppData\Local\Temp\surefire12410889031630427019 2024-12-30T19-21-22_571-jvmRun1 surefire15260969664042407064tmp surefire_017103697636515932581tmp"/>
+    <property name="sun.java.command" value="C:\Users\lenovo\AppData\Local\Temp\surefire15958667180920278576\surefirebooter7680807899211014454.jar C:\Users\lenovo\AppData\Local\Temp\surefire15958667180920278576 2025-01-04T11-44-04_653-jvmRun1 surefire14005858108508067671tmp surefire_014569677904055977718tmp"/>
     <property name="jdk.debug" value="release"/>
-    <property name="surefire.test.class.path" value="C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\test-classes;C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\classes;C:\Users\lenovo\.m2\repository\junit\junit\4.11\junit-4.11.jar;C:\Users\lenovo\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;"/>
+    <property name="surefire.test.class.path" value="C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\test-classes;C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\target\classes;C:\Users\lenovo\.m2\repository\junit\junit\4.11\junit-4.11.jar;C:\Users\lenovo\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;C:\Users\lenovo\.m2\repository\org\jetbrains\annotations\26.0.1\annotations-26.0.1.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\lenovo"/>
     <property name="user.language" value="en"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\lenovo\AppData\Local\Temp\surefire12410889031630427019\surefirebooter2196229219314719916.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\lenovo\AppData\Local\Temp\surefire15958667180920278576\surefirebooter7680807899211014454.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.5+9-LTS-239"/>
@@ -58,18 +58,18 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testMakeArrayList" classname="com.smarthome.LinkedListTest" time="0.003"/>
+  <testcase name="testMakeArrayList" classname="com.smarthome.LinkedListTest" time="0.005"/>
   <testcase name="testGet" classname="com.smarthome.LinkedListTest" time="0"/>
   <testcase name="testClear" classname="com.smarthome.LinkedListTest" time="0"/>
   <testcase name="testPeek" classname="com.smarthome.LinkedListTest" time="0"/>
   <testcase name="testSort" classname="com.smarthome.LinkedListTest" time="0"/>
   <testcase name="testPeekEnd" classname="com.smarthome.LinkedListTest" time="0"/>
   <testcase name="testRemoveFront" classname="com.smarthome.LinkedListTest" time="0"/>
-  <testcase name="testRemoveIndex" classname="com.smarthome.LinkedListTest" time="0"/>
+  <testcase name="testRemoveIndex" classname="com.smarthome.LinkedListTest" time="0.001"/>
   <testcase name="testAddFront" classname="com.smarthome.LinkedListTest" time="0"/>
-  <testcase name="testAddIndex" classname="com.smarthome.LinkedListTest" time="0.001"/>
+  <testcase name="testAddIndex" classname="com.smarthome.LinkedListTest" time="0"/>
   <testcase name="testContains" classname="com.smarthome.LinkedListTest" time="0"/>
-  <testcase name="testReverse" classname="com.smarthome.LinkedListTest" time="0.001"/>
+  <testcase name="testReverse" classname="com.smarthome.LinkedListTest" time="0"/>
   <testcase name="testAddEnd" classname="com.smarthome.LinkedListTest" time="0"/>
   <testcase name="testIndexOf" classname="com.smarthome.LinkedListTest" time="0"/>
   <testcase name="testIsEmpty" classname="com.smarthome.LinkedListTest" time="0"/>

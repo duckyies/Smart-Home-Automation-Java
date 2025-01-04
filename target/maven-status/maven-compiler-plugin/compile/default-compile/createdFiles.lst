@@ -1,6 +1,7 @@
 com\smarthome\TaskComparator.class
 com\smarthome\LinkedList$Node.class
 com\smarthome\PriorityQueue.class
+com\smarthome\SmartHome.class
 com\smarthome\Task.class
-com\smarthome\Main.class
+com\smarthome\Rule.class
 com\smarthome\LinkedList.class

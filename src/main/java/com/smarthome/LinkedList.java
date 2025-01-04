@@ -2,6 +2,8 @@ package com.smarthome;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
+
 
 /**
  * A linked list implementation.
@@ -9,7 +11,7 @@ import java.util.List;
  * @param <T> the type of elements stored in the linked list.
  */
 public class LinkedList<T extends Comparable<T>> {
-
+    private final ReentrantLock lock = new ReentrantLock();
     private Node<T> head;
 
     /**
@@ -94,6 +96,15 @@ public class LinkedList<T extends Comparable<T>> {
     }
 
     /**
+     * Adds a new element to the beginning of the list.
+     *
+     * @param val the value to add to the front of the list.
+     */
+    synchronized public void addFront(T val) {
+        head = new Node<>(val, head);
+    }
+
+    /**
      * Retrieves the value of the first element in the list without removing it.
      *
      * @return the value of the first element.
@@ -103,32 +114,68 @@ public class LinkedList<T extends Comparable<T>> {
     }
 
     /**
+     * Retrieves and removes the value of the first element in the list.
+     *
+     * @return the value of the first element.
+     */
+    public T peekAndRemove() {
+        T val;
+        synchronized (this) {
+            val = head.val;
+            head = head.next;
+        }
+        return val;
+    }
+
+    /**
+     * Retrieves and removes the value of the last element in the list.
+     *
+     * @return the value of the last element.
+     */
+    public T peekEndAndRemove() {
+        Node<T> temp = head;
+        Node<T> prev = null;
+        T val;
+        lock.lock();
+        try {
+            while (temp.next != null) {
+                prev = temp;
+                temp = temp.next;
+            }
+            val = temp.val;
+            if (prev == null) {
+                head = null;
+            } else {
+                prev.next = null;
+            }
+        } finally {
+            lock.unlock();
+
+        }
+        return val;
+    }
+
+
+    /**
      * Retrieves the value of the last element in the list without removing it.
      *
      * @return the value of the last element.
-     * @throws Error if the list is empty.
+     * @throws EmptyListAccessException if the list is empty.
      */
     public T peekEnd() {
         if (head == null) {
-            throw new Error("List is empty!");
+            throw new EmptyListAccessException("List is empty!");
         }
 
         Node<T> temp = head;
 
-        while (temp.next != null) {
-            temp = temp.next;
+        synchronized (this) {
+            while (temp.next != null) {
+                temp = temp.next;
+            }
         }
-        return temp.val;
-    }
 
-    /**
-     * Adds a new element to the beginning of the list.
-     *
-     * @param val the value to add to the front of the list.
-     */
-    public void addFront(T val) {
-        Node<T> newNode = new Node<>(val, head);
-        head = newNode;
+        return temp.val;
     }
 
     /**
@@ -138,16 +185,21 @@ public class LinkedList<T extends Comparable<T>> {
      */
     public void addEnd(T val) {
         Node<T> newNode = new Node<>(val);
-
         newNode.next = null;
-        if (head == null) {
-            head = newNode;
-        } else {
-            Node<T> temp = head;
-            while (temp.next != null) {
-                temp = temp.next;
+
+        lock.lock();
+        try {
+            if (head == null) {
+                head = newNode;
+            } else {
+                Node<T> temp = head;
+                while (temp.next != null) {
+                    temp = temp.next;
+                }
+                temp.next = newNode;
             }
-            temp.next = newNode;
+        } finally {
+            lock.unlock();
         }
     }
 
@@ -156,7 +208,7 @@ public class LinkedList<T extends Comparable<T>> {
      *
      * @param val   the value to add to the list.
      * @param index the index at which to insert the new element.
-     * @throws Error if the index is out of bounds.
+     * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
     public void addIndex(T val, int index) {
         Node<T> newNode = new Node<>(val);
@@ -167,18 +219,25 @@ public class LinkedList<T extends Comparable<T>> {
         }
         Node<T> tempNode = head;
 
-        while (index != 1) {
-            if (tempNode.next == null) {
-                throw new Error("Index out of bounds");
+        lock.lock();
+        try {
+            if (tempNode == null) {
+                throw new IndexOutOfBoundsException("Index out of bounds");
             }
-            tempNode = tempNode.next;
-            index--;
+            while (index != 1) {
+                if (tempNode.next == null) {
+                    throw new IndexOutOfBoundsException("Index out of bounds");
+                }
+                tempNode = tempNode.next;
+                index--;
+            }
+
+            Node<T> temp = tempNode.next;
+            tempNode.next = newNode;
+            newNode.next = temp;
+        } finally {
+            lock.unlock();
         }
-
-        Node<T> temp = tempNode.next;
-        tempNode.next = newNode;
-        newNode.next = temp;
-
     }
 
     /**
@@ -227,11 +286,12 @@ public class LinkedList<T extends Comparable<T>> {
      *
      * @param index the index of the element to update.
      * @param value the new value for the element.
-     * @throws Error if the list is empty or the index is out of bounds.
+     * @throws EmptyListAccessException if the list is empty.
+     * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
     public void set(int index, T value) {
         if (head == null) {
-            throw new Error("List is empty!");
+            throw new EmptyListAccessException("List is empty!");
         }
 
         if (index == 0) {
@@ -240,26 +300,31 @@ public class LinkedList<T extends Comparable<T>> {
         }
         Node<T> tempNode = head;
 
-        while (index != 1) {
-            if (tempNode.next.next == null) {
-                throw new Error("Index out of bounds");
+        lock.lock();
+        try {
+            while (index != 1) {
+                if (tempNode.next.next == null) {
+                    throw new IndexOutOfBoundsException("Index out of bounds");
+                }
+                tempNode = tempNode.next;
+                index--;
             }
-            tempNode = tempNode.next;
-            index--;
+
+            tempNode.next.val = value;
         }
-
-        tempNode.next.val = value;
-
+        finally {
+            lock.unlock();
+        }
     }
 
     /**
      * Removes the first element from the list.
      *
-     * @throws Error if the list is empty.
+     * @throws EmptyListAccessException if the list is empty.
      */
-    public void removeFront() {
+    synchronized public void removeFront() {
         if (head == null) {
-            throw new Error("List is empty!");
+            throw new EmptyListAccessException("List is empty!");
         }
 
         head = head.next;
@@ -268,19 +333,24 @@ public class LinkedList<T extends Comparable<T>> {
     /**
      * Removes the last element from the list.
      *
-     * @throws Error if the list is empty.
+     * @throws EmptyListAccessException if the list is empty.
      */
     public void removeEnd() {
         if (head == null) {
-            throw new Error("List is empty!");
+            throw new EmptyListAccessException("List is empty!");
         }
 
         Node<T> temp = head;
 
-        while (temp.next.next != null) {
-            temp = temp.next;
+        lock.lock();
+        try {
+            while (temp.next.next != null) {
+                temp = temp.next;
+            }
         }
-
+        finally {
+            lock.unlock();
+        }
         temp.next = null;
     }
 
@@ -311,7 +381,7 @@ public class LinkedList<T extends Comparable<T>> {
 
     /**
      * Removes all elements from the listy.
-     */
+ */
     public void clear() {
         head = null;
     }
@@ -361,11 +431,12 @@ public class LinkedList<T extends Comparable<T>> {
      *
      * @param index the index of the element to retrieve.
      * @return the value of the element at the specified index.
-     * @throws Error if the list is empty or the index is out of bounds.
+     * @throws EmptyListAccessException if the list is empty/
+     * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
     public T get(int index) {
         if (head == null) {
-            throw new Error("List is empty!");
+            throw new EmptyListAccessException("List is empty!");
         }
 
         if (index == 0) {
@@ -383,14 +454,14 @@ public class LinkedList<T extends Comparable<T>> {
             currentIndex++;
         }
 
-        throw new Error("Index out of bounds");
+        throw new IndexOutOfBoundsException("Index out of bounds");
     }
 
     /**
      * Removes the element at a specific index from the list.
      *
      * @param index the index of the element to remove.
-     * @throws Error if the index is out of bounds.
+     * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
     public void removeIndex(int index) {
 
@@ -401,23 +472,28 @@ public class LinkedList<T extends Comparable<T>> {
         Node<T> tempNode = head;
         int currentIndex = 0;
 
-        while (tempNode != null && currentIndex < index - 1) {
-            tempNode = tempNode.next;
-            currentIndex++;
+        lock.lock();
+        try {
+            while (tempNode != null && currentIndex < index - 1) {
+                tempNode = tempNode.next;
+                currentIndex++;
+            }
+
+            if (tempNode == null || tempNode.next == null) {
+                throw new IndexOutOfBoundsException("Index out of bounds");
+            }
+
+            tempNode.next = tempNode.next.next;
         }
-
-        if (tempNode == null || tempNode.next == null) {
-            throw new Error("Index out of bounds");
+        finally {
+            lock.unlock();
         }
-
-        tempNode.next = tempNode.next.next;
-
     }
 
     /**
      * Reverses the order of the elements in the list.
      */
-    public void reverse() {
+    synchronized public void reverse() {
         ArrayList<T> tempArray = makeArrayList();
         List<T> temp = tempArray.reversed();
         clear();
@@ -430,7 +506,7 @@ public class LinkedList<T extends Comparable<T>> {
     /**
      * Sorts the elements of the list in their natural ascending order.
      */
-    public void sort() {
+    synchronized public void sort() {
         ArrayList<T> tempArray = makeArrayList();
         tempArray.sort(Comparator.naturalOrder());
         clear();
