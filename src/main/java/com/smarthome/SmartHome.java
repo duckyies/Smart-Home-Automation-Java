@@ -30,7 +30,7 @@ public class SmartHome {
     private LinkedList<LogTask> loggingList;
     private LinkedList<Rule> ruleList;
 
-    z
+    private int powerConsumption = 0;
 
     private int threshold = 2;
 
@@ -49,7 +49,10 @@ public class SmartHome {
             typeMap.put(deviceType, new DeviceType(deviceType));
         }
 
-        startTick();
+        loggingList = new LinkedList<>();
+
+        initializeScheduler();
+
     }
 
     private void initializeLogger() {
@@ -66,12 +69,21 @@ public class SmartHome {
     }
 
     private void startLogging() {
-        scheduler.scheduleAtFixedRate(this::log, 0, 2, TimeUnit.SECONDS);
+        System.out.println("Logging started");
+        try {
+            scheduler.scheduleAtFixedRate(this::log, 0, 2, TimeUnit.SECONDS);
+        }
+        catch (Exception e) {
+            System.err.println("Error during logging: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void log() {
+        System.out.println("Logging");
         LogTask task = loggingList.peekAndRemove();
         while(task != null) {
+            System.out.println(task.getMessage());
             logger.log(task.getLogLevel(), task.getMessage());
             task = loggingList.peekAndRemove();
         }
@@ -80,6 +92,9 @@ public class SmartHome {
 
     private void initializeScheduler() {
         scheduler = Executors.newScheduledThreadPool(2);
+        startTick();
+        initializeLogger();
+        startLogging();
     }
 
     private void startTick() {
@@ -93,8 +108,16 @@ public class SmartHome {
     }
 
     private void tick() {
-        
+        try {
+            System.out.println("Tick");
+            loggingList.addEnd(new LogTask(Level.INFO, "Tick"));
+            tickTask();
+        } catch (Exception e) {
+            System.err.println("Error during tick execution: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
+
 
     public void  addToGroupAndType(Device device) {
         groupMap.get(device.getDeviceGroup()).addDevice(device);
@@ -102,11 +125,25 @@ public class SmartHome {
     }
 
     public Device createDevice(String deviceName, String deviceType, String deviceGroup, String location) {
-        return new Device(deviceName, deviceType, deviceGroup, location, false, 0,  0, 0, 0);
+        return new Device(deviceName, deviceType, deviceGroup, location, false, 0,  0, 0, 1);
     };
 
     public Device createDevice(String deviceName, String deviceType, String deviceGroup, String location, boolean isTurnedOn, int batteryLevel, int powerConsumption, int maxBatteryCapacity, int powerLevel) {
         return new Device(deviceName, deviceType, deviceGroup, location, isTurnedOn, batteryLevel, powerConsumption, maxBatteryCapacity, powerLevel);
+    }
+
+    private double calculateCurrentPowerConsumption() {
+
+        double powerConsumption = poweredOnDevices.stream().map(Device::getBasePowerConsumption).reduce(0, Integer::sum);
+        return 0.0;
+    }
+
+    public void addRule(Rule rule) {
+        ruleList.addEnd(rule);
+    }
+
+    public void addImmediateRule(Rule rule) {
+        ruleList.addFront(rule);
     }
 
     public void tickTask() {
@@ -115,13 +152,6 @@ public class SmartHome {
         // all the calculations and stuff yk? dont forget
     }
 
-    public double calculateCurrentPowerUsage() {
-        return 0.0;
-    }
-
     //another function i thought of but immediately forgot something to do with tick
 
-    public static void main(String[] args) {
-
-    }
 }

@@ -27,7 +27,7 @@ public class Device {
     // Maximum battery capacity of the device
     private int maxBatteryCapacity;
     // Power consumption of the device
-    private int powerConsumption;
+    private int basePowerConsumption;
     // Indicates whether the device is running on battery
     private boolean isOnBattery;
     // Current power level of the device
@@ -54,7 +54,7 @@ public class Device {
         this.location = location;
         this.isTurnedOn = isTurnedOn;
         this.batteryLevel = batteryLevel;
-        this.powerConsumption = powerConsumption;
+        this.basePowerConsumption = powerConsumption;
         this.maxBatteryCapacity = maxBatteryCapacity;
 
         this.isOnBattery = this.maxBatteryCapacity > 0;
@@ -102,17 +102,17 @@ public class Device {
      *
      * @return the power consumption
      */
-    public int getPowerConsumption() {
-        return powerConsumption;
+    public int getBasePowerConsumption() {
+        return basePowerConsumption;
     }
 
     /**
      * Sets the power consumption of the device.
      *
-     * @param powerConsumption the new power consumption
+     * @param basePowerConsumption the new power consumption
      */
-    public void setPowerConsumption(int powerConsumption) {
-        this.powerConsumption = powerConsumption;
+    public void setBasePowerConsumption(int basePowerConsumption) {
+        this.basePowerConsumption = basePowerConsumption;
     }
 
     /**
