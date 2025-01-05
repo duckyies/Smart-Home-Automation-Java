@@ -30,7 +30,7 @@ public class SmartHome {
     private LinkedList<LogTask> loggingList;
     private LinkedList<Rule> ruleList;
 
-    private int powerConsumption = 0;
+    private int powerConsumption = 1;
 
     private int threshold = 10;
 
@@ -140,7 +140,6 @@ public class SmartHome {
         addToGroupAndType(device);
     }
 
-
     private double calculateCurrentPowerConsumption() {
         return (double) poweredOnDevices.stream().map(Device::getBasePowerConsumption).reduce(0.0, Double::sum);
     }
@@ -157,13 +156,13 @@ public class SmartHome {
         double powerConsumption = calculateCurrentPowerConsumption();
 
         if(powerConsumption > threshold * 1.5) {
-            loggingList.addEnd(new LogTask(Level.SEVERE, String.format("Power consumption is %f, which is 50 percent above the threshold", powerConsumption)));
+            loggingList.addEnd(new LogTask(Level.SEVERE, String.format("Power consumption is %fW, which is %.2f percent above the threshold", powerConsumption, (powerConsumption - threshold) / threshold * 100)));
         }
         else if(powerConsumption > threshold) {
-            loggingList.addEnd(new LogTask(Level.WARNING, String.format("Power consumption is %f, which is above the threshold", powerConsumption)));
+            loggingList.addEnd(new LogTask(Level.WARNING, String.format("Power consumption is %fW, which is %.2f percent above the threshold", powerConsumption, (powerConsumption - threshold) / threshold * 100)));
         }
         else {
-            loggingList.addEnd(new LogTask(Level.INFO, String.format("Power consumption is %f, which is below the threshold", powerConsumption)));
+            loggingList.addEnd(new LogTask(Level.INFO, String.format("Power consumption - %fW, %.2f percent of threshold", powerConsumption, powerConsumption / threshold * 100)));
         }
     }
 
