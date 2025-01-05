@@ -32,11 +32,11 @@ public class SmartHome {
 
     private int powerConsumption = 0;
 
-    private int threshold = 2;
+    private int threshold = 10;
 
     public void initialize() {
 
-        ArrayList<String> deviceGroupList = new ArrayList<>(List.of("Lights", "Fans", "Alarms", "Cameras", "AirConditioners", "Heaters", "Appliances", "Gardening", "Others"));
+        ArrayList<String> deviceGroupList = new ArrayList<>(List.of("Lights", "Fans", "Alarms", "Cameras", "AirConditioners", "Heaters", "Appliances", "Gardening", "Entertainment", "Others"));
         ArrayList<String> deviceTypeList = new ArrayList<>(List.of("Decorative", "Necessary", "Health", "Entertainment", "Security", "Others"));
 
         groupMap = new ConcurrentHashMap<>();
@@ -49,8 +49,9 @@ public class SmartHome {
             typeMap.put(deviceType, new DeviceType(deviceType));
         }
 
-        loggingList = new LinkedList<>();
-
+        loggingList = new LinkedList<LogTask>();
+        poweredOnDevices = new ArrayList<Device>();
+        poweredOffDevices = new ArrayList<Device>();
         initializeScheduler();
 
     }
@@ -80,10 +81,9 @@ public class SmartHome {
     }
 
     private void log() {
-        System.out.println("Logging");
         LogTask task = loggingList.peekAndRemove();
+
         while(task != null) {
-            System.out.println(task.getMessage());
             logger.log(task.getLogLevel(), task.getMessage());
             task = loggingList.peekAndRemove();
         }
@@ -93,8 +93,10 @@ public class SmartHome {
     private void initializeScheduler() {
         scheduler = Executors.newScheduledThreadPool(2);
         startTick();
+        System.out.println("Tick started");
         initializeLogger();
         startLogging();
+        System.out.println("Logging started");
     }
 
     private void startTick() {
@@ -109,15 +111,12 @@ public class SmartHome {
 
     private void tick() {
         try {
-            System.out.println("Tick");
-            loggingList.addEnd(new LogTask(Level.INFO, "Tick"));
             tickTask();
         } catch (Exception e) {
             System.err.println("Error during tick execution: " + e.getMessage());
             e.printStackTrace();
         }
     }
-
 
     public void  addToGroupAndType(Device device) {
         groupMap.get(device.getDeviceGroup()).addDevice(device);
@@ -128,14 +127,22 @@ public class SmartHome {
         return new Device(deviceName, deviceType, deviceGroup, location, false, 0,  0, 0, 1);
     };
 
-    public Device createDevice(String deviceName, String deviceType, String deviceGroup, String location, boolean isTurnedOn, int batteryLevel, int powerConsumption, int maxBatteryCapacity, int powerLevel) {
+    public Device createDevice(String deviceName, String deviceType, String deviceGroup, String location, boolean isTurnedOn, double batteryLevel, double powerConsumption, int maxBatteryCapacity, int powerLevel) {
         return new Device(deviceName, deviceType, deviceGroup, location, isTurnedOn, batteryLevel, powerConsumption, maxBatteryCapacity, powerLevel);
     }
 
-    private double calculateCurrentPowerConsumption() {
+    public void addDevice(Device device) {
+        if(device.isTurnedOn()) {
+            poweredOnDevices.add(device);
+        } else {
+            poweredOffDevices.add(device);
+        }
+        addToGroupAndType(device);
+    }
 
-        double powerConsumption = poweredOnDevices.stream().map(Device::getBasePowerConsumption).reduce(0, Integer::sum);
-        return 0.0;
+
+    private double calculateCurrentPowerConsumption() {
+        return (double) poweredOnDevices.stream().map(Device::getBasePowerConsumption).reduce(0.0, Double::sum);
     }
 
     public void addRule(Rule rule) {
@@ -146,10 +153,22 @@ public class SmartHome {
         ruleList.addFront(rule);
     }
 
-    public void tickTask() {
-        //so dont forget you made this
-        // you planned to add stuff like adding power consumption etc in every tick etc etc here
-        // all the calculations and stuff yk? dont forget
+    private void logPowerConsumption() {
+        double powerConsumption = calculateCurrentPowerConsumption();
+
+        if(powerConsumption > threshold * 1.5) {
+            loggingList.addEnd(new LogTask(Level.SEVERE, String.format("Power consumption is %f, which is 50 percent above the threshold", powerConsumption)));
+        }
+        else if(powerConsumption > threshold) {
+            loggingList.addEnd(new LogTask(Level.WARNING, String.format("Power consumption is %f, which is above the threshold", powerConsumption)));
+        }
+        else {
+            loggingList.addEnd(new LogTask(Level.INFO, String.format("Power consumption is %f, which is below the threshold", powerConsumption)));
+        }
+    }
+
+    private void tickTask() {
+        logPowerConsumption();
     }
 
     //another function i thought of but immediately forgot something to do with tick

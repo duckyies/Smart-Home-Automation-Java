@@ -23,11 +23,11 @@ public class Device {
     private Boolean isTurnedOn = false;
 
     // Current battery level of the device
-    private int batteryLevel;
+    private double batteryLevel;
     // Maximum battery capacity of the device
     private int maxBatteryCapacity;
     // Power consumption of the device
-    private int basePowerConsumption;
+    private double basePowerConsumption;
     // Indicates whether the device is running on battery
     private boolean isOnBattery;
     // Current power level of the device
@@ -46,7 +46,7 @@ public class Device {
      * @param maxBatteryCapacity the maximum battery capacity of the device
      * @param powerLevel        the current power level of the device
      */
-    Device(String deviceName, String deviceType, String deviceGroup, String location, Boolean isTurnedOn, int batteryLevel, int powerConsumption, int maxBatteryCapacity, int powerLevel) {
+    Device(String deviceName, String deviceType, String deviceGroup, String location, Boolean isTurnedOn, double batteryLevel, double powerConsumption, int maxBatteryCapacity, int powerLevel) {
         this.deviceName = deviceName;
         this.deviceID = deviceNum++;
         this.deviceType = deviceType;
@@ -84,7 +84,7 @@ public class Device {
      *
      * @return the current battery level
      */
-    public int getBatteryLevel() {
+    public double getBatteryLevel() {
         return batteryLevel;
     }
 
@@ -102,7 +102,7 @@ public class Device {
      *
      * @return the power consumption
      */
-    public int getBasePowerConsumption() {
+    public double getBasePowerConsumption() {
         return basePowerConsumption;
     }
 
