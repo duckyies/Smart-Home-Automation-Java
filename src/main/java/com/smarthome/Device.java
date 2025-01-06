@@ -19,6 +19,7 @@ public class Device {
     private String location;
     // Group to which the device belongs (e.g., living room devices)
     private String deviceGroup;
+
     // Indicates whether the device is turned on or off
     private Boolean isTurnedOn = false;
 
