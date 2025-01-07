@@ -34,6 +34,7 @@ public class Device {
     // Current power level of the device
     private int powerLevel;
 
+    private boolean isInteracted = false;
     /**
      * Constructor to initialize a new Device object with the specified attributes.
      *
@@ -58,6 +59,7 @@ public class Device {
         this.basePowerConsumption = powerConsumption;
         this.maxBatteryCapacity = maxBatteryCapacity;
 
+        this.isInteracted = false;
         this.isOnBattery = this.maxBatteryCapacity > 0;
         this.powerLevel = powerLevel;
     }
@@ -231,5 +233,13 @@ public class Device {
      */
     public void setPowerLevel(int powerLevel) {
         this.powerLevel = powerLevel;
+    }
+
+    public boolean getInteraction() {
+        return isInteracted;
+    }
+
+    public void flipInteractionState() {
+        isInteracted = !isInteracted;
     }
 }

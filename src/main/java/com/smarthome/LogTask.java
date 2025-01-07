@@ -1,5 +1,7 @@
 package com.smarthome;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -32,7 +34,7 @@ public class LogTask implements Comparable<LogTask>{
     }
 
     @Override
-    public int compareTo(LogTask task) {
+    public int compareTo(@NotNull LogTask task) {
         ArrayList<Level> levelList = new ArrayList<>(List.of(Level.OFF,Level.SEVERE,Level.WARNING,Level.INFO,Level.CONFIG,Level.FINE,Level.FINER, Level.FINEST, Level.ALL));
         int taskLevel = levelList.indexOf(task.getLogLevel());
         int currTaskLevel = levelList.indexOf(getLogLevel());

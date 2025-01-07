@@ -1,6 +1,7 @@
 package com.smarthome;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Random;
 import java.util.concurrent.*;
 /**
  * Entry point for the Smart Home Automation project.
@@ -15,22 +16,26 @@ import java.util.concurrent.*;
  */
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.*;
 
 public class SmartHome {
 
+    int tickCount = 0;
     
     private ConcurrentHashMap<String, DeviceGroup> groupMap;
     private ConcurrentHashMap<String, DeviceType> typeMap;
     private ConcurrentHashMap<String, DeviceLocation> locationMap;
-    private ArrayList<Device> poweredOnDevices;
-    private ArrayList<Device> poweredOffDevices;
+    private CopyOnWriteArrayList<Device> poweredOnDevices;
+    private CopyOnWriteArrayList<Device> poweredOffDevices;
     private ScheduledExecutorService scheduler;
+
+    private Random random = new Random();
 
     private Logger powerConsumptionlogger;
     private Logger logger;
+    private final ReentrantLock lock = new ReentrantLock();
 
     //device queue, you planned to give priority based on type and group, make enum
     private PriorityQueue<Device> deviceQueue;
@@ -75,13 +80,13 @@ public class SmartHome {
 
         loggingList = new LinkedList<LogTask>();
         powerConsumptionLogList = new LinkedList<LogTask>();
-        poweredOnDevices = new ArrayList<Device>();
-        poweredOffDevices = new ArrayList<Device>();
+        poweredOnDevices = new CopyOnWriteArrayList<>();
+        poweredOffDevices = new CopyOnWriteArrayList<>();
+
         ruleList = new LinkedList<Rule>();
         deviceQueue = new PriorityQueue<Device>();
         powerReducableDevices = new PriorityQueue<Device>();
         initializeScheduler();
-
     }
 
     private void initializeLogger() {
@@ -151,8 +156,6 @@ public class SmartHome {
             powerConsumptionlogger.log(powerTask.getLogLevel(), powerTask.getMessage());
             powerTask = powerConsumptionLogList.peekAndRemove();
         }
-
-
     }
 
     private void initializeScheduler() {
@@ -175,6 +178,16 @@ public class SmartHome {
     }
 
     private void tick() {
+        tickCount++;
+        if(tickCount % 2 == 0) {
+            try {
+                 simulateDeviceChange();
+            }
+            catch (Exception e) {
+                System.err.println("Error during deviceChange execution: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
         try {
             tickTask();
         } catch (Exception e) {
@@ -219,8 +232,14 @@ public class SmartHome {
         locationMap.put(location, new DeviceLocation(location));
     }
 
-    private double calculateCurrentPowerConsumption() {
+    private double calculateCurrentBasePowerConsumption() {
         return (double) poweredOnDevices.stream().map(Device::getBasePowerConsumption).reduce(0.0, Double::sum);
+    }
+
+    private double calculateCurrentPowerConsumption() {
+        return poweredOnDevices.stream()
+                .mapToDouble(device -> device.getBasePowerConsumption() * (device.getPowerLevel() > 0 ? device.getPowerLevel() : 1))
+                .sum();
     }
 
     public void addRule(Rule rule) {
@@ -278,8 +297,35 @@ public class SmartHome {
         logPowerConsumption();
     }
 
-    //another function i thought of but immediately forgot something to do with tick
+    private void simulateDeviceChange() {
+        List<Device> toTurnOff = new ArrayList<>();
+        List<Device> toTurnOn = new ArrayList<>();
 
+        for (Device device : poweredOnDevices) {
+            double randomDouble = random.nextDouble();
+            if (randomDouble >= 0.6) {
+                toTurnOff.add(device);
+                device.flipInteractionState();
+            } else if (device.getPowerLevel() != 0) {
+                device.setPowerLevel(random.nextInt(1, 6));
+            }
+        }
+
+        for (Device device : poweredOffDevices) {
+            if (device.getInteraction()) {
+                device.flipInteractionState();
+            } else if (random.nextDouble() >= 0.6) {
+                toTurnOn.add(device);
+            }
+        }
+
+        toTurnOff.forEach(this::turnOffDevice);
+        toTurnOn.forEach(this::turnOnDevice);
+    }
+
+
+
+    //another function i thought of but immediately forgot something to do with tick
 
     //ALSO
     //add a function to get all devices in a group or type or location
