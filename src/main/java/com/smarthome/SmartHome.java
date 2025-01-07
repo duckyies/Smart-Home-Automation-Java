@@ -21,12 +21,15 @@ import java.util.logging.*;
 
 public class SmartHome {
 
+    
     private ConcurrentHashMap<String, DeviceGroup> groupMap;
     private ConcurrentHashMap<String, DeviceType> typeMap;
     private ConcurrentHashMap<String, DeviceLocation> locationMap;
     private ArrayList<Device> poweredOnDevices;
     private ArrayList<Device> poweredOffDevices;
     private ScheduledExecutorService scheduler;
+
+    private Logger powerConsumptionlogger;
     private Logger logger;
 
     //device queue, you planned to give priority based on type and group, make enum
@@ -36,7 +39,7 @@ public class SmartHome {
     private PriorityQueue<Device> powerReducableDevices;
 
     private LinkedList<LogTask> loggingList;
-
+    private LinkedList<LogTask> powerConsumptionLogList;
     // add rules here and complete the whole list in a tick, add another thread for that maybe? is that really needed? who tf knows? might as well go on with the multithreading 😱
     private LinkedList<Rule> ruleList;
 
@@ -71,6 +74,7 @@ public class SmartHome {
         }
 
         loggingList = new LinkedList<LogTask>();
+        powerConsumptionLogList = new LinkedList<LogTask>();
         poweredOnDevices = new ArrayList<Device>();
         poweredOffDevices = new ArrayList<Device>();
         ruleList = new LinkedList<Rule>();
@@ -82,19 +86,43 @@ public class SmartHome {
 
     private void initializeLogger() {
 
-        //MAKE MULTIPLE
-        //SEVERITY BASED AND CATEGORY BASED
-
+        powerConsumptionlogger = Logger.getLogger("PowerConsumptionLog");
         logger = Logger.getLogger(SmartHome.class.getName());
-        FileHandler logFileHandler;
+
+        FileHandler infoFileHandler;
+        FileHandler warningFileHandler;
+        FileHandler severeFileHandler;
+        FileHandler powerConsumptionFileHandler;
 
         try {
-            logFileHandler = new FileHandler("SmartHome.log");
-            logger.addHandler(logFileHandler);
 
-            SimpleFormatter formatter = new SimpleFormatter();
-            logFileHandler.setFormatter(formatter);
+            powerConsumptionlogger.setLevel(Level.ALL);
+            powerConsumptionFileHandler = new FileHandler("PowerConsumption.log");
+            powerConsumptionFileHandler.setLevel(Level.ALL);
+            powerConsumptionFileHandler.setFormatter(new SimpleFormatter());
 
+            infoFileHandler = new FileHandler("Info.log");
+            infoFileHandler.setLevel(Level.INFO);
+            infoFileHandler.setFormatter(new SimpleFormatter());
+            infoFileHandler.setFilter(record -> record.getLevel() == Level.INFO);
+
+            warningFileHandler = new FileHandler("Warning.log");
+            warningFileHandler.setLevel(Level.WARNING);
+            warningFileHandler.setFormatter(new SimpleFormatter());
+            warningFileHandler.setFilter(record -> record.getLevel() == Level.WARNING);
+
+            severeFileHandler = new FileHandler("Severe.log");
+            severeFileHandler.setLevel(Level.SEVERE);
+            severeFileHandler.setFormatter(new SimpleFormatter());
+            severeFileHandler.setFilter(record -> record.getLevel() == Level.SEVERE);
+
+            logger.addHandler(infoFileHandler);
+            logger.addHandler(warningFileHandler);
+            logger.addHandler(severeFileHandler);
+            powerConsumptionlogger.addHandler(powerConsumptionFileHandler);
+
+            powerConsumptionlogger.setUseParentHandlers(false);
+            logger.setUseParentHandlers(false);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -113,11 +141,17 @@ public class SmartHome {
 
     private void log() {
         LogTask task = loggingList.peekAndRemove();
-
+        LogTask powerTask = powerConsumptionLogList.peekAndRemove();
         while(task != null) {
             logger.log(task.getLogLevel(), task.getMessage());
             task = loggingList.peekAndRemove();
         }
+
+        while(powerTask != null) {
+            powerConsumptionlogger.log(powerTask.getLogLevel(), powerTask.getMessage());
+            powerTask = powerConsumptionLogList.peekAndRemove();
+        }
+
 
     }
 
@@ -213,17 +247,26 @@ public class SmartHome {
         loggingList.addEnd(new LogTask(logLevel, message));
     }
 
+    private void addPowerLog(Level logLevel, String message) {
+        powerConsumptionLogList.addEnd(new LogTask(logLevel, message));
+
+        if(!logLevel.equals(Level.INFO)) {
+            addLog(logLevel, message);
+        }
+
+    }
+
     private void logPowerConsumption() {
         powerConsumption = calculateCurrentPowerConsumption();
 
         if(powerConsumption > threshold * 1.5) {
-            addLog(Level.SEVERE, String.format("Power consumption is %fW, which is %.2f percent above the threshold", powerConsumption, (powerConsumption - threshold) / threshold * 100));
+            addPowerLog(Level.SEVERE, String.format("Power consumption is %fW, which is %.2f percent above the threshold", powerConsumption, (powerConsumption - threshold) / threshold * 100));
         }
         else if(powerConsumption > threshold) {
-            addLog(Level.WARNING, String.format("Power consumption is %fW, which is %.2f percent above the threshold", powerConsumption, (powerConsumption - threshold) / threshold * 100));
+            addPowerLog(Level.WARNING, String.format("Power consumption is %fW, which is %.2f percent above the threshold", powerConsumption, (powerConsumption - threshold) / threshold * 100));
         }
         else {
-            addLog(Level.INFO, String.format("Power consumption - %fW, %.2f percent of threshold", powerConsumption, powerConsumption / threshold * 100));;
+            addPowerLog(Level.INFO, String.format("Power consumption - %fW, %.2f percent of threshold", powerConsumption, powerConsumption / threshold * 100));;
         }
     }
 

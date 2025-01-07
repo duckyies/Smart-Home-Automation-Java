@@ -20,6 +20,21 @@ public class Main {
         testHome.addDevice(testHome.createDevice("Kitchen Camera", "Security", "Cameras", "Kitchen", true, 100, 0.05, 100, 100));
         testHome.addDevice(testHome.createDevice("Smart Thermostat", "Necessary", "AirConditioners", "Living Room", true, 100, 0.10, 100, 100));
         testHome.addDevice(testHome.createDevice("Living Room AC", "Necessary", "AirConditioners", "Living Room", true, 100, 1.20, 100, 100));
+        testHome.addDevice(testHome.createDevice("Living Room AC", "Necessary", "AirConditioners", "Living Room", true, 100, 1.20, 100, 100));
+        testHome.addDevice(testHome.createDevice("Living Room AC", "Necessary", "AirConditioners", "Living Room", true, 100, 1.20, 100, 100));
+        testHome.addDevice(testHome.createDevice("Living Room AC", "Necessary", "AirConditioners", "Living Room", true, 100, 1.20, 100, 100));
+        testHome.addDevice(testHome.createDevice("Living Room AC", "Necessary", "AirConditioners", "Living Room", true, 100, 1.20, 100, 100));
+        testHome.addDevice(testHome.createDevice("Living Room AC", "Necessary", "AirConditioners", "Living Room", true, 100, 1.20, 100, 100));
+        testHome.addDevice(testHome.createDevice("Living Room AC", "Necessary", "AirConditioners", "Living Room", true, 100, 1.20, 100, 100));
+        testHome.addDevice(testHome.createDevice("Living Room AC", "Necessary", "AirConditioners", "Living Room", true, 100, 1.20, 100, 100));
+        testHome.addDevice(testHome.createDevice("Living Room AC", "Necessary", "AirConditioners", "Living Room", true, 100, 1.20, 100, 100));
+        testHome.addDevice(testHome.createDevice("Living Room AC", "Necessary", "AirConditioners", "Living Room", true, 100, 1.20, 100, 100));
+        testHome.addDevice(testHome.createDevice("Living Room AC", "Necessary", "AirConditioners", "Living Room", true, 100, 1.20, 100, 100));
+        testHome.addDevice(testHome.createDevice("Living Room AC", "Necessary", "AirConditioners", "Living Room", true, 100, 1.20, 100, 100));
+        testHome.addDevice(testHome.createDevice("Living Room AC", "Necessary", "AirConditioners", "Living Room", true, 100, 1.20, 100, 100));
+        testHome.addDevice(testHome.createDevice("Living Room AC", "Necessary", "AirConditioners", "Living Room", true, 100, 1.20, 100, 100));
+
+        testHome.addDevice(testHome.createDevice("Living Room AC", "Necessary", "AirConditioners", "Living Room", true, 100, 1.20, 100, 100));
         // Keep the program running
         while (true) {
             try {
