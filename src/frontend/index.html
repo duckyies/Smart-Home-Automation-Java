@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Home UI</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Smart Home Device Management</h1>
+    
+    <h2>Devices</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Device Name</th>
+          <th>Power Consumption (W)</th>
+          <th>Power State</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="deviceTable">
+          </tbody>
+    </table>
+
+    <h2>Add Device</h2>
+    <form id="addDeviceForm">
+      <label>
+        Device Name:
+        <input type="text" id="deviceName" required>
+      </label>
+      <label>
+        Power Consumption (W):
+        <input type="number" id="powerConsumption" required>
+      </label>
+      <button type="submit">Add Device</button>
+    </form>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

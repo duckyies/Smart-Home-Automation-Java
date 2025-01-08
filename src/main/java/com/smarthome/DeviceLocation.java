@@ -11,6 +11,8 @@ public class DeviceLocation {
     // Name of the location
     public String location;
 
+    private double temperature;
+
     /**
      * Constructor to initialize a new DeviceLocation object with the specified location name.
      *
@@ -64,5 +66,13 @@ public class DeviceLocation {
         for (Device device : devices) {
             device.setTurnedOn(true);
         }
+    }
+
+    public double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
     }
 }

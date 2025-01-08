@@ -323,7 +323,21 @@ public class SmartHome {
         toTurnOn.forEach(this::turnOnDevice);
     }
 
+    private void tempcheck() {
 
+    }
+
+    private void accidentallyturnedoncheck() {
+
+    }
+    private void roommemberscheck() {
+
+    }
+    private void changeMode() {
+
+    }
+
+    private void 
 
     //another function i thought of but immediately forgot something to do with tick
 
