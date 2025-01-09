@@ -1,6 +1,7 @@
 package com.smarthome;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.*;
 /**
@@ -24,14 +25,16 @@ public class SmartHome {
 
     int tickCount = 0;
     
-    private ConcurrentHashMap<String, DeviceGroup> groupMap;
-    private ConcurrentHashMap<String, DeviceType> typeMap;
-    private ConcurrentHashMap<String, DeviceLocation> locationMap;
-    private CopyOnWriteArrayList<Device> poweredOnDevices;
-    private CopyOnWriteArrayList<Device> poweredOffDevices;
+    private final ConcurrentHashMap<String, DeviceGroup> groupMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, DeviceType> typeMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, DeviceLocation> locationMap = new ConcurrentHashMap<>();
+    private final CopyOnWriteArrayList<Device> poweredOnDevices = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<Device> poweredOffDevices = new CopyOnWriteArrayList<>();
     private ScheduledExecutorService scheduler;
 
     private final Random random = new Random();
+
+    private final Date date = new Date();
 
     private Logger powerConsumptionlogger;
     private Logger logger;
@@ -39,17 +42,17 @@ public class SmartHome {
     private final ReentrantLock lock = new ReentrantLock();
 
     //device queue, you planned to give priority based on type and group, make enum
-    private PriorityQueue<Device> deviceQueue;
+    private final PriorityQueue<Device> deviceQueue = new PriorityQueue<>();
 
     //another queue but then you can also make it so that you can reduce power level and if that makes it go below the threshold, do that before turning it off
-    private PriorityQueue<Device> powerReducableDevices;
+    private final PriorityQueue<Device> powerReducableDevices = new PriorityQueue<>();
 
-    private LinkedList<LogTask> loggingList;
-    private LinkedList<LogTask> powerConsumptionLogList;
-    private LinkedList<LogTask> deviceBatteryLogList;
+    private final LinkedList<LogTask> loggingList = new LinkedList<>();
+    private final LinkedList<LogTask> powerConsumptionLogList = new LinkedList<>();
+    private final LinkedList<LogTask> deviceBatteryLogList = new LinkedList<>();
 
     // add rules here and complete the whole list in a tick, add another thread for that maybe? is that really needed? who tf knows? might as well go on with the multithreading 😱
-    private LinkedList<Rule> ruleList;
+    private final LinkedList<Rule> ruleList = new LinkedList<>();
 
     private double powerConsumption = 1;
 
@@ -67,10 +70,6 @@ public class SmartHome {
                 List.of("Living Room", "Bedroom", "Bedroom2", "Bedroom3", "Bedroom4", "Garden", "Office", "Entrance", "Kitchen", "Bathroom", "Bathroom2", "Bathroom3", "Others")
         );
 
-        locationMap = new ConcurrentHashMap<>();
-        groupMap = new ConcurrentHashMap<>();
-        typeMap = new ConcurrentHashMap<>();
-
         for (String deviceGroup : deviceGroupList) {
             groupMap.put(deviceGroup, new DeviceGroup(deviceGroup));
         }
@@ -78,18 +77,11 @@ public class SmartHome {
             typeMap.put(deviceType, new DeviceType(deviceType));
         }
         for (String location:  locationList) {
-            locationMap.put(location, new DeviceLocation(location));
+            DeviceLocation devLocation = new DeviceLocation(location);
+            locationMap.put(location, devLocation);
+            devLocation.setTemperature(random.nextInt(10, 45));
         }
 
-        loggingList = new LinkedList<LogTask>();
-        powerConsumptionLogList = new LinkedList<LogTask>();
-        deviceBatteryLogList = new LinkedList<LogTask>();
-        poweredOnDevices = new CopyOnWriteArrayList<>();
-        poweredOffDevices = new CopyOnWriteArrayList<>();
-
-        ruleList = new LinkedList<Rule>();
-        deviceQueue = new PriorityQueue<Device>();
-        powerReducableDevices = new PriorityQueue<Device>();
         initializeScheduler();
     }
 
@@ -237,6 +229,7 @@ public class SmartHome {
     public void addDevice(@NotNull Device device) {
         if(device.isTurnedOn()) {
             poweredOnDevices.add(device);
+            device.setTurnedOnTime(date.getTime());
         } else {
             poweredOffDevices.add(device);
         }
@@ -380,7 +373,9 @@ public class SmartHome {
         toTurnOn.forEach(this::turnOnDevice);
     }
 
-    private void tempcheck() {
+    private void tempCheck(DeviceLocation location) {
+
+
 
     }
 

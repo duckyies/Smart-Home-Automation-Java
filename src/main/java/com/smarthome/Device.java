@@ -1,5 +1,7 @@
 package com.smarthome;
 
+import java.util.Date;
+
 /**
  * The Device class represents a smart home device with various attributes such as
  * device name, type, group, location, power status, battery level, and power consumption.
@@ -8,6 +10,7 @@ public class Device {
 
     // Static variable to keep track of the number of devices created
     static int deviceNum = 0;
+    private final Date date = new Date();
 
     // Unique identifier for the device
     private int deviceID;
@@ -35,6 +38,8 @@ public class Device {
     private boolean isOnBattery;
     // Current power level of the device
     private int powerLevel;
+
+    private long turnedOnTime;
 
     private boolean isInteracted = false;
     /**
@@ -260,4 +265,17 @@ public class Device {
     public double getMaxBatteryCapacity() {
         return maxBatteryCapacity;
     }
+
+    public void setTurnedOnTime(long time) {
+        turnedOnTime = time;
+    }
+
+    public long getTurnedOnTime() {
+        return turnedOnTime;
+    }
+
+    public int getMinutesSinceTurnedOn() {
+        return (int) ((new Date().getTime() - turnedOnTime) / 60000);
+    }
+
 }
