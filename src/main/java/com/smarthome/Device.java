@@ -27,6 +27,8 @@ public class Device {
     private double batteryLevel;
     // Maximum battery capacity of the device
     private int maxBatteryCapacity;
+
+    private double currentBatteryCapacity;
     // Power consumption of the device
     private double basePowerConsumption;
     // Indicates whether the device is running on battery
@@ -58,7 +60,7 @@ public class Device {
         this.batteryLevel = batteryLevel;
         this.basePowerConsumption = powerConsumption;
         this.maxBatteryCapacity = maxBatteryCapacity;
-
+        this.currentBatteryCapacity = maxBatteryCapacity;
         this.isInteracted = false;
         this.isOnBattery = this.maxBatteryCapacity > 0;
         this.powerLevel = powerLevel;
@@ -96,7 +98,7 @@ public class Device {
      *
      * @param batteryLevel the new battery level
      */
-    public void setBatteryLevel(int batteryLevel) {
+    public void setBatteryLevel(double batteryLevel) {
         this.batteryLevel = batteryLevel;
     }
 
@@ -243,4 +245,19 @@ public class Device {
         isInteracted = !isInteracted;
     }
 
+    public boolean isOnBattery() {
+        return isOnBattery;
+    }
+
+    public double getCurrentBatteryCapacity() {
+        return currentBatteryCapacity;
+    }
+
+    public void setCurrentBatteryCapacity(double capacity) {
+        currentBatteryCapacity = capacity;
+    }
+
+    public double getMaxBatteryCapacity() {
+        return maxBatteryCapacity;
+    }
 }

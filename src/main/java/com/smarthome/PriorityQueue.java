@@ -1,7 +1,5 @@
 package com.smarthome;
 import java.util.ArrayList;
-import com.smarthome.Task;
-import com.sun.source.tree.BreakTree;
 
 /**
  * A generic priority queue implementation using an ArrayList.

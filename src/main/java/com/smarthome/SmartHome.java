@@ -35,6 +35,7 @@ public class SmartHome {
 
     private Logger powerConsumptionlogger;
     private Logger logger;
+    private Logger deviceBatteryLogger;
     private final ReentrantLock lock = new ReentrantLock();
 
     //device queue, you planned to give priority based on type and group, make enum
@@ -93,11 +94,13 @@ public class SmartHome {
 
         powerConsumptionlogger = Logger.getLogger("PowerConsumptionLog");
         logger = Logger.getLogger(SmartHome.class.getName());
+        deviceBatteryLogger = Logger.getLogger("DeviceBatteryLog");
 
         FileHandler infoFileHandler;
         FileHandler warningFileHandler;
         FileHandler severeFileHandler;
         FileHandler powerConsumptionFileHandler;
+        FileHandler deviceBatteryFileHandler;
 
         try {
 
@@ -121,13 +124,20 @@ public class SmartHome {
             severeFileHandler.setFormatter(new SimpleFormatter());
             severeFileHandler.setFilter(record -> record.getLevel() == Level.SEVERE);
 
+            deviceBatteryLogger.setLevel(Level.ALL);
+            deviceBatteryFileHandler = new FileHandler("DeviceBattery.log");
+            deviceBatteryFileHandler.setLevel(Level.ALL);
+            deviceBatteryFileHandler.setFormatter(new SimpleFormatter());
+
             logger.addHandler(infoFileHandler);
             logger.addHandler(warningFileHandler);
             logger.addHandler(severeFileHandler);
             powerConsumptionlogger.addHandler(powerConsumptionFileHandler);
-
             powerConsumptionlogger.setUseParentHandlers(false);
             logger.setUseParentHandlers(false);
+            deviceBatteryLogger.addHandler(deviceBatteryFileHandler);
+            deviceBatteryLogger.setUseParentHandlers(false);
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -229,13 +239,14 @@ public class SmartHome {
     private void reduceBatteryTick() {
         for (Device device : poweredOnDevices) {
             if(device.isOnBattery()) {
-                device.reduceBatteryLevel();
+                reduceBatteryLevel(device);
             }
         }
     }
 
-    private void reduceBatteryLevel() {
-        
+    private void reduceBatteryLevel(Device device) {
+        device.setCurrentBatteryCapacity(device.getCurrentBatteryCapacity() - (device.getBasePowerConsumption() * device.getPowerLevel()));
+        device.setBatteryLevel((int) (device.getCurrentBatteryCapacity() / device.getMaxBatteryCapacity() * 100));
     }
 
     public void addLocation(String location) {
@@ -311,6 +322,7 @@ public class SmartHome {
 
     private void tickTask() {
         logPowerConsumption();
+        reduceBatteryTick();
     }
 
     private void simulateDeviceChange() {
