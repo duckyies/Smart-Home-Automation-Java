@@ -46,6 +46,8 @@ public class SmartHome {
 
     private LinkedList<LogTask> loggingList;
     private LinkedList<LogTask> powerConsumptionLogList;
+    private LinkedList<LogTask> deviceBatteryLogList;
+
     // add rules here and complete the whole list in a tick, add another thread for that maybe? is that really needed? who tf knows? might as well go on with the multithreading 😱
     private LinkedList<Rule> ruleList;
 
@@ -81,6 +83,7 @@ public class SmartHome {
 
         loggingList = new LinkedList<LogTask>();
         powerConsumptionLogList = new LinkedList<LogTask>();
+        deviceBatteryLogList = new LinkedList<LogTask>();
         poweredOnDevices = new CopyOnWriteArrayList<>();
         poweredOffDevices = new CopyOnWriteArrayList<>();
 
@@ -137,7 +140,7 @@ public class SmartHome {
             logger.setUseParentHandlers(false);
             deviceBatteryLogger.addHandler(deviceBatteryFileHandler);
             deviceBatteryLogger.setUseParentHandlers(false);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -157,6 +160,8 @@ public class SmartHome {
     private void log() {
         LogTask task = loggingList.peekAndRemove();
         LogTask powerTask = powerConsumptionLogList.peekAndRemove();
+        LogTask batteryTask = deviceBatteryLogList.peekAndRemove();
+
         while(task != null) {
             logger.log(task.getLogLevel(), task.getMessage());
             task = loggingList.peekAndRemove();
@@ -165,6 +170,11 @@ public class SmartHome {
         while(powerTask != null) {
             powerConsumptionlogger.log(powerTask.getLogLevel(), powerTask.getMessage());
             powerTask = powerConsumptionLogList.peekAndRemove();
+        }
+
+        while(batteryTask != null) {
+            deviceBatteryLogger.log(batteryTask.getLogLevel(), batteryTask.getMessage());
+            batteryTask = deviceBatteryLogList.peekAndRemove();
         }
     }
 
@@ -239,14 +249,25 @@ public class SmartHome {
     private void reduceBatteryTick() {
         for (Device device : poweredOnDevices) {
             if(device.isOnBattery()) {
-                reduceBatteryLevel(device);
+                 boolean toLog = reduceBatteryLevel(device);
+                if(device.getBatteryLevel() < 20) {
+                    addBatteryLog(Level.WARNING, String.format("Battery level of %s is below 10 percent!", device.getDeviceName()));
+                }
+                else if(device.getBatteryLevel() < 10) {
+                    addBatteryLog(Level.SEVERE, String.format("Battery level of %s is below 5 percent!", device.getDeviceName()));
+                }
+                else if(!toLog){
+                    addBatteryLog(Level.INFO, String.format("Battery level of %s is now %s", device.getDeviceName(), device.getBatteryLevel()));
+                }
             }
         }
     }
 
-    private void reduceBatteryLevel(Device device) {
+    private boolean reduceBatteryLevel(Device device) {
+        int currentBattery = (int) device.getBatteryLevel();
         device.setCurrentBatteryCapacity(device.getCurrentBatteryCapacity() - (device.getBasePowerConsumption() * device.getPowerLevel()));
         device.setBatteryLevel((int) (device.getCurrentBatteryCapacity() / device.getMaxBatteryCapacity() * 100));
+        return ((int) device.getBatteryLevel()) == currentBattery;
     }
 
     public void addLocation(String location) {
@@ -300,6 +321,14 @@ public class SmartHome {
             addLog(logLevel, message);
         }
 
+    }
+
+    private void addBatteryLog(Level logLevel, String message) {
+        deviceBatteryLogList.addEnd(new LogTask(logLevel, message));
+
+        if(!logLevel.equals(Level.INFO)) {
+            addLog(logLevel, message);
+        }
     }
 
     private void logPowerConsumption() {
