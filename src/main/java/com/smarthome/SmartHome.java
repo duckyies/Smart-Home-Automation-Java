@@ -31,7 +31,7 @@ public class SmartHome {
     private CopyOnWriteArrayList<Device> poweredOffDevices;
     private ScheduledExecutorService scheduler;
 
-    private Random random = new Random();
+    private final Random random = new Random();
 
     private Logger powerConsumptionlogger;
     private Logger logger;
@@ -50,7 +50,7 @@ public class SmartHome {
 
     private double powerConsumption = 1;
 
-    private int threshold = 10;
+    private final int threshold = 10;
 
     public void initialize() {
 
@@ -199,6 +199,7 @@ public class SmartHome {
     public void  addToGroupAndType(@NotNull Device device) {
         groupMap.get(device.getDeviceGroup()).addDevice(device);
         typeMap.get(device.getDeviceType()).addDevice(device);
+        locationMap.get(device.getLocation()).addDevice(device);
     }
 
     public Device createDevice(String deviceName, String deviceType, String deviceGroup, String location) {
@@ -220,6 +221,21 @@ public class SmartHome {
             poweredOffDevices.add(device);
         }
         addToGroupAndType(device);
+        if (device.getPowerLevel() == 0) {
+            //powerReducableDevices.enqueue();
+        }
+    }
+
+    private void reduceBatteryTick() {
+        for (Device device : poweredOnDevices) {
+            if(device.isOnBattery()) {
+                device.reduceBatteryLevel();
+            }
+        }
+    }
+
+    private void reduceBatteryLevel() {
+        
     }
 
     public void addLocation(String location) {
@@ -336,8 +352,6 @@ public class SmartHome {
     private void changeMode() {
 
     }
-
-    private void 
 
     //another function i thought of but immediately forgot something to do with tick
 

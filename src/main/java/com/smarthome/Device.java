@@ -242,4 +242,5 @@ public class Device {
     public void flipInteractionState() {
         isInteracted = !isInteracted;
     }
+
 }
