@@ -1,4 +1,4 @@
-package com.smarthome;
+package com.smarthome.misc;
 
 public class EmptyListAccessException extends RuntimeException {
     public EmptyListAccessException(String message) {

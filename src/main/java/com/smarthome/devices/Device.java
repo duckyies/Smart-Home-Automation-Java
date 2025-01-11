@@ -1,4 +1,8 @@
-package com.smarthome;
+package com.smarthome.devices;
+
+import com.smarthome.enums.DeviceGroup.DeviceGroupEnum;
+import com.smarthome.enums.DeviceLocation.DeviceLocationEnum;
+import com.smarthome.enums.DeviceType.DeviceTypeEnum;
 
 import java.util.Date;
 
@@ -8,37 +12,24 @@ import java.util.Date;
  */
 public class Device {
 
-    // Static variable to keep track of the number of devices created
     static int deviceNum = 0;
     private final Date date = new Date();
 
-    // Unique identifier for the device
     private int deviceID;
-    // Name of the device
     private String deviceName;
-    // Type of the device (e.g., light, thermostat)
-    private String deviceType;
-    // Location of the device within the home
-    private String location;
-    // Group to which the device belongs (e.g., living room devices)
-    private String deviceGroup;
+    private DeviceTypeEnum deviceType;
+    private DeviceLocationEnum location;
+    private DeviceGroupEnum deviceGroup;
 
-    // Indicates whether the device is turned on or off
-    private Boolean isTurnedOn = false;
 
-    // Current battery level of the device
     private double batteryLevel;
-    // Maximum battery capacity of the device
     private int maxBatteryCapacity;
-
     private double currentBatteryCapacity;
-    // Power consumption of the device
-    private double basePowerConsumption;
-    // Indicates whether the device is running on battery
     private boolean isOnBattery;
-    // Current power level of the device
-    private int powerLevel;
 
+    private Boolean isTurnedOn = false;
+    private double basePowerConsumption;
+    private int powerLevel;
     private long turnedOnTime;
 
     private boolean isInteracted = false;
@@ -55,7 +46,7 @@ public class Device {
      * @param maxBatteryCapacity the maximum battery capacity of the device
      * @param powerLevel        the current power level of the device
      */
-    Device(String deviceName, String deviceType, String deviceGroup, String location, Boolean isTurnedOn, double batteryLevel, double powerConsumption, int maxBatteryCapacity, int powerLevel) {
+    public Device(String deviceName, DeviceTypeEnum deviceType, DeviceGroupEnum deviceGroup, DeviceLocationEnum location, Boolean isTurnedOn, double batteryLevel, double powerConsumption, int maxBatteryCapacity, int powerLevel) {
         this.deviceName = deviceName;
         this.deviceID = deviceNum++;
         this.deviceType = deviceType;
@@ -121,7 +112,7 @@ public class Device {
      *
      * @param basePowerConsumption the new power consumption
      */
-    public void setBasePowerConsumption(int basePowerConsumption) {
+    public void setBasePowerConsumption(double basePowerConsumption) {
         this.basePowerConsumption = basePowerConsumption;
     }
 
@@ -175,7 +166,7 @@ public class Device {
      *
      * @return the device type
      */
-    public String getDeviceType() {
+    public DeviceTypeEnum getDeviceType() {
         return deviceType;
     }
 
@@ -184,7 +175,7 @@ public class Device {
      *
      * @param deviceType the new type of the device
      */
-    public void setDeviceType(String deviceType) {
+    public void setDeviceType(DeviceTypeEnum deviceType) {
         this.deviceType = deviceType;
     }
 
@@ -193,7 +184,7 @@ public class Device {
      *
      * @return the location of the device
      */
-    public String getLocation() {
+    public DeviceLocationEnum getLocation() {
         return location;
     }
 
@@ -202,7 +193,7 @@ public class Device {
      *
      * @param location the new location of the device
      */
-    public void setLocation(String location) {
+    public void setLocation(DeviceLocationEnum location) {
         this.location = location;
     }
 
@@ -211,7 +202,7 @@ public class Device {
      *
      * @return the device group
      */
-    public String getDeviceGroup() {
+    public DeviceGroupEnum getDeviceGroup() {
         return deviceGroup;
     }
 
@@ -220,7 +211,7 @@ public class Device {
      *
      * @param deviceGroup the new group of the device
      */
-    public void setDeviceGroup(String deviceGroup) {
+    public void setDeviceGroup(DeviceGroupEnum deviceGroup) {
         this.deviceGroup = deviceGroup;
     }
 

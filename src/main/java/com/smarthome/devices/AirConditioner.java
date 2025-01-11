@@ -1,4 +1,8 @@
-package com.smarthome;
+package com.smarthome.devices;
+
+import com.smarthome.enums.DeviceGroup.DeviceGroupEnum;
+import com.smarthome.enums.DeviceLocation.DeviceLocationEnum;
+import com.smarthome.enums.DeviceType.DeviceTypeEnum;
 
 import java.util.Date;
 
@@ -20,7 +24,7 @@ public class AirConditioner extends Device {
      */
 
     private long simulationTempChangeTime;
-    AirConditioner(String deviceName, String deviceType, String deviceGroup, String location, Boolean isTurnedOn, double batteryLevel, double powerConsumption, int maxBatteryCapacity, int powerLevel, boolean mode) {
+    public AirConditioner(String deviceName, DeviceTypeEnum deviceType, DeviceGroupEnum deviceGroup, DeviceLocationEnum location, Boolean isTurnedOn, double batteryLevel, double powerConsumption, int maxBatteryCapacity, int powerLevel, boolean mode) {
         super(deviceName, deviceType, deviceGroup, location, isTurnedOn, batteryLevel, powerConsumption, maxBatteryCapacity, powerLevel);
 
         //true = cooling, false = heating

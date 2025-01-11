@@ -1,28 +1,47 @@
-package com.smarthome;
+package com.smarthome.enums;
+
+import com.smarthome.devices.Device;
 
 import java.util.ArrayList;
 
 /**
- * The DeviceType class represents a type of smart home devices.
+ * The DeviceLocation class represents a location within a smart home that contains multiple devices.
  */
-public class DeviceType {
-    // List of devices of this type
+public class DeviceLocation {
+
+    public enum DeviceLocationEnum {
+        LIVING_ROOM,
+        BEDROOM,
+        BEDROOM2,
+        BEDROOM3,
+        BEDROOM4,
+        GARDEN,
+        OFFICE,
+        ENTRANCE,
+        KITCHEN,
+        BATHROOM,
+        BATHROOM2,
+        BATHROOM3,
+        OTHERS;
+    }
+
     private ArrayList<Device> devices;
-    // Name of the device type
-    public String typeName;
+    public String location;
+
+    private double temperature;
 
     /**
-     * Constructor to initialize a new DeviceType object with the specified type name.
+     * Constructor to initialize a new DeviceLocation object with the specified location name.
      *
-     * @param typeName the name of the device type
+     * @param location the name of the location
      */
-    DeviceType(String typeName) {
-        this.typeName = typeName;
+    public DeviceLocation(String location) {
+        this.location = location;
         this.devices = new ArrayList<>();
     }
 
     /**
-     * Adds a device to the type.
+     * Adds a device to the location.
      *
      * @param device the device to be added
      */
@@ -31,7 +50,7 @@ public class DeviceType {
     }
 
     /**
-     * Removes a device from the type.
+     * Removes a device from the location.
      *
      * @param device the device to be removed
      */
@@ -40,7 +59,7 @@ public class DeviceType {
     }
 
     /**
-     * Returns the list of devices of this type.
+     * Returns the list of devices in the location.
      *
      * @return the list of devices
      */
@@ -49,7 +68,7 @@ public class DeviceType {
     }
 
     /**
-     * Turns off all devices of this type.
+     * Turns off all devices in the location.
      */
     public void turnOffAllDevices() {
         for (Device device : devices) {
@@ -58,12 +77,20 @@ public class DeviceType {
     }
 
     /**
-     * Turns on all devices of this type.
+     * Turns on all devices in the location.
      */
     public void turnOnAllDevices() {
         for (Device device : devices) {
             device.setTurnedOn(true);
         }
+    }
+
+    public double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
     }
 
     public Device getDeviceByName(String name) {
@@ -77,5 +104,10 @@ public class DeviceType {
 
     public Device getDeviceById(int id) {
         return devices.stream().filter(device -> device.getDeviceID() == id).findFirst().orElse(null);
+    }
+
+    @Override
+    public String toString() {
+        return "Location: " + location;
     }
 }

@@ -1,28 +1,43 @@
-package com.smarthome;
+package com.smarthome.enums;
+
+import com.smarthome.devices.Device;
 
 import java.util.ArrayList;
 
 /**
- * The DeviceGroup class represents a group of smart home devices.
+ * The DeviceType class represents a type of smart home devices.
  */
-public class DeviceGroup {
-    // List of devices in the group
+public class DeviceType {
+
+    public enum DeviceTypeEnum {
+        DECORATIVE,
+        NECESSARY,
+        HEALTH,
+        ENTERTAINMENT,
+        SECURITY,
+        PERSONAL_CARE,
+        CONNECTIVITY,
+        COOKING,
+        LUXURY,
+        OFFICE,
+        OTHERS;
+    }
+
     private ArrayList<Device> devices;
-    // Name of the device group
-    public String groupName;
+    public String typeName;
 
     /**
-     * Constructor to initialize a new DeviceGroup object with the specified group name.
+     * Constructor to initialize a new DeviceType object with the specified type name.
      *
-     * @param groupName the name of the device group
+     * @param typeName the name of the device type
      */
-    DeviceGroup(String groupName) {
-        this.groupName = groupName;
+    public DeviceType(String typeName) {
+        this.typeName = typeName;
         this.devices = new ArrayList<>();
     }
 
     /**
-     * Adds a device to the group.
+     * Adds a device to the type.
      *
      * @param device the device to be added
      */
@@ -31,7 +46,7 @@ public class DeviceGroup {
     }
 
     /**
-     * Removes a device from the group.
+     * Removes a device from the type.
      *
      * @param device the device to be removed
      */
@@ -40,7 +55,7 @@ public class DeviceGroup {
     }
 
     /**
-     * Returns the list of devices in the group.
+     * Returns the list of devices of this type.
      *
      * @return the list of devices
      */
@@ -49,7 +64,7 @@ public class DeviceGroup {
     }
 
     /**
-     * Turns off all devices in the group.
+     * Turns off all devices of this type.
      */
     public void turnOffAllDevices() {
         for (Device device : devices) {
@@ -58,7 +73,7 @@ public class DeviceGroup {
     }
 
     /**
-     * Turns on all devices in the group.
+     * Turns on all devices of this type.
      */
     public void turnOnAllDevices() {
         for (Device device : devices) {

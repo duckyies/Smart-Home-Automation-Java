@@ -1,12 +1,11 @@
 package com.smarthome;
 
-import com.smarthome.PriorityQueue;
-import com.smarthome.Task;
+import com.smarthome.datastuctures.PriorityQueue;
+import com.smarthome.tasks.Task;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class PriorityQueueTest {
 

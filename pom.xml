@@ -46,7 +46,6 @@
       <artifactId>maven-javadoc-plugin</artifactId>
       <configuration>
         <outputDirectory>${project.build.directory}/../docs</outputDirectory>
-        <destDir>.</destDir>
       </configuration>
     </plugin>
     <plugin>

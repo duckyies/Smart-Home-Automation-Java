@@ -1,11 +1,10 @@
-package com.smarthome;
+package com.smarthome.tasks;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class LogTask implements Comparable<LogTask>{
 

@@ -1,4 +1,4 @@
-package com.smarthome;
+package com.smarthome.tasks;
 
 /**
  * The Rule class represents a set of actions to be performed on smart home devices.

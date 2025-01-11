@@ -1,4 +1,7 @@
-package com.smarthome;
+package com.smarthome.datastuctures;
+import com.smarthome.misc.EmptyListAccessException;
+import com.smarthome.tasks.Task;
+
 import java.util.ArrayList;
 
 /**
@@ -15,7 +18,7 @@ public class PriorityQueue<T> {
     /**
      * Constructs an empty priority queue.
      */
-    PriorityQueue() {
+    public PriorityQueue() {
         this.queue = new ArrayList<Task<T>>();
     }
 
@@ -40,18 +43,18 @@ public class PriorityQueue<T> {
             queue.add(newTask);
             return;
         }
-        if(newTask.priority < queue.getFirst().priority) {
+        if(newTask.getPriority() < queue.getFirst().getPriority()) {
             queue.addFirst(newTask);
             return;
         }
 
-        if(newTask.priority >= queue.getLast().priority) {
+        if(newTask.getPriority() >= queue.getLast().getPriority()) {
             queue.addLast(newTask);
             return;
         }
         for(int i = 0; i < queue.size(); i++) {
 
-            if(queue.get(i).priority > newTask.priority) {
+            if(queue.get(i).getPriority() > newTask.getPriority()) {
                 queue.add(i , newTask);
                 break;
             }
@@ -74,7 +77,7 @@ public class PriorityQueue<T> {
      */
     public void print() {
         for(Task<T> task : queue) {
-            System.out.printf("Priority: %d, Task: %s\n", task.priority, task.task);
+            System.out.printf("Priority: %d, Task: %s\n", task.getPriority(), task.getTask());
         }
     }
 
@@ -142,7 +145,7 @@ public class PriorityQueue<T> {
      */
     public void updatePriority(Task<T> task, int priority) {
         if(queue.remove(task)) {
-            task.priority = priority;
+            task.setPriority(priority);
             enqueue(task);
         }
     }
@@ -155,8 +158,8 @@ public class PriorityQueue<T> {
      */
     public int getPriority(T task) {
         for(Task<T> task1 : queue) {
-            if(task1.task.equals(task)) {
-                return task1.priority;
+            if(task1.getTask().equals(task)) {
+                return task1.getPriority();
             }
         }
         return -1;
@@ -170,7 +173,7 @@ public class PriorityQueue<T> {
      */
     public Task<T> getTask(int priority) {
         for(Task<T> task1 : queue) {
-            if(task1.priority == priority) {
+            if(task1.getPriority() == priority) {
                 return task1;
             }
         }

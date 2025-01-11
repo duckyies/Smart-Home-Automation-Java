@@ -1,30 +1,46 @@
-package com.smarthome;
+package com.smarthome.enums;
+
+import com.smarthome.devices.Device;
 
 import java.util.ArrayList;
 
 /**
- * The DeviceLocation class represents a location within a smart home that contains multiple devices.
+ * The DeviceGroup class represents a group of smart home devices.
  */
-public class DeviceLocation {
-    // List of devices in the location
-    private ArrayList<Device> devices;
-    // Name of the location
-    public String location;
+public class DeviceGroup {
 
-    private double temperature;
+    public enum DeviceGroupEnum {
+        LIGHTS,
+        FANS,
+        ALARMS,
+        CAMERAS,
+        AIR_CONDITIONERS,
+        HEATERS,
+        APPLIANCES,
+        GARDENING,
+        ENTERTAINMENT,
+        CLEANING,
+        LAUNDRY,
+        WEARABLES,
+        BATHROOM,
+        OTHERS;
+    }
+
+    private ArrayList<Device> devices;
+    public String groupName;
 
     /**
-     * Constructor to initialize a new DeviceLocation object with the specified location name.
+     * Constructor to initialize a new DeviceGroup object with the specified group name.
      *
-     * @param location the name of the location
+     * @param groupName the name of the device group
      */
-    DeviceLocation(String location) {
-        this.location = location;
+    public DeviceGroup(String groupName) {
+        this.groupName = groupName;
         this.devices = new ArrayList<>();
     }
 
     /**
-     * Adds a device to the location.
+     * Adds a device to the group.
      *
      * @param device the device to be added
      */
@@ -33,7 +49,7 @@ public class DeviceLocation {
     }
 
     /**
-     * Removes a device from the location.
+     * Removes a device from the group.
      *
      * @param device the device to be removed
      */
@@ -42,7 +58,7 @@ public class DeviceLocation {
     }
 
     /**
-     * Returns the list of devices in the location.
+     * Returns the list of devices in the group.
      *
      * @return the list of devices
      */
@@ -51,7 +67,7 @@ public class DeviceLocation {
     }
 
     /**
-     * Turns off all devices in the location.
+     * Turns off all devices in the group.
      */
     public void turnOffAllDevices() {
         for (Device device : devices) {
@@ -60,20 +76,12 @@ public class DeviceLocation {
     }
 
     /**
-     * Turns on all devices in the location.
+     * Turns on all devices in the group.
      */
     public void turnOnAllDevices() {
         for (Device device : devices) {
             device.setTurnedOn(true);
         }
-    }
-
-    public double getTemperature() {
-        return temperature;
-    }
-
-    public void setTemperature(double temperature) {
-        this.temperature = temperature;
     }
 
     public Device getDeviceByName(String name) {
@@ -88,5 +96,4 @@ public class DeviceLocation {
     public Device getDeviceById(int id) {
         return devices.stream().filter(device -> device.getDeviceID() == id).findFirst().orElse(null);
     }
-
 }

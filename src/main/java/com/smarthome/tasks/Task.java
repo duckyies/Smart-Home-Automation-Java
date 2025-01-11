@@ -1,4 +1,4 @@
-package com.smarthome;
+package com.smarthome.tasks;
 import java.util.Comparator;
 
 /**

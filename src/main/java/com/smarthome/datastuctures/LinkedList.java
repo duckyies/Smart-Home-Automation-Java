@@ -1,4 +1,6 @@
-package com.smarthome;
+package com.smarthome.datastuctures;
+import com.smarthome.misc.EmptyListAccessException;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -50,7 +52,7 @@ public class LinkedList<T extends Comparable<T>> {
     /**
      * Constructs an empty linked list.
      */
-    LinkedList() {
+    public LinkedList() {
         this.head = null;
     }
 
