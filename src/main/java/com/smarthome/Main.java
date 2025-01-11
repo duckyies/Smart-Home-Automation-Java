@@ -3,7 +3,7 @@ package com.smarthome;
 public class Main {
 
     public static void main(String[] args) {
-        SmartHome testHome = new SmartHome();
+        SmartHome testHome = new SmartHome(10,25);
         System.out.println("Initializing smart home...");
         testHome.initialize();
         testHome.addDevice(testHome.createDevice("Living Room Light", "Necessary", "Lights", "Living Room", true, 100, 0.15, 5000, 1));
@@ -31,6 +31,7 @@ public class Main {
 
         testHome.addDevice(testHome.createDevice("Living Room AC", "Necessary", "AirConditioners", "Living Room", true, 0, 1.20, 0, 1));
         // Keep the program running
+        System.out.println(testHome.getDeviceByLocation("Bedroom", "Bedroom Light"));
         while (true) {
             try {
                     Thread.sleep(1); // Sleep to reduce CPU usage

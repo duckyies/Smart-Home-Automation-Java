@@ -1,8 +1,8 @@
 package com.smarthome;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.TestOnly;
 
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.*;
 /**
  * Entry point for the Smart Home Automation project.
@@ -16,15 +16,13 @@ import java.util.concurrent.*;
  * @date 2024-12-27
  */
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.*;
 
 public class SmartHome {
 
     int tickCount = 0;
-    
+
     private final ConcurrentHashMap<String, DeviceGroup> groupMap = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, DeviceType> typeMap = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, DeviceLocation> locationMap = new ConcurrentHashMap<>();
@@ -56,12 +54,19 @@ public class SmartHome {
 
     private double powerConsumption = 1;
 
-    private final int threshold = 10;
+    private int threshold;
+    private int idealTemp;
+
+    SmartHome(int threshold, int idealTemp) {
+        this.threshold = threshold;
+        this.idealTemp = idealTemp;
+        initialize();
+    }
 
     public void initialize() {
 
         ArrayList<String> deviceGroupList = new ArrayList<>(
-                List.of("Lights", "Fans", "Alarms", "Cameras", "AirConditioners", "Heaters", "Appliances", "Gardening", "Entertainment", "Cleaning", "Laundry", "Wearables","Bathroom", "Others")
+                List.of("Lights", "Fans", "Alarms", "Cameras", "AirConditioners", "Appliances", "Gardening", "Entertainment", "Cleaning", "Laundry", "Wearables","Bathroom", "Others")
         );
         ArrayList<String> deviceTypeList = new ArrayList<>(
                 List.of("Decorative", "Necessary", "Health", "Entertainment", "Security", "PersonalCare","Connectivity", "Cooking", "Luxury", "Office", "Others")
@@ -171,12 +176,23 @@ public class SmartHome {
     }
 
     private void initializeScheduler() {
-        scheduler = Executors.newScheduledThreadPool(2);
+        scheduler = Executors.newScheduledThreadPool(3);
         startTick();
         System.out.println("Tick started");
         initializeLogger();
         startLogging();
         System.out.println("Logging started");
+        startRuleExecution();
+    }
+
+
+    private void startRuleExecution() {
+        scheduler.scheduleAtFixedRate(this::executeRules, 0, 1, TimeUnit.SECONDS);
+    }
+
+    private void executeRules() {
+        Rule rule = ruleList.peekAndRemove();
+
     }
 
     private void startTick() {
@@ -215,12 +231,23 @@ public class SmartHome {
     }
 
     public Device createDevice(String deviceName, String deviceType, String deviceGroup, String location) {
+        if (Objects.equals(deviceType, "AirConditioner")) {
+            return new AirConditioner(
+                    deviceName, deviceType, deviceGroup, location, false, 0, 0, 0, 1, true
+            );
+        }
         return new Device(
                 deviceName, deviceType, deviceGroup, location, false, 0,  0, 0, 1
         );
     };
 
     public Device createDevice(String deviceName, String deviceType, String deviceGroup, String location, boolean isTurnedOn, double batteryLevel, double powerConsumption, int maxBatteryCapacity, int powerLevel) {
+
+        if (Objects.equals(deviceType, "AirConditioner")) {
+            return new AirConditioner(
+                    deviceName, deviceType, deviceGroup, location, isTurnedOn, batteryLevel, powerConsumption, maxBatteryCapacity, powerLevel, true
+            );
+        }
         return new Device(
                 deviceName, deviceType, deviceGroup, location, isTurnedOn, batteryLevel, powerConsumption, maxBatteryCapacity, powerLevel
         );
@@ -345,6 +372,13 @@ public class SmartHome {
     private void tickTask() {
         logPowerConsumption();
         reduceBatteryTick();
+        checkEachDevice();
+    }
+
+    public void checkEachDevice() {
+        for (Device device : poweredOnDevices) {
+
+        }
     }
 
     private void simulateDeviceChange() {
@@ -352,6 +386,9 @@ public class SmartHome {
         List<Device> toTurnOn = new ArrayList<>();
 
         for (Device device : poweredOnDevices) {
+            if(device.getClass() != Device.class) {
+                continue;
+            }
             double randomDouble = random.nextDouble();
             if (randomDouble >= 0.6) {
                 toTurnOff.add(device);
@@ -373,10 +410,15 @@ public class SmartHome {
         toTurnOn.forEach(this::turnOnDevice);
     }
 
-    private void tempCheck(DeviceLocation location) {
+    @TestOnly
+    public Device getDeviceByLocation(String location, String name){
+        return locationMap.get(location).getDeviceByName(name);
+    }
+
+    private void tempCheck(Device AirConditioner, @NotNull DeviceLocation location) {
 
 
-
+        double setLevel = location.getTemperature() - idealTemp > 5 ? 5 : location.getTemperature() - idealTemp;
     }
 
     private void accidentallyturnedoncheck() {

@@ -278,4 +278,17 @@ public class Device {
         return (int) ((new Date().getTime() - turnedOnTime) / 60000);
     }
 
+    @Override
+    public String toString() {
+        return "Device ID: " + deviceID + "\n" +
+                "Device Name: " + deviceName + "\n" +
+                "Device Type: " + deviceType + "\n" +
+                "Device Group: " + deviceGroup + "\n" +
+                "Location: " + location + "\n" +
+                "Power Status: " + (isTurnedOn ? "On" : "Off") + "\n" +
+                "Battery Level: " + batteryLevel + "\n" +
+                "Power Consumption: " + basePowerConsumption + " W\n" +
+                "Power Level: " + powerLevel + "\n";
+    }
+
 }

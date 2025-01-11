@@ -65,4 +65,17 @@ public class DeviceGroup {
             device.setTurnedOn(true);
         }
     }
+
+    public Device getDeviceByName(String name) {
+        return devices.stream()
+                .filter(device -> device.getDeviceName()
+                .toLowerCase()
+                .contains(name.toLowerCase()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public Device getDeviceById(int id) {
+        return devices.stream().filter(device -> device.getDeviceID() == id).findFirst().orElse(null);
+    }
 }
