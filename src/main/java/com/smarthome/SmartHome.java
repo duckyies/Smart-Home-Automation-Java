@@ -81,7 +81,7 @@ public class SmartHome {
         for (String deviceType : deviceTypeList) {
             typeMap.put(deviceType, new DeviceType(deviceType));
         }
-        for (String location:  locationList) {
+        for (String location : locationList) {
             DeviceLocation devLocation = new DeviceLocation(location);
             locationMap.put(location, devLocation);
             devLocation.setTemperature(random.nextInt(10, 45));
@@ -231,7 +231,7 @@ public class SmartHome {
     }
 
     public Device createDevice(String deviceName, String deviceType, String deviceGroup, String location) {
-        if (Objects.equals(deviceType, "AirConditioner")) {
+        if (Objects.equals(deviceGroup, "AirConditioners")) {
             return new AirConditioner(
                     deviceName, deviceType, deviceGroup, location, false, 0, 0, 0, 1, true
             );
@@ -243,7 +243,7 @@ public class SmartHome {
 
     public Device createDevice(String deviceName, String deviceType, String deviceGroup, String location, boolean isTurnedOn, double batteryLevel, double powerConsumption, int maxBatteryCapacity, int powerLevel) {
 
-        if (Objects.equals(deviceType, "AirConditioner")) {
+        if (Objects.equals(deviceGroup, "AirConditioners")) {
             return new AirConditioner(
                     deviceName, deviceType, deviceGroup, location, isTurnedOn, batteryLevel, powerConsumption, maxBatteryCapacity, powerLevel, true
             );
@@ -377,7 +377,9 @@ public class SmartHome {
 
     public void checkEachDevice() {
         for (Device device : poweredOnDevices) {
-
+            if(device.getClass() == AirConditioner.class) {
+                tempCheck((AirConditioner) device, locationMap.get(device.getLocation()));
+            }
         }
     }
 
@@ -387,6 +389,7 @@ public class SmartHome {
 
         for (Device device : poweredOnDevices) {
             if(device.getClass() != Device.class) {
+                System.out.println(device.getDeviceName());
                 continue;
             }
             double randomDouble = random.nextDouble();
@@ -399,6 +402,10 @@ public class SmartHome {
         }
 
         for (Device device : poweredOffDevices) {
+            if(device.getClass() != Device.class) {
+                System.out.println(device.getDeviceName());
+                continue;
+            }
             if (device.getInteraction()) {
                 device.flipInteractionState();
             } else if (random.nextDouble() >= 0.6) {
@@ -415,10 +422,38 @@ public class SmartHome {
         return locationMap.get(location).getDeviceByName(name);
     }
 
-    private void tempCheck(Device AirConditioner, @NotNull DeviceLocation location) {
+    private void tempCheck(@NotNull AirConditioner airConditioner, @NotNull DeviceLocation location) {
 
+        System.out.println("Temperature check: " + location);
+        System.out.println("Ideal temp: " + idealTemp + " Current temp: " + location.getTemperature());
 
-        double setLevel = location.getTemperature() - idealTemp > 5 ? 5 : location.getTemperature() - idealTemp;
+        if (true) {
+            airConditioner.setSimulationTempChangeTime(date.getTime());
+            if (airConditioner.getMode()) {
+                System.out.println("Mode is on, decreasing temperature by " + airConditioner.getPowerLevel());
+                location.setTemperature(location.getTemperature() - airConditioner.getPowerLevel());
+            } else {
+                System.out.println("Mode is off, increasing temperature by " + airConditioner.getPowerLevel());
+                location.setTemperature(location.getTemperature() + airConditioner.getPowerLevel());
+            }
+        }
+
+        if (idealTemp == location.getTemperature()) {
+            System.out.println("Temperature is ideal, turning off device");
+            airConditioner.setPowerLevel(1);
+            turnOffDevice(airConditioner);
+            return;
+        }
+
+        if(idealTemp - location.getTemperature() > 0) {
+            airConditioner.setMode(false);
+            airConditioner.setPowerLevel(idealTemp - location.getTemperature() > 5 ? 5 : (int) (idealTemp - location.getTemperature()));
+        }
+        else {
+            airConditioner.setMode(true);
+            airConditioner.setPowerLevel(location.getTemperature() - idealTemp > 5 ? 5 : (int) (location.getTemperature() - idealTemp));
+        }
+
     }
 
     private void accidentallyturnedoncheck() {
