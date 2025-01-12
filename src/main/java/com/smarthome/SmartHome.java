@@ -10,6 +10,7 @@ import com.smarthome.enums.DeviceType;
 import com.smarthome.enums.DeviceGroup.DeviceGroupEnum;
 import com.smarthome.enums.DeviceLocation.DeviceLocationEnum;
 import com.smarthome.enums.DeviceType.DeviceTypeEnum;
+import com.smarthome.misc.RuleParsingException;
 import com.smarthome.tasks.LogTask;
 import com.smarthome.tasks.Rule;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +31,8 @@ import java.util.logging.*;
  * @author Tara Samiksha
  * @author Sarvesh Ram Kumar
  * @version 1.0
- * @date 2024-12-27
+ * @since 2021-04-10
+ * @see Device
  */
 public class SmartHome {
 
@@ -70,14 +72,16 @@ public class SmartHome {
     private double powerConsumption = 1;
     private int threshold;
     private int idealTemp;
+    private boolean simulate;
 
     // ========================================================================
     // Constructors and Initializers
     // ========================================================================
 
-    SmartHome(int threshold, int idealTemp) {
+    SmartHome(int threshold, int idealTemp, boolean simulate) {
         this.threshold = threshold;
         this.idealTemp = idealTemp;
+        this.simulate = simulate;
         initialize();
     }
 
@@ -157,6 +161,50 @@ public class SmartHome {
         poweredOnDevices.remove(device);
     }
 
+    public void removeDevice(@NotNull Device device) {
+        poweredOnDevices.remove(device);
+        poweredOffDevices.remove(device);
+        groupMap.get(device.getDeviceGroup().name()).removeDevice(device);
+        typeMap.get(device.getDeviceType().name()).removeDevice(device);
+        locationMap.get(device.getLocation().name()).removeDevice(device);
+    }
+
+    public Device getDeviceByName(String name) {
+        for (Device device : poweredOnDevices) {
+            if (device.getDeviceName().equals(name)) {
+                return device;
+            }
+        }
+        for (Device device : poweredOffDevices) {
+            if (device.getDeviceName().equals(name)) {
+                return device;
+            }
+        }
+        return null;
+    }
+
+    public Device getDeviceByID(int id) {
+        for (Device device : poweredOnDevices) {
+            if (device.getDeviceID() == id) {
+                return device;
+            }
+        }
+        for (Device device : poweredOffDevices) {
+            if (device.getDeviceID() == id) {
+                return device;
+            }
+        }
+        return null;
+    }
+
+    public Device getDevice(int id) {
+        return getDeviceByID(id);
+    }
+
+    public Device getDevice(String name) {
+        return getDeviceByName(name);
+    }
+
     // ========================================================================
     // Tick and Scheduling
     // ========================================================================
@@ -182,15 +230,6 @@ public class SmartHome {
     }
 
     private void tick() {
-        tickCount++;
-        if (tickCount % 2 == 0) {
-            try {
-                // simulateDeviceChange();
-            } catch (Exception e) {
-                System.err.println("Error during deviceChange execution: " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
         try {
             tickTask();
         } catch (Exception e) {
@@ -200,11 +239,26 @@ public class SmartHome {
     }
 
     private void tickTask() {
-        realisticPowerConsumption();
-        logPowerConsumption();
-        reduceBatteryTick();
-        checkEachDevice();
-        checkEachLocation();
+        tickCount++;
+        if (tickCount % 2 == 0) {
+            try {
+                if (simulate) simulateDeviceChange();
+                realisticPowerConsumption();
+            } catch (Exception e) {
+                System.err.println("Error during deviceChange execution: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        try {
+            logPowerConsumption();
+            reduceBatteryTick();
+            checkEachDevice();
+            checkEachLocation();
+        }
+        catch (Exception e) {
+            System.err.println("Error during tickTask execution: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void startRuleExecution() {
@@ -503,6 +557,8 @@ public class SmartHome {
         toTurnOn.forEach(this::turnOnDevice);
     }
 
+
+
     private void accidentallyturnedoncheck() {
         // Implementation for checking accidentally turned on devices
     }
@@ -519,19 +575,47 @@ public class SmartHome {
     // Utility and Helper Methods
     // ========================================================================
 
-    // Function to get all devices in a group
     public List<Device> getDevicesByGroup(String groupName) {
         return groupMap.get(groupName).getDevices();
     }
 
-    // Function to get all devices of a type
     public List<Device> getDevicesByType(String typeName) {
         return typeMap.get(typeName).getDevices();
     }
 
-    // Function to get all devices in a location
     public List<Device> getDevicesByLocation(String locationName) {
         return locationMap.get(locationName).getDevices();
+    }
+
+    public Rule parseRule(@NotNull String ruleString) {
+
+        //maybe add if conditions later
+        //like samsung routines idk
+
+        /*
+        * FLIP - [flip deviceId/deviceName]
+        * TURN - [turn deviceId/deviceName on/off]
+        * SET - [set deviceId/deviceName powerLevel]
+        * GROUP - [group groupName on/off]
+        * TYPE - [type typeName on/off]
+        * LOCATION - [location locationName on/off]
+        * MODE - [mode deviceId/deviceName mode]
+        * */
+        ArrayList<String> tokens = new ArrayList<>(List.of(ruleString.toLowerCase().split(" ")));
+        ArrayList<String> validTokens = new ArrayList<>(List.of("flip", "turn", "set", "group", "type", "location", "mode"));
+
+        if (!validTokens.contains(tokens.getFirst())) {
+            throw new RuleParsingException("Invalid type of rule - " + tokens.getFirst() + "\nAvailable types - " + validTokens);
+        }
+
+        if (Objects.equals(tokens.getFirst(), "flip")) {
+            if(tokens.size() != 2) {
+                throw new RuleParsingException("Invalid number of arguments for flip rule");
+            }
+
+        }
+
+        return null;
     }
 
     // ========================================================================

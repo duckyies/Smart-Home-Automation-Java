@@ -5,7 +5,7 @@ import com.smarthome.enums.DeviceType.DeviceTypeEnum;
 public class Main {
 
     public static void main(String[] args) {
-        SmartHome testHome = new SmartHome(10,25);
+        SmartHome testHome = new SmartHome(10,25 , false);
         System.out.println("Initializing smart home...");
         testHome.addDevice(testHome.createDevice("Living Room Light", DeviceTypeEnum.NECESSARY, DeviceGroupEnum.LIGHTS, DeviceLocationEnum.LIVING_ROOM, true, 100, 0.15, 5000, 1));
         testHome.addDevice(testHome.createDevice("Bedroom Light", DeviceTypeEnum.NECESSARY, DeviceGroupEnum.LIGHTS, DeviceLocationEnum.BEDROOM, true, 100, 0.10, 4000, 1));
