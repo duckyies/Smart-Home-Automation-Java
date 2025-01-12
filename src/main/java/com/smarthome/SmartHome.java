@@ -16,7 +16,6 @@ import com.smarthome.tasks.Rule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
 
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.ReentrantLock;
@@ -575,6 +574,10 @@ public class SmartHome {
     // Utility and Helper Methods
     // ========================================================================
 
+    public static boolean isNumeric(String str) {
+        return str.matches("-?\\d+(\\.\\d+)?");
+    }
+
     public List<Device> getDevicesByGroup(String groupName) {
         return groupMap.get(groupName).getDevices();
     }
@@ -609,13 +612,51 @@ public class SmartHome {
         }
 
         if (Objects.equals(tokens.getFirst(), "flip")) {
-            if(tokens.size() != 2) {
-                throw new RuleParsingException("Invalid number of arguments for flip rule");
+
+            checkTokenSize(tokens, 2);
+            Device device = checkTokenForDevice(tokens.get(1));
+
+            return new Rule(device.getDeviceID(), true, false, false, false, 0, false, false, "", false, false, "", false, false, "");
+
+        } else if (Objects.equals(tokens.getFirst(), "turn")) {
+
+            checkTokenSize(tokens, 3);
+            Device device = checkTokenForDevice(tokens.get(1));
+
+            boolean state;
+
+            if (Objects.equals(tokens.get(2), "on")) {
+                state = true;
+            } else if (Objects.equals(tokens.get(2), "off")) {
+                state = false;
+            } else {
+                throw new RuleParsingException("Invalid argument for turn device - " + tokens.get(2));
             }
 
+            return new Rule(device.getDeviceID(), false, state, !state, false, 0, false, false, "", false, false, "", false, false, "");
         }
 
         return null;
+    }
+
+    public Device checkTokenForDevice(String token) {
+        Device device;
+        if(isNumeric(token)) {
+            device = getDevice(Integer.parseInt(token));
+        } else {
+            device = getDevice(token);
+        }
+
+        if(device == null) {
+            throw new RuleParsingException("Device not found");
+        }
+        return device;
+    }
+
+    public void checkTokenSize(ArrayList<String> tokens, int size) {
+        if(tokens.size() != size) {
+            throw new RuleParsingException("Invalid number of arguments for rule");
+        }
     }
 
     // ========================================================================

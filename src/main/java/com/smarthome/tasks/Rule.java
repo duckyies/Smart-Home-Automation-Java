@@ -9,6 +9,8 @@ public class Rule implements Comparable<Rule> {
     private int deviceId;
     // Indicates whether to flip the state of the device
     private boolean flipState;
+    private boolean turnOn;
+    private boolean turnOff;
     // Indicates whether to set the power level of the device
     private boolean setPowerLevel;
     // The power level to be set
@@ -49,7 +51,7 @@ public class Rule implements Comparable<Rule> {
      * @param turnLocationOn   whether to turn on the location of devices
      * @param locationName     the name of the location of devices
      */
-    public Rule(int deviceId, boolean flipState, boolean setPowerLevel, int powerLevel, boolean turnGroupOff, boolean turnGroupOn, String groupName, boolean turnTypeOff, boolean turnTypeOn, String typeName, boolean turnLocationOff, boolean turnLocationOn, String locationName) {
+    public Rule(int deviceId, boolean flipState, boolean turnOn, boolean turnOff, boolean setPowerLevel, int powerLevel, boolean turnGroupOff, boolean turnGroupOn, String groupName, boolean turnTypeOff, boolean turnTypeOn, String typeName, boolean turnLocationOff, boolean turnLocationOn, String locationName) {
         this.deviceId = deviceId;
         this.flipState = flipState;
         this.setPowerLevel = setPowerLevel;
@@ -63,6 +65,8 @@ public class Rule implements Comparable<Rule> {
         this.turnLocationOff = turnLocationOff;
         this.turnLocationOn = turnLocationOn;
         this.locationName = locationName;
+        this.turnOn = turnOn;
+        this.turnOff = turnOff;
     }
 
     /**
@@ -297,6 +301,22 @@ public class Rule implements Comparable<Rule> {
      */
     public void setLocationName(String locationName) {
         this.locationName = locationName;
+    }
+
+    public boolean isTurnOn() {
+        return turnOn;
+    }
+
+    public void setTurnOn(boolean turnOn) {
+        this.turnOn = turnOn;
+    }
+
+    public boolean isTurnOff() {
+        return turnOff;
+    }
+
+    public void setTurnOff(boolean turnOff) {
+        this.turnOff = turnOff;
     }
 
     @Override
