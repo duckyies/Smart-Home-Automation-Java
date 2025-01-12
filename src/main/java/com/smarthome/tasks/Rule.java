@@ -37,21 +37,21 @@ public class Rule implements Comparable<Rule> {
     /**
      * Constructor to initialize a new Rule object with the specified attributes.
      *
-     * @param deviceId         the ID of the device
-     * @param flipState        whether to flip the state of the device
-     * @param setPowerLevel    whether to set the power level of the device
-     * @param powerLevel       the power level to be set
-     * @param turnGroupOff     whether to turn off the group of devices
-     * @param turnGroupOn      whether to turn on the group of devices
-     * @param groupName        the name of the group of devices
-     * @param turnTypeOff      whether to turn off the type of devices
-     * @param turnTypeOn       whether to turn on the type of devices
-     * @param typeName         the name of the type of devices
-     * @param turnLocationOff  whether to turn off the location of devices
-     * @param turnLocationOn   whether to turn on the location of devices
-     * @param locationName     the name of the location of devices
+     * @param deviceId        the ID of the device
+     * @param flipState       whether to flip the state of the device
+     * @param setPowerLevel   whether to set the power level of the device
+     * @param powerLevel      the power level to be set
+     * @param groupName       the name of the group of devices
+     * @param turnGroupOff    whether to turn off the group of devices
+     * @param turnGroupOn     whether to turn on the group of devices
+     * @param typeName        the name of the type of devices
+     * @param turnTypeOff     whether to turn off the type of devices
+     * @param turnTypeOn      whether to turn on the type of devices
+     * @param locationName    the name of the location of devices
+     * @param turnLocationOff whether to turn off the location of devices
+     * @param turnLocationOn  whether to turn on the location of devices
      */
-    public Rule(int deviceId, boolean flipState, boolean turnOn, boolean turnOff, boolean setPowerLevel, int powerLevel, boolean turnGroupOff, boolean turnGroupOn, String groupName, boolean turnTypeOff, boolean turnTypeOn, String typeName, boolean turnLocationOff, boolean turnLocationOn, String locationName) {
+    public Rule(int deviceId, boolean flipState, boolean turnOn, boolean turnOff, boolean setPowerLevel, int powerLevel, String groupName, boolean turnGroupOff, boolean turnGroupOn, String typeName, boolean turnTypeOff, boolean turnTypeOn, String locationName, boolean turnLocationOff, boolean turnLocationOn) {
         this.deviceId = deviceId;
         this.flipState = flipState;
         this.setPowerLevel = setPowerLevel;
@@ -317,6 +317,27 @@ public class Rule implements Comparable<Rule> {
 
     public void setTurnOff(boolean turnOff) {
         this.turnOff = turnOff;
+    }
+
+    @Override
+    public String toString() {
+        return "Rule{" +
+                "deviceId=" + deviceId +
+                ", flipState=" + flipState +
+                ", turnOn=" + turnOn +
+                ", turnOff=" + turnOff +
+                ", setPowerLevel=" + setPowerLevel +
+                ", powerLevel=" + powerLevel +
+                ", turnGroupOff=" + turnGroupOff +
+                ", turnGroupOn=" + turnGroupOn +
+                ", groupName='" + groupName + '\'' +
+                ", turnTypeOff=" + turnTypeOff +
+                ", turnTypeOn=" + turnTypeOn +
+                ", typeName='" + typeName + '\'' +
+                ", turnLocationOff=" + turnLocationOff +
+                ", turnLocationOn=" + turnLocationOn +
+                ", locationName='" + locationName + '\'' +
+                '}';
     }
 
     @Override

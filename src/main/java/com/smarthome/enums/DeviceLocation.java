@@ -76,6 +76,10 @@ public class DeviceLocation {
         }
     }
 
+    public String getLocation() {
+        return location;
+    }
+
     /**
      * Turns on all devices in the location.
      */

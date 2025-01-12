@@ -21,6 +21,8 @@ public class Main {
         testHome.addDevice(testHome.createDevice("Kitchen Camera", DeviceTypeEnum.SECURITY, DeviceGroupEnum.CAMERAS, DeviceLocationEnum.KITCHEN, true, 100, 0.05, 3000, 0));
         testHome.addDevice(testHome.createDevice("Living Room AC", DeviceTypeEnum.NECESSARY, DeviceGroupEnum.AIR_CONDITIONERS, DeviceLocationEnum.LIVING_ROOM, true, 0, 0.20, 0, 1));
 
+        System.out.println(testHome.parseRule("group cameras off"));
+
         while (true) {
             try {
                 Thread.sleep(1); // Sleep to reduce CPU usage

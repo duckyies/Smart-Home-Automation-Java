@@ -36,6 +36,10 @@ public class DeviceType {
         this.devices = new ArrayList<>();
     }
 
+    public String getTypeName() {
+        return typeName;
+    }
+
     /**
      * Adds a device to the type.
      *

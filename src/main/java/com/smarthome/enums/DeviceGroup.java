@@ -75,6 +75,10 @@ public class DeviceGroup {
         }
     }
 
+    public String getGroupName() {
+        return groupName;
+    }
+
     /**
      * Turns on all devices in the group.
      */

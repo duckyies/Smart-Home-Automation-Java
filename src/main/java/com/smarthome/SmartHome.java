@@ -71,6 +71,7 @@ public class SmartHome {
     private double powerConsumption = 1;
     private int threshold;
     private int idealTemp;
+    private String mode = "Normal";
     private boolean simulate;
 
     // ========================================================================
@@ -170,12 +171,12 @@ public class SmartHome {
 
     public Device getDeviceByName(String name) {
         for (Device device : poweredOnDevices) {
-            if (device.getDeviceName().equals(name)) {
+            if (device.getDeviceName().toLowerCase().equals(name)) {
                 return device;
             }
         }
         for (Device device : poweredOffDevices) {
-            if (device.getDeviceName().equals(name)) {
+            if (device.getDeviceName().toLowerCase().equals(name)) {
                 return device;
             }
         }
@@ -602,7 +603,7 @@ public class SmartHome {
         * GROUP - [group groupName on/off]
         * TYPE - [type typeName on/off]
         * LOCATION - [location locationName on/off]
-        * MODE - [mode deviceId/deviceName mode]
+        * MODE - [mode modeName]
         * */
         ArrayList<String> tokens = new ArrayList<>(List.of(ruleString.toLowerCase().split(" ")));
         ArrayList<String> validTokens = new ArrayList<>(List.of("flip", "turn", "set", "group", "type", "location", "mode"));
@@ -616,7 +617,7 @@ public class SmartHome {
             checkTokenSize(tokens, 2);
             Device device = checkTokenForDevice(tokens.get(1));
 
-            return new Rule(device.getDeviceID(), true, false, false, false, 0, false, false, "", false, false, "", false, false, "");
+            return new Rule(device.getDeviceID(), true, false, false, false, 0, "", false, false, "", false, false, "", false, false);
 
         } else if (Objects.equals(tokens.getFirst(), "turn")) {
 
@@ -633,9 +634,63 @@ public class SmartHome {
                 throw new RuleParsingException("Invalid argument for turn device - " + tokens.get(2));
             }
 
-            return new Rule(device.getDeviceID(), false, state, !state, false, 0, false, false, "", false, false, "", false, false, "");
-        }
+            return new Rule(device.getDeviceID(), false, state, !state, false, 0, "", false, false, "", false, false, "", false, false);
 
+        } else if (Objects.equals(tokens.getFirst(), "set")) {
+
+            checkTokenSize(tokens, 3);
+            Device device = checkTokenForDevice(tokens.get(1));
+
+            if(!isNumeric(tokens.get(2))) {
+                throw new RuleParsingException("Invalid argument for set power level - " + tokens.get(2));
+            }
+
+            int powerLevel = Integer.parseInt(tokens.get(2));
+            if(powerLevel < 0 || powerLevel > 5) {
+                throw new RuleParsingException("Invalid power level - " + powerLevel);
+            }
+            return new Rule(device.getDeviceID(), false, false, false, true, powerLevel, "", false, false, "", false, false, "", false, false);
+        
+        } else if (Objects.equals(tokens.getFirst(), "group")) {
+
+            checkTokenSize(tokens, 3);
+            DeviceGroup group = groupMap.get(tokens.get(1));
+            if(group == null) {
+                throw new RuleParsingException("Group not found");
+            }
+
+            boolean state = checkTokenOnOff(tokens.get(2));
+
+            return new Rule(-1, false, state, !state, false, 0, group.getGroupName(), state, !state, "", false, false, "", false, false);
+
+        } else if (Objects.equals(tokens.getFirst(), "type")) {
+
+            checkTokenSize(tokens, 3);
+            DeviceType type = typeMap.get(tokens.get(1));
+            if(type == null) {
+                throw new RuleParsingException("Type not found");
+            }
+
+            boolean state = checkTokenOnOff(tokens.get(2));
+
+            return new Rule(-1, false, state, !state, false, 0, "", false, false, type.getTypeName(), state, !state, "", false, false);
+
+        } else if (Objects.equals(tokens.getFirst(), "location")) {
+
+            checkTokenSize(tokens, 3);
+            DeviceLocation location = locationMap.get(tokens.get(1));
+            if(location == null) {
+                throw new RuleParsingException("Location not found");
+            }
+
+            boolean state = checkTokenOnOff(tokens.get(2));
+
+            return new Rule(-1, false, state, !state, false, 0, "", false, false, "", false, false, location.getLocation(), state, !state);
+
+        } else if (Objects.equals(tokens.getFirst(), "mode")) {
+
+            checkTokenSize(tokens, 2);
+        }
         return null;
     }
 
@@ -653,9 +708,19 @@ public class SmartHome {
         return device;
     }
 
-    public void checkTokenSize(ArrayList<String> tokens, int size) {
+    public void checkTokenSize(@NotNull ArrayList<String> tokens, int size) {
         if(tokens.size() != size) {
             throw new RuleParsingException("Invalid number of arguments for rule");
+        }
+    }
+
+    public boolean checkTokenOnOff(String token) {
+        if (Objects.equals(token, "on")) {
+            return true;
+        } else if (Objects.equals(token, "off")) {
+           return false;
+        } else {
+            throw new RuleParsingException("Invalid argument for turn location - " + token);
         }
     }
 
