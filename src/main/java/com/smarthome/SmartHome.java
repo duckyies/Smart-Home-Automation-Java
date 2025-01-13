@@ -34,6 +34,7 @@ import java.util.logging.*;
  * @since 2021-04-10
  * @see Device
  */
+@SuppressWarnings({"unused", "CallToPrintStackTrace"})
 public class SmartHome {
 
     // ========================================================================
@@ -59,7 +60,7 @@ public class SmartHome {
 
     // Device queues
     private final PriorityQueue<Device> deviceQueue = new PriorityQueue<>(); // You planned to give priority based on type and group, make enum
-    private final PriorityQueue<Device> powerReducableDevices = new PriorityQueue<>();
+    private final PriorityQueue<Device> powerReducibleDevices = new PriorityQueue<>();
     private final PriorityQueue<Device> turnBackOnDevices = new PriorityQueue<>();
     // Logging lists
     private final LinkedList<LogTask> loggingList = new LinkedList<>();
@@ -150,7 +151,7 @@ public class SmartHome {
         if (device.getPowerLevel() != 0) {
             if (device.getDeviceType().getPriority() == Integer.MAX_VALUE) return;
             DeviceLocation location = locationMap.get(device.getLocation().name());
-            powerReducableDevices.enqueue(new Task<>(device, device.getDeviceType().getPriority() + device.getDeviceGroup().getPriority() + (location.getPeople() * 10)));
+            powerReducibleDevices.enqueue(new Task<>(device, device.getDeviceType().getPriority() + device.getDeviceGroup().getPriority() + (location.getPeople() * 10)));
         }
     }
 
@@ -266,6 +267,34 @@ public class SmartHome {
         });
     }
 
+    public void addPerson(@NotNull DeviceLocation location) {
+        location.addPeople(1);
+        location.getDevices().forEach(device -> {
+            if (device.isTurnedOn()) {
+                System.out.println("Old priority: " + deviceQueue.getTask(device).getPriority());
+                Task<Device> task = deviceQueue.getTask(device);
+                deviceQueue.updatePriority(task, task.getPriority() + 10);
+                System.out.println("New priority: " + deviceQueue.getTask(device).getPriority());
+            }
+        });
+    }
+
+    public void removePerson(@NotNull DeviceLocation location) {
+        location.addPeople(1);
+        System.out.println("People in location: " + location.getDevices());
+        location.getDevices().forEach(device -> {
+            if (device.isTurnedOn()) {
+                System.out.println("Old priority: " + deviceQueue.getTask(device).getPriority());
+                Task<Device> task = deviceQueue.getTask(device);
+                deviceQueue.updatePriority(task, task.getPriority() - 10);
+                System.out.println("New priority: " + deviceQueue.getTask(device).getPriority());
+            }
+            else {
+                System.out.println("Device is turned off");
+            }
+        });
+    }
+
     // ========================================================================
     // Tick and Scheduling
     // ========================================================================
@@ -303,11 +332,20 @@ public class SmartHome {
         double currPowerConsumption = calculateCurrentPowerConsumption();
 
         if (currPowerConsumption > threshold) {
-            Task<Device> reducePowerTask = powerReducableDevices.dequeue();
+            Task<Device> reducePowerTask = powerReducibleDevices.dequeue();
+            if (reducePowerTask == null) {
+                System.out.println("No devices to reduce power consumption");
+                return;
+            }
             Device device = reducePowerTask.getTask();
 
             if (currPowerConsumption - (device.getBasePowerConsumption() * (device.getPowerLevel() - 1)) > threshold) {
+                powerReducibleDevices.enqueue(reducePowerTask);
                 Task<Device> removeTask = deviceQueue.dequeue();
+                if (removeTask == null) {
+                    System.out.println("No devices to turn off");
+                    return;
+                }
                 Device removeDevice = removeTask.getTask();
 
                 System.out.println("Reducing power consumption by turning off " + device.getDeviceName());
@@ -660,7 +698,7 @@ public class SmartHome {
 
     public void executeRule(@NotNull Rule rule) {
 
-        /*"Rule{" +
+        /*"
                 "deviceId=" + deviceId +
                 ", flipState=" + flipState +
                 ", turnOn=" + turnOn +
@@ -765,8 +803,19 @@ public class SmartHome {
 
     private void checkEachLocation() {
 
-        //DO SOME SIMULATION WITH PEOPLE LEAVINGGGG
         for (DeviceLocation location : locationMap.values()) {
+
+            /*if (simulate) {
+                double randomDouble = random.nextDouble();
+                if (randomDouble >= 0.9) {
+                    System.out.println("Adding person to " + location);
+                    addPerson(location);
+                } else if (randomDouble <= 0.1) {
+                    System.out.println("Removing person from " + location);
+                    if (location.getPeople() > 0) removePerson(location);
+                }
+            }
+            */
             if (location.getTemperature() > 40) {
                 addLog(Level.SEVERE, String.format("Temperature in %s is above 40 degrees!", location));
             } else if (location.getTemperature() > 35) {
@@ -918,6 +967,30 @@ public class SmartHome {
         } else {
             throw new RuleParsingException("Invalid argument for turn location - " + token);
         }
+    }
+
+    public void setThreshold(int threshold) {
+        this.threshold = threshold;
+    }
+
+    public void setIdealTemp(int idealTemp) {
+        this.idealTemp = idealTemp;
+    }
+
+    public void setSimulate(boolean simulate) {
+        this.simulate = simulate;
+    }
+
+    public int getThreshold() {
+        return threshold;
+    }
+
+    public int getIdealTemp() {
+        return idealTemp;
+    }
+
+    public boolean isSimulate() {
+        return simulate;
     }
 
     // ========================================================================
