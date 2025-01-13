@@ -293,14 +293,13 @@ public class SmartHome {
     }
 
     public void checkPowerConsumption() {
-        //add lots of print statements to check if the logic is working
-        powerConsumption = calculateCurrentPowerConsumption();
+        double currPowerConsumption = calculateCurrentPowerConsumption();
 
-        if (powerConsumption > threshold) {
+        if (currPowerConsumption > threshold) {
             Task<Device> reducePowerTask = powerReducableDevices.dequeue();
             Device device = reducePowerTask.getTask();
 
-            if (powerConsumption - (device.getBasePowerConsumption() * (device.getPowerLevel() - 1)) > threshold) {
+            if (currPowerConsumption - (device.getBasePowerConsumption() * (device.getPowerLevel() - 1)) > threshold) {
                 Task<Device> removeTask = deviceQueue.dequeue();
                 Device removeDevice = removeTask.getTask();
 

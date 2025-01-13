@@ -3,6 +3,7 @@ import com.smarthome.misc.EmptyListAccessException;
 import com.smarthome.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * A generic priority queue implementation using an ArrayList.
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  * @param <T> The type of the task associated with each priority.
  */
 public class PriorityQueue<T> {
-
+    private final ReentrantLock lock = new ReentrantLock();
     private ArrayList<Task<T>> queue;
 
     /**
@@ -38,26 +39,32 @@ public class PriorityQueue<T> {
      * @param newTask The task to be added to the queue.
      */
     public void enqueue(Task<T> newTask) {
-
-        if (queue.isEmpty()) {
-            queue.add(newTask);
-            return;
-        }
-        if(newTask.getPriority() < queue.getFirst().getPriority()) {
-            queue.addFirst(newTask);
-            return;
-        }
-
-        if(newTask.getPriority() >= queue.getLast().getPriority()) {
-            queue.addLast(newTask);
-            return;
-        }
-        for(int i = 0; i < queue.size(); i++) {
-
-            if(queue.get(i).getPriority() > newTask.getPriority()) {
-                queue.add(i , newTask);
-                break;
+        lock.lock();
+        try {
+            if (queue.isEmpty()) {
+                queue.add(newTask);
+                return;
             }
+
+            if (newTask.getPriority() < queue.getFirst().getPriority()) {
+                queue.addFirst(newTask);
+                return;
+            }
+
+            if (newTask.getPriority() >= queue.getLast().getPriority()) {
+                queue.addLast(newTask);
+                return;
+            }
+            for (int i = 0; i < queue.size(); i++) {
+
+                if (queue.get(i).getPriority() > newTask.getPriority()) {
+                    queue.add(i, newTask);
+                    break;
+                }
+            }
+        }
+        finally {
+            lock.unlock();
         }
     }
 
@@ -66,10 +73,16 @@ public class PriorityQueue<T> {
      * @throws EmptyListAccessException if the queue is empty.
      */
     public Task<T> dequeue() {
-        if(queue.isEmpty()) {
-            return null;
+        lock.lock();
+        try {
+            if (queue.isEmpty()) {
+                return null;
+            }
+            return queue.removeFirst();
         }
-        return queue.removeFirst();
+        finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -77,8 +90,15 @@ public class PriorityQueue<T> {
      */
 
     public void print() {
-        for(Task<T> task : queue) {
-            System.out.printf("Priority: %d, Task: %s\n", task.getPriority(), task.getTask());
+        lock.lock();
+        try {
+            for (Task<T> task : queue) {
+                System.out.printf("Priority: %d, Task: %s\n", task.getPriority(), task.getTask());
+            }
+
+        }
+        finally {
+            lock.unlock();
         }
     }
 
@@ -88,10 +108,16 @@ public class PriorityQueue<T> {
      * @return The highest priority task, or null if the queue is empty.
      */
     public Task<T> peek() {
-        if(queue.isEmpty()) {
-            return null;
+        lock.lock();
+        try {
+            if (queue.isEmpty()) {
+                return null;
+            }
+            return queue.getFirst();
         }
-        return queue.getFirst();
+        finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -100,7 +126,13 @@ public class PriorityQueue<T> {
      * @return A new ArrayList containing all the tasks in the queue.
      */
     public ArrayList<Task<T>> getQueue() {
-        return new ArrayList<>(queue);
+        lock.lock();
+        try {
+            return new ArrayList<>(queue);
+        }
+        finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -109,8 +141,15 @@ public class PriorityQueue<T> {
      * @return The size of the queue.
      */
     public int size() {
-        return queue.size();
+        lock.lock();
+        try {
+            return queue.size();
+        }
+        finally {
+            lock.unlock();
+        }
     }
+
 
     /**
      * Checks if the priority queue is empty.
@@ -125,7 +164,13 @@ public class PriorityQueue<T> {
      * Removes all tasks from the priority queue, making it empty.
      */
     public void clear() {
-        queue.clear();
+        lock.lock();
+        try {
+            queue.clear();
+        }
+        finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -135,7 +180,13 @@ public class PriorityQueue<T> {
      * @return True if the queue contains the specified task, false otherwise.
      */
     public boolean contains(Task<T> task) {
-        return queue.contains(task);
+        lock.lock();
+        try {
+            return queue.contains(task);
+        }
+        finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -145,9 +196,15 @@ public class PriorityQueue<T> {
      * @param priority The new priority for the task.
      */
     public void updatePriority(Task<T> task, int priority) {
-        if(queue.remove(task)) {
-            task.setPriority(priority);
-            enqueue(task);
+        lock.lock();
+        try {
+            if (queue.remove(task)) {
+                task.setPriority(priority);
+                enqueue(task);
+            }
+        }
+        finally {
+            lock.unlock();
         }
     }
 
@@ -158,12 +215,18 @@ public class PriorityQueue<T> {
      * @return The priority of the task if found, or -1 if the task is not in the queue.
      */
     public int getPriority(T task) {
-        for(Task<T> task1 : queue) {
-            if(task1.getTask().equals(task)) {
-                return task1.getPriority();
+        lock.lock();
+        try {
+            for (Task<T> task1 : queue) {
+                if (task1.getTask().equals(task)) {
+                    return task1.getPriority();
+                }
             }
+            return -1;
         }
-        return -1;
+        finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -173,11 +236,16 @@ public class PriorityQueue<T> {
      * @return The first task with the specified priority, or null if no task with that priority exists.
      */
     public Task<T> getTask(int priority) {
-        for(Task<T> task1 : queue) {
-            if(task1.getPriority() == priority) {
-                return task1;
+        lock.lock();
+        try {
+            for (Task<T> task1 : queue) {
+                if (task1.getPriority() == priority) {
+                    return task1;
+                }
             }
+            return null;
+        } finally {
+            lock.unlock();
         }
-        return  null;
     }
 }
