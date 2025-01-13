@@ -189,6 +189,21 @@ public class PriorityQueue<T> {
         }
     }
 
+    public Task<T> getTask(T task) {
+        lock.lock();
+        try {
+            for (Task<T> task1 : queue) {
+                if (task1.getTask().equals(task)) {
+                    return task1;
+                }
+            }
+            return null;
+        }
+        finally {
+            lock.unlock();
+        }
+    }
+
     /**
      * Updates the priority of an existing task in the queue.
      *

@@ -82,6 +82,8 @@ public class Main {
         testHome.addRule(testHome.parseRule("set ceiling fan (living room) 5"));
         testHome.addRule(testHome.parseRule("set 1 3"));
 
+        testHome.addPerson(DeviceLocationEnum.LIVINGROOM);
+
         while (true) {
             try {
                 Thread.sleep(1); // Sleep to reduce CPU usage

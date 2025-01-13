@@ -27,7 +27,7 @@ public class DeviceLocation {
 
     private ArrayList<Device> devices;
     public String location;
-
+    private int people;
     private double temperature;
 
     /**
@@ -38,6 +38,7 @@ public class DeviceLocation {
     public DeviceLocation(String location) {
         this.location = location;
         this.devices = new ArrayList<>();
+        this.people = 0;
     }
 
     /**
@@ -65,6 +66,22 @@ public class DeviceLocation {
      */
     public ArrayList<Device> getDevices() {
         return devices;
+    }
+
+    public int getPeople() {
+        return people;
+    }
+
+    public void setPeople(int people) {
+        this.people = people;
+    }
+
+    public void addPeople(int people) {
+        this.people += people;
+    }
+
+    public void removePeople(int people) {
+        this.people -= people;
     }
 
     /**

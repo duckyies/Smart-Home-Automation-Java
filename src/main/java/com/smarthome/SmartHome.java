@@ -141,14 +141,16 @@ public class SmartHome {
             poweredOnDevices.add(device);
             device.setTurnedOnTime(date.getTime());
             if (device.getDeviceType().getPriority() == Integer.MAX_VALUE) return;
-            deviceQueue.enqueue(new Task<>(device, device.getDeviceType().getPriority() + device.getDeviceGroup().getPriority()));
+            DeviceLocation location = locationMap.get(device.getLocation().name());
+            deviceQueue.enqueue(new Task<>(device, device.getDeviceType().getPriority() + device.getDeviceGroup().getPriority() + (location.getPeople() * 10)));
         } else {
             poweredOffDevices.add(device);
         }
         addToGroupAndType(device);
         if (device.getPowerLevel() != 0) {
             if (device.getDeviceType().getPriority() == Integer.MAX_VALUE) return;
-            powerReducableDevices.enqueue(new Task<>(device, device.getDeviceType().getPriority() + device.getDeviceGroup().getPriority()));
+            DeviceLocation location = locationMap.get(device.getLocation().name());
+            powerReducableDevices.enqueue(new Task<>(device, device.getDeviceType().getPriority() + device.getDeviceGroup().getPriority() + (location.getPeople() * 10)));
         }
     }
 
@@ -204,51 +206,36 @@ public class SmartHome {
     }
 
     public void turnOffDevicesByGroup(String groupName) {
-        for (Device device : groupMap.get(groupName).getDevices()) {
-            turnOffDevice(device);
-        }
+        groupMap.get(groupName).getDevices().forEach(this::turnOffDevice);
     }
 
     public void turnOnDevicesByGroup(String groupName) {
-        for (Device device : groupMap.get(groupName).getDevices()) {
-            turnOnDevice(device);
-        }
+        groupMap.get(groupName).getDevices().forEach(this::turnOnDevice);
     }
 
     public void turnOffDevicesByType(String typeName) {
-        for (Device device : typeMap.get(typeName).getDevices()) {
-            turnOffDevice(device);
-        }
+        typeMap.get(typeName).getDevices().forEach(this::turnOffDevice);
+
     }
 
     public void turnOnDevicesByType(String typeName) {
-        for (Device device : typeMap.get(typeName).getDevices()) {
-            turnOnDevice(device);
-        }
+        typeMap.get(typeName).getDevices().forEach(this::turnOnDevice);
     }
 
     public void turnOffDevicesByLocation(String locationName) {
-        for (Device device : locationMap.get(locationName).getDevices()) {
-            turnOffDevice(device);
-        }
+        locationMap.get(locationName).getDevices().forEach(this::turnOffDevice);
     }
 
     public void turnOnDevicesByLocation(String locationName) {
-        for (Device device : locationMap.get(locationName).getDevices()) {
-            turnOnDevice(device);
-        }
+        locationMap.get(locationName).getDevices().forEach(this::turnOnDevice);
     }
 
     public void turnOffAllDevices() {
-        for (Device device : poweredOnDevices) {
-            turnOffDevice(device);
-        }
+        poweredOnDevices.forEach(this::turnOffDevice);
     }
 
     public void turnOnAllDevices() {
-        for (Device device : poweredOffDevices) {
-            turnOnDevice(device);
-        }
+        poweredOffDevices.forEach(this::turnOnDevice);
     }
 
     public Device getDevice(int id) {
@@ -257,6 +244,26 @@ public class SmartHome {
 
     public Device getDevice(String name) {
         return getDeviceByName(name);
+    }
+
+    public void addPerson(@NotNull DeviceLocationEnum location) {
+        locationMap.get(location.name()).addPeople(1);
+        locationMap.get(location.name()).getDevices().forEach(device -> {
+            if (device.isTurnedOn()) {
+                Task<Device> task = deviceQueue.getTask(device);
+                deviceQueue.updatePriority(task, task.getPriority() + 10);
+            }
+        });
+    }
+
+    public void removePerson(@NotNull DeviceLocationEnum location) {
+        locationMap.get(location.name()).removePeople(1);
+        locationMap.get(location.name()).getDevices().forEach(device -> {
+            if (device.isTurnedOn()) {
+                Task<Device> task = deviceQueue.getTask(device);
+                deviceQueue.updatePriority(task, task.getPriority() - 10);
+            }
+        });
     }
 
     // ========================================================================
@@ -315,6 +322,11 @@ public class SmartHome {
         else {
             Task<Device> turnBackOnTask = turnBackOnDevices.dequeue();
             if (turnBackOnTask != null) {
+                Device turnBackOnDevice = turnBackOnTask.getTask();
+                if (currPowerConsumption + (turnBackOnDevice.getBasePowerConsumption() * turnBackOnDevice.getPowerLevel()) > threshold) {
+                    System.out.println("Not turning back on " + turnBackOnTask.getTask().getDeviceName());
+                    return;
+                }
                 System.out.println("Turning back on " + turnBackOnTask.getTask().getDeviceName());
                 addRule(parseRule("turn " + turnBackOnTask.getTask().getDeviceID() + " on"));
             }
@@ -752,6 +764,8 @@ public class SmartHome {
     }
 
     private void checkEachLocation() {
+
+        //DO SOME SIMULATION WITH PEOPLE LEAVINGGGG
         for (DeviceLocation location : locationMap.values()) {
             if (location.getTemperature() > 40) {
                 addLog(Level.SEVERE, String.format("Temperature in %s is above 40 degrees!", location));
