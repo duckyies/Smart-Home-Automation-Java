@@ -23,7 +23,7 @@ public class Task<T> {
      * @param task     The task to be associated with this object.
      * @param priority The priority of the task.
      */
-    Task(T task, int priority) {
+    public Task(T task, int priority) {
         this.task = task;
         this.priority = priority;
     }

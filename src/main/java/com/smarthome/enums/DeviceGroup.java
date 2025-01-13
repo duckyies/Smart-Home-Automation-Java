@@ -10,21 +10,32 @@ import java.util.ArrayList;
 public class DeviceGroup {
 
     public enum DeviceGroupEnum {
-        LIGHTS,
-        FANS,
-        ALARMS,
-        CAMERAS,
-        AIRCONDITIONERS,
-        HEATERS,
-        APPLIANCES,
-        GARDENING,
-        ENTERTAINMENT,
-        CLEANING,
-        LAUNDRY,
-        WEARABLES,
-        BATHROOM,
-        OTHERS;
+        LIGHTS(10),
+        FANS(9),
+        ALARMS(15),
+        CAMERAS(14),
+        AIRCONDITIONERS(8),
+        HEATERS(8),
+        APPLIANCES(6),
+        GARDENING(3),
+        ENTERTAINMENT(2),
+        CLEANING(5),
+        LAUNDRY(4),
+        WEARABLES(7),
+        BATHROOM(12),
+        OTHERS(1);
+
+        private final int priority;
+
+        DeviceGroupEnum(int priority) {
+            this.priority = priority;
+        }
+
+        public int getPriority() {
+            return priority;
+        }
     }
+
 
     private ArrayList<Device> devices;
     public String groupName;

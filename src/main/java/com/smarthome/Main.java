@@ -24,6 +24,14 @@ public class Main {
         testHome.addRule(testHome.parseRule("group cameras off"));
         testHome.addRule(testHome.parseRule("group lights on"));
         testHome.addRule(testHome.parseRule("group fans off"));
+        testHome.addRule(testHome.parseRule("turn chandelier off"));
+        testHome.addRule(testHome.parseRule("turn garden light off"));
+        testHome.addRule(testHome.parseRule("turn living room light off"));
+        testHome.addRule(testHome.parseRule("turn bedroom light on"));
+        testHome.addRule(testHome.parseRule("turn ceiling fan (living room) on"));
+        testHome.addRule(testHome.parseRule("set ceiling fan (living room) 5"));
+        testHome.addRule(testHome.parseRule("set 1 3"));
+
         while (true) {
             try {
                 Thread.sleep(1); // Sleep to reduce CPU usage

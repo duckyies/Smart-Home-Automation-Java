@@ -115,7 +115,7 @@ public class SmartHome {
     }
 
     public Device createDevice(String deviceName, DeviceTypeEnum deviceType, DeviceGroupEnum deviceGroup, DeviceLocationEnum location) {
-        if (Objects.equals(deviceGroup, "AirConditioners")) {
+        if (Objects.equals(deviceGroup.name().toLowerCase(), "AirConditioners".toLowerCase())) {
             return new AirConditioner(
                     deviceName, deviceType, deviceGroup, location, false, 0, 0, 0, 1, true
             );
@@ -126,7 +126,7 @@ public class SmartHome {
     }
 
     public Device createDevice(String deviceName, DeviceTypeEnum deviceType, DeviceGroupEnum deviceGroup, DeviceLocationEnum location, boolean isTurnedOn, double batteryLevel, double powerConsumption, int maxBatteryCapacity, int powerLevel) {
-        if (Objects.equals(deviceGroup, "AirConditioners")) {
+        if (Objects.equals(deviceGroup.name().toLowerCase(), "AirConditioners".toLowerCase())) {
             return new AirConditioner(
                     deviceName, deviceType, deviceGroup, location, isTurnedOn, batteryLevel, powerConsumption, maxBatteryCapacity, powerLevel, true
             );
@@ -454,7 +454,6 @@ public class SmartHome {
             addPowerLog(Level.WARNING, String.format("Power consumption is %fW, which is %.2f percent above the threshold", powerConsumption, (powerConsumption - threshold) / threshold * 100));
         } else {
             addPowerLog(Level.INFO, String.format("Power consumption - %fW, %.2f percent of threshold", powerConsumption, powerConsumption / threshold * 100));
-            ;
         }
     }
 
@@ -491,11 +490,13 @@ public class SmartHome {
         }
     }
 
+
     private boolean reduceBatteryLevel(Device device) {
         int currentBattery = (int) device.getBatteryLevel();
         device.setCurrentBatteryCapacity(device.getCurrentBatteryCapacity() - (device.getBasePowerConsumption() * device.getPowerLevel()));
         device.setBatteryLevel((int) (device.getCurrentBatteryCapacity() / device.getMaxBatteryCapacity() * 100));
         return ((int) device.getBatteryLevel()) == currentBattery;
+
     }
 
     // ========================================================================
@@ -525,21 +526,23 @@ public class SmartHome {
 
         if (Objects.equals(tokens.getFirst(), "flip")) {
 
-            checkTokenSize(tokens, 2);
-            Device device = checkTokenForDevice(tokens.get(1));
+            tokens.removeFirst();
+            Device device = checkTokenForDevice(String.join(" ", tokens));
 
             return new Rule(device.getDeviceID(), true, false, false, false, 0, "", false, false, "", false, false, "", false, false);
 
         } else if (Objects.equals(tokens.getFirst(), "turn")) {
 
-            checkTokenSize(tokens, 3);
-            Device device = checkTokenForDevice(tokens.get(1));
+            String stateString = tokens.getLast();
+            tokens.removeLast();
+            tokens.removeFirst();
+            Device device = checkTokenForDevice(String.join(" ", tokens));
 
             boolean state;
 
-            if (Objects.equals(tokens.get(2), "on")) {
+            if (Objects.equals(stateString, "on")) {
                 state = true;
-            } else if (Objects.equals(tokens.get(2), "off")) {
+            } else if (Objects.equals(stateString, "off")) {
                 state = false;
             } else {
                 throw new RuleParsingException("Invalid argument for turn device - " + tokens.get(2));
@@ -549,14 +552,16 @@ public class SmartHome {
 
         } else if (Objects.equals(tokens.getFirst(), "set")) {
 
-            checkTokenSize(tokens, 3);
-            Device device = checkTokenForDevice(tokens.get(1).toUpperCase());
+            String stateString = tokens.getLast();
+            tokens.removeLast();
+            tokens.removeFirst();
+            Device device = checkTokenForDevice(String.join(" ", tokens));
 
-            if(!isNumeric(tokens.get(2))) {
+            if(!isNumeric(stateString)) {
                 throw new RuleParsingException("Invalid argument for set power level - " + tokens.get(2));
             }
 
-            int powerLevel = Integer.parseInt(tokens.get(2));
+            int powerLevel = Integer.parseInt(stateString);
             if(powerLevel < 0 || powerLevel > 5) {
                 throw new RuleParsingException("Invalid power level - " + powerLevel);
             }
@@ -589,7 +594,7 @@ public class SmartHome {
         } else if (Objects.equals(tokens.getFirst(), "location")) {
 
             checkTokenSize(tokens, 3);
-            DeviceLocation location = locationMap.get(tokens.get(1));
+            DeviceLocation location = locationMap.get(tokens.get(1).toUpperCase());
             if(location == null) {
                 throw new RuleParsingException("Location not found");
             }
@@ -725,16 +730,17 @@ public class SmartHome {
             if (location.getTemperature() != idealTemp) {
                 Device airConditioner = location.getDeviceByName("AirConditioner");
                 if (airConditioner != null) {
-                    turnOnDevice(airConditioner);
+                    addRule(parseRule("turn " + airConditioner.getDeviceID() + " on"));
+                    addRule(parseRule("set " + airConditioner.getDeviceID() + "1"));
                 }
             }
         }
     }
 
     private void tempCheck(@NotNull AirConditioner airConditioner, @NotNull DeviceLocation location) {
+
         if (airConditioner.getMinutesSinceTempChange() >= 1) {
             airConditioner.setSimulationTempChangeTime(date.getTime());
-
             if (airConditioner.getMode()) {
                 location.setTemperature(location.getTemperature() - airConditioner.getPowerLevel());
             } else {
@@ -744,17 +750,17 @@ public class SmartHome {
 
         if (idealTemp == location.getTemperature()) {
             addLog(Level.INFO, "Temperature is ideal, turning off AirConditioner in " + location);
-            airConditioner.setPowerLevel(1);
-            turnOffDevice(airConditioner);
+            addRule(parseRule("set " + airConditioner.getDeviceID() + " 1"));
+            addRule(parseRule("turn " + airConditioner.getDeviceID() + " off"));
             return;
         }
 
         if (idealTemp - location.getTemperature() > 0) {
             airConditioner.setMode(false);
-            airConditioner.setPowerLevel(idealTemp - location.getTemperature() > 5 ? 5 : (int) (idealTemp - location.getTemperature()));
+            addRule(parseRule("set " + airConditioner.getDeviceID() + " " + (idealTemp - location.getTemperature() > 5 ? 5 : (int) (idealTemp - location.getTemperature()))));
         } else {
             airConditioner.setMode(true);
-            airConditioner.setPowerLevel(location.getTemperature() - idealTemp > 5 ? 5 : (int) (location.getTemperature() - idealTemp));
+            addRule(parseRule("set " + airConditioner.getDeviceID() + " " + (location.getTemperature() - idealTemp > 5 ? 5 : (int) (location.getTemperature() - idealTemp))));
         }
     }
 
@@ -765,7 +771,7 @@ public class SmartHome {
     private void checkEachDevice() {
         for (Device device : poweredOnDevices) {
             if (device.getClass() == AirConditioner.class) {
-                tempCheck((AirConditioner) device, locationMap.get(device.getLocation()));
+                tempCheck((AirConditioner) device, locationMap.get(device.getLocation().name()));
             }
         }
     }
@@ -801,8 +807,6 @@ public class SmartHome {
         toTurnOff.forEach(this::turnOffDevice);
         toTurnOn.forEach(this::turnOnDevice);
     }
-
-
 
     private void accidentallyturnedoncheck() {
         // Implementation for checking accidentally turned on devices

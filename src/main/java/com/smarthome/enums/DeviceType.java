@@ -10,18 +10,29 @@ import java.util.ArrayList;
 public class DeviceType {
 
     public enum DeviceTypeEnum {
-        DECORATIVE,
-        NECESSARY,
-        HEALTH,
-        ENTERTAINMENT,
-        SECURITY,
-        PERSONALCARE,
-        CONNECTIVITY,
-        COOKING,
-        LUXURY,
-        OFFICE,
-        OTHERS;
+        DECORATIVE(1),
+        NECESSARY(Integer.MAX_VALUE),
+        HEALTH(15),
+        ENTERTAINMENT(3),
+        SECURITY(20),
+        PERSONALCARE(7),
+        CONNECTIVITY(10),
+        COOKING(12),
+        LUXURY(2),
+        OFFICE(10),
+        OTHERS(5);
+
+        private final int priority;
+
+        DeviceTypeEnum(int priority) {
+            this.priority = priority;
+        }
+
+        public int getPriority() {
+            return priority;
+        }
     }
+
 
     private ArrayList<Device> devices;
     public String typeName;
