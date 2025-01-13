@@ -65,16 +65,17 @@ public class PriorityQueue<T> {
      * Removes the highest priority task from the queue (the task at the front of the queue).
      * @throws EmptyListAccessException if the queue is empty.
      */
-    public void dequeue() {
+    public Task<T> dequeue() {
         if(queue.isEmpty()) {
-            throw new EmptyListAccessException("The queue is empty");
+            return null;
         }
-        queue.removeFirst();
+        return queue.removeFirst();
     }
 
     /**
      * Prints the priority and task of each element in the queue to the console.
      */
+
     public void print() {
         for(Task<T> task : queue) {
             System.out.printf("Priority: %d, Task: %s\n", task.getPriority(), task.getTask());

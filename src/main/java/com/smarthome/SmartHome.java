@@ -13,6 +13,7 @@ import com.smarthome.enums.DeviceType.DeviceTypeEnum;
 import com.smarthome.misc.RuleParsingException;
 import com.smarthome.tasks.LogTask;
 import com.smarthome.tasks.Rule;
+import com.smarthome.tasks.Task;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
 
@@ -59,7 +60,7 @@ public class SmartHome {
     // Device queues
     private final PriorityQueue<Device> deviceQueue = new PriorityQueue<>(); // You planned to give priority based on type and group, make enum
     private final PriorityQueue<Device> powerReducableDevices = new PriorityQueue<>();
-
+    private final PriorityQueue<Device> turnBackOnDevices = new PriorityQueue<>();
     // Logging lists
     private final LinkedList<LogTask> loggingList = new LinkedList<>();
     private final LinkedList<LogTask> powerConsumptionLogList = new LinkedList<>();
@@ -78,7 +79,7 @@ public class SmartHome {
     // Constructors and Initializers
     // ========================================================================
 
-    SmartHome(int threshold, int idealTemp, boolean simulate) {
+    public SmartHome(int threshold, int idealTemp, boolean simulate) {
         this.threshold = threshold;
         this.idealTemp = idealTemp;
         this.simulate = simulate;
@@ -103,7 +104,6 @@ public class SmartHome {
         initializeScheduler();
     }
 
-
     // ========================================================================
     // Device Management
     // ========================================================================
@@ -114,7 +114,7 @@ public class SmartHome {
         locationMap.get(device.getLocation().name()).addDevice(device);
     }
 
-    public Device createDevice(String deviceName, DeviceTypeEnum deviceType, DeviceGroupEnum deviceGroup, DeviceLocationEnum location) {
+    public Device createDevice(String deviceName, DeviceTypeEnum deviceType, @NotNull DeviceGroupEnum deviceGroup, DeviceLocationEnum location) {
         if (Objects.equals(deviceGroup.name().toLowerCase(), "AirConditioners".toLowerCase())) {
             return new AirConditioner(
                     deviceName, deviceType, deviceGroup, location, false, 0, 0, 0, 1, true
@@ -125,7 +125,7 @@ public class SmartHome {
         );
     }
 
-    public Device createDevice(String deviceName, DeviceTypeEnum deviceType, DeviceGroupEnum deviceGroup, DeviceLocationEnum location, boolean isTurnedOn, double batteryLevel, double powerConsumption, int maxBatteryCapacity, int powerLevel) {
+    public Device createDevice(String deviceName, DeviceTypeEnum deviceType, @NotNull DeviceGroupEnum deviceGroup, DeviceLocationEnum location, boolean isTurnedOn, double batteryLevel, double powerConsumption, int maxBatteryCapacity, int powerLevel) {
         if (Objects.equals(deviceGroup.name().toLowerCase(), "AirConditioners".toLowerCase())) {
             return new AirConditioner(
                     deviceName, deviceType, deviceGroup, location, isTurnedOn, batteryLevel, powerConsumption, maxBatteryCapacity, powerLevel, true
@@ -140,18 +140,24 @@ public class SmartHome {
         if (device.isTurnedOn()) {
             poweredOnDevices.add(device);
             device.setTurnedOnTime(date.getTime());
+            if (device.getDeviceType().getPriority() == Integer.MAX_VALUE) return;
+            deviceQueue.enqueue(new Task<>(device, device.getDeviceType().getPriority() + device.getDeviceGroup().getPriority()));
         } else {
             poweredOffDevices.add(device);
         }
         addToGroupAndType(device);
-        if (device.getPowerLevel() == 0) {
-            // powerReducableDevices.enqueue();
+        if (device.getPowerLevel() != 0) {
+            if (device.getDeviceType().getPriority() == Integer.MAX_VALUE) return;
+            powerReducableDevices.enqueue(new Task<>(device, device.getDeviceType().getPriority() + device.getDeviceGroup().getPriority()));
         }
     }
 
     public void turnOnDevice(@NotNull Device device) {
         device.setTurnedOn(true);
-        if(!poweredOnDevices.contains(device)) poweredOnDevices.add(device);
+        if(!poweredOnDevices.contains(device)) {
+            poweredOnDevices.add(device);
+            device.setTurnedOnTime(date.getTime());
+        }
         poweredOffDevices.remove(device);
     }
 
@@ -286,6 +292,36 @@ public class SmartHome {
         }
     }
 
+    public void checkPowerConsumption() {
+        //add lots of print statements to check if the logic is working
+        powerConsumption = calculateCurrentPowerConsumption();
+
+        if (powerConsumption > threshold) {
+            Task<Device> reducePowerTask = powerReducableDevices.dequeue();
+            Device device = reducePowerTask.getTask();
+
+            if (powerConsumption - (device.getBasePowerConsumption() * (device.getPowerLevel() - 1)) > threshold) {
+                Task<Device> removeTask = deviceQueue.dequeue();
+                Device removeDevice = removeTask.getTask();
+
+                System.out.println("Reducing power consumption by turning off " + device.getDeviceName());
+
+                addRule(parseRule("turn " + removeDevice.getDeviceID() + " off"));
+                turnBackOnDevices.enqueue(new Task<>(device, -removeTask.getPriority()));
+            }
+            else {
+                addRule(parseRule("set " + device.getDeviceID() + " 1"));
+            }
+        }
+        else {
+            Task<Device> turnBackOnTask = turnBackOnDevices.dequeue();
+            if (turnBackOnTask != null) {
+                System.out.println("Turning back on " + turnBackOnTask.getTask().getDeviceName());
+                addRule(parseRule("turn " + turnBackOnTask.getTask().getDeviceID() + " on"));
+            }
+        }
+    }
+
     private void tickTask() {
         tickCount++;
         if (tickCount % 2 == 0) {
@@ -302,6 +338,7 @@ public class SmartHome {
             reduceBatteryTick();
             checkEachDevice();
             checkEachLocation();
+            checkPowerConsumption();
         }
         catch (Exception e) {
             System.err.println("Error during tickTask execution: " + e.getMessage());

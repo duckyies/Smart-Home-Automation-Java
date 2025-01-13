@@ -1,4 +1,6 @@
 package com.smarthome.tasks;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Comparator;
 
 /**
@@ -86,7 +88,7 @@ class TaskComparator<T> implements Comparator<Task<T>> {
      *         is less than, equal to, or greater than the priority of the second task.
      */
     @Override
-    public int compare(Task<T> t1, Task<T> t2) {
+    public int compare(@NotNull Task<T> t1, @NotNull Task<T> t2) {
         return t1.priority - t2.priority;
     }
 
