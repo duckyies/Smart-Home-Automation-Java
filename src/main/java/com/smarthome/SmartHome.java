@@ -151,13 +151,13 @@ public class SmartHome {
 
     public void turnOnDevice(@NotNull Device device) {
         device.setTurnedOn(true);
-        poweredOnDevices.add(device);
+        if(!poweredOnDevices.contains(device)) poweredOnDevices.add(device);
         poweredOffDevices.remove(device);
     }
 
     public void turnOffDevice(@NotNull Device device) {
         device.setTurnedOn(false);
-        poweredOffDevices.add(device);
+        if(!poweredOffDevices.contains(device)) poweredOffDevices.add(device);
         poweredOnDevices.remove(device);
     }
 
@@ -195,6 +195,54 @@ public class SmartHome {
             }
         }
         return null;
+    }
+
+    public void turnOffDevicesByGroup(String groupName) {
+        for (Device device : groupMap.get(groupName).getDevices()) {
+            turnOffDevice(device);
+        }
+    }
+
+    public void turnOnDevicesByGroup(String groupName) {
+        for (Device device : groupMap.get(groupName).getDevices()) {
+            turnOnDevice(device);
+        }
+    }
+
+    public void turnOffDevicesByType(String typeName) {
+        for (Device device : typeMap.get(typeName).getDevices()) {
+            turnOffDevice(device);
+        }
+    }
+
+    public void turnOnDevicesByType(String typeName) {
+        for (Device device : typeMap.get(typeName).getDevices()) {
+            turnOnDevice(device);
+        }
+    }
+
+    public void turnOffDevicesByLocation(String locationName) {
+        for (Device device : locationMap.get(locationName).getDevices()) {
+            turnOffDevice(device);
+        }
+    }
+
+    public void turnOnDevicesByLocation(String locationName) {
+        for (Device device : locationMap.get(locationName).getDevices()) {
+            turnOnDevice(device);
+        }
+    }
+
+    public void turnOffAllDevices() {
+        for (Device device : poweredOnDevices) {
+            turnOffDevice(device);
+        }
+    }
+
+    public void turnOnAllDevices() {
+        for (Device device : poweredOffDevices) {
+            turnOnDevice(device);
+        }
     }
 
     public Device getDevice(int id) {
@@ -262,12 +310,21 @@ public class SmartHome {
     }
 
     private void startRuleExecution() {
-        scheduler.scheduleAtFixedRate(this::executeRules, 0, 1, TimeUnit.SECONDS);
+        try {
+            scheduler.scheduleAtFixedRate(this::executeRules, 0, 1, TimeUnit.SECONDS);
+        }
+        catch (Exception e) {
+            System.err.println("Error during rule execution: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void executeRules() {
         Rule rule = ruleList.peekAndRemove();
-        // Implement rule execution logic here
+        while (rule != null) {
+            executeRule(rule);
+            rule = ruleList.peekAndRemove();
+        }
     }
 
     // ========================================================================
@@ -445,6 +502,194 @@ public class SmartHome {
     // Rule Management
     // ========================================================================
 
+    public Rule parseRule(@NotNull String ruleString) {
+
+        //maybe add if conditions later
+        //like samsung routines idk
+
+        /*
+         * FLIP - [flip deviceId/deviceName]
+         * TURN - [turn deviceId/deviceName on/off]
+         * SET - [set deviceId/deviceName powerLevel]
+         * GROUP - [group groupName on/off]
+         * TYPE - [type typeName on/off]
+         * LOCATION - [location locationName on/off]
+         * MODE - [mode modeName]
+         * */
+        ArrayList<String> tokens = new ArrayList<>(List.of(ruleString.toLowerCase().split(" ")));
+        ArrayList<String> validTokens = new ArrayList<>(List.of("flip", "turn", "set", "group", "type", "location", "mode"));
+
+        if (!validTokens.contains(tokens.getFirst())) {
+            throw new RuleParsingException("Invalid type of rule - " + tokens.getFirst() + "\nAvailable types - " + validTokens);
+        }
+
+        if (Objects.equals(tokens.getFirst(), "flip")) {
+
+            checkTokenSize(tokens, 2);
+            Device device = checkTokenForDevice(tokens.get(1));
+
+            return new Rule(device.getDeviceID(), true, false, false, false, 0, "", false, false, "", false, false, "", false, false);
+
+        } else if (Objects.equals(tokens.getFirst(), "turn")) {
+
+            checkTokenSize(tokens, 3);
+            Device device = checkTokenForDevice(tokens.get(1));
+
+            boolean state;
+
+            if (Objects.equals(tokens.get(2), "on")) {
+                state = true;
+            } else if (Objects.equals(tokens.get(2), "off")) {
+                state = false;
+            } else {
+                throw new RuleParsingException("Invalid argument for turn device - " + tokens.get(2));
+            }
+
+            return new Rule(device.getDeviceID(), false, state, !state, false, 0, "", false, false, "", false, false, "", false, false);
+
+        } else if (Objects.equals(tokens.getFirst(), "set")) {
+
+            checkTokenSize(tokens, 3);
+            Device device = checkTokenForDevice(tokens.get(1).toUpperCase());
+
+            if(!isNumeric(tokens.get(2))) {
+                throw new RuleParsingException("Invalid argument for set power level - " + tokens.get(2));
+            }
+
+            int powerLevel = Integer.parseInt(tokens.get(2));
+            if(powerLevel < 0 || powerLevel > 5) {
+                throw new RuleParsingException("Invalid power level - " + powerLevel);
+            }
+            return new Rule(device.getDeviceID(), false, false, false, true, powerLevel, "", false, false, "", false, false, "", false, false);
+
+        } else if (Objects.equals(tokens.getFirst(), "group")) {
+
+            checkTokenSize(tokens, 3);
+            DeviceGroup group = groupMap.get(tokens.get(1).toUpperCase());
+            if(group == null) {
+                throw new RuleParsingException("Group not found");
+            }
+
+            boolean state = checkTokenOnOff(tokens.get(2));
+
+            return new Rule(-1, false, state, !state, false, 0, group.getGroupName(), state, !state, "", false, false, "", false, false);
+
+        } else if (Objects.equals(tokens.getFirst(), "type")) {
+
+            checkTokenSize(tokens, 3);
+            DeviceType type = typeMap.get(tokens.get(1).toUpperCase());
+            if(type == null) {
+                throw new RuleParsingException("Type not found");
+            }
+
+            boolean state = checkTokenOnOff(tokens.get(2));
+
+            return new Rule(-1, false, state, !state, false, 0, "", false, false, type.getTypeName(), state, !state, "", false, false);
+
+        } else if (Objects.equals(tokens.getFirst(), "location")) {
+
+            checkTokenSize(tokens, 3);
+            DeviceLocation location = locationMap.get(tokens.get(1));
+            if(location == null) {
+                throw new RuleParsingException("Location not found");
+            }
+
+            boolean state = checkTokenOnOff(tokens.get(2));
+
+            return new Rule(-1, false, state, !state, false, 0, "", false, false, "", false, false, location.getLocation(), state, !state);
+
+        } else if (Objects.equals(tokens.getFirst(), "mode")) {
+
+            checkTokenSize(tokens, 2);
+        }
+        return null;
+    }
+
+    public void executeRule(@NotNull Rule rule) {
+
+        /*"Rule{" +
+                "deviceId=" + deviceId +
+                ", flipState=" + flipState +
+                ", turnOn=" + turnOn +
+                ", turnOff=" + turnOff +
+                ", setPowerLevel=" + setPowerLevel +
+                ", powerLevel=" + powerLevel +
+                ", turnGroupOff=" + turnGroupOff +
+                ", turnGroupOn=" + turnGroupOn +
+                ", groupName='" + groupName + '\'' +
+                ", turnTypeOff=" + turnTypeOff +
+                ", turnTypeOn=" + turnTypeOn +
+                ", typeName='" + typeName + '\'' +
+                ", turnLocationOff=" + turnLocationOff +
+                ", turnLocationOn=" + turnLocationOn +
+                ", locationName='" + locationName + '\'' +
+                '}';*/
+        Device device;
+        DeviceGroup group;
+        DeviceType type;
+        DeviceLocation location;
+
+        if (rule.getDeviceId() != -1) {
+            device = getDevice(rule.getDeviceId());
+            if (device == null) {
+                throw new RuleParsingException("Device not found");
+            }
+            if(rule.isFlipState()) {
+                device.setTurnedOn(!device.isTurnedOn());
+
+            } else if(rule.isSetPowerLevel()) {
+                if (rule.getPowerLevel() > 5 || rule.getPowerLevel() < 0) {
+                    throw new RuleParsingException("Invalid power level");
+                }
+                device.setPowerLevel(rule.getPowerLevel());
+
+            } else if(rule.isTurnOn()) {
+                turnOnDevice(device);
+
+            } else if(rule.isTurnOff()) {
+                turnOffDevice(device);
+
+            }
+        }
+        if(!rule.getGroupName().isEmpty()) {
+            group = groupMap.get(rule.getGroupName().toUpperCase());
+            if(group == null) {
+                throw new RuleParsingException("Group not found");
+            }
+            if(rule.isTurnGroupOn()) {
+                turnOffDevicesByGroup(group.getGroupName());
+
+            } else if(rule.isTurnGroupOff()) {
+                turnOnDevicesByGroup(group.getGroupName());
+            }
+        }
+        if(!rule.getTypeName().isEmpty()) {
+            type = typeMap.get(rule.getTypeName().toUpperCase());
+            if(type == null) {
+                throw new RuleParsingException("Type not found");
+            }
+            if(rule.isTurnTypeOn()) {
+                turnOffDevicesByType(type.getTypeName());
+
+            } else if(rule.isTurnTypeOff()) {
+                turnOnDevicesByType(type.getTypeName());
+            }
+        }
+        if(!rule.getLocationName().isEmpty()) {
+            location = locationMap.get(rule.getLocationName().toUpperCase());
+            if(location == null) {
+                throw new RuleParsingException("Location not found");
+            }
+            if(rule.isTurnLocationOn()) {
+                turnOffDevicesByLocation(location.getLocation());
+
+            } else if(rule.isTurnLocationOff()) {
+                turnOnDevicesByLocation(location.getLocation());
+            }
+        }
+
+    }
+
     public void addRule(Rule rule) {
         ruleList.addEnd(rule);
     }
@@ -589,109 +834,6 @@ public class SmartHome {
 
     public List<Device> getDevicesByLocation(String locationName) {
         return locationMap.get(locationName).getDevices();
-    }
-
-    public Rule parseRule(@NotNull String ruleString) {
-
-        //maybe add if conditions later
-        //like samsung routines idk
-
-        /*
-        * FLIP - [flip deviceId/deviceName]
-        * TURN - [turn deviceId/deviceName on/off]
-        * SET - [set deviceId/deviceName powerLevel]
-        * GROUP - [group groupName on/off]
-        * TYPE - [type typeName on/off]
-        * LOCATION - [location locationName on/off]
-        * MODE - [mode modeName]
-        * */
-        ArrayList<String> tokens = new ArrayList<>(List.of(ruleString.toLowerCase().split(" ")));
-        ArrayList<String> validTokens = new ArrayList<>(List.of("flip", "turn", "set", "group", "type", "location", "mode"));
-
-        if (!validTokens.contains(tokens.getFirst())) {
-            throw new RuleParsingException("Invalid type of rule - " + tokens.getFirst() + "\nAvailable types - " + validTokens);
-        }
-
-        if (Objects.equals(tokens.getFirst(), "flip")) {
-
-            checkTokenSize(tokens, 2);
-            Device device = checkTokenForDevice(tokens.get(1));
-
-            return new Rule(device.getDeviceID(), true, false, false, false, 0, "", false, false, "", false, false, "", false, false);
-
-        } else if (Objects.equals(tokens.getFirst(), "turn")) {
-
-            checkTokenSize(tokens, 3);
-            Device device = checkTokenForDevice(tokens.get(1));
-
-            boolean state;
-
-            if (Objects.equals(tokens.get(2), "on")) {
-                state = true;
-            } else if (Objects.equals(tokens.get(2), "off")) {
-                state = false;
-            } else {
-                throw new RuleParsingException("Invalid argument for turn device - " + tokens.get(2));
-            }
-
-            return new Rule(device.getDeviceID(), false, state, !state, false, 0, "", false, false, "", false, false, "", false, false);
-
-        } else if (Objects.equals(tokens.getFirst(), "set")) {
-
-            checkTokenSize(tokens, 3);
-            Device device = checkTokenForDevice(tokens.get(1));
-
-            if(!isNumeric(tokens.get(2))) {
-                throw new RuleParsingException("Invalid argument for set power level - " + tokens.get(2));
-            }
-
-            int powerLevel = Integer.parseInt(tokens.get(2));
-            if(powerLevel < 0 || powerLevel > 5) {
-                throw new RuleParsingException("Invalid power level - " + powerLevel);
-            }
-            return new Rule(device.getDeviceID(), false, false, false, true, powerLevel, "", false, false, "", false, false, "", false, false);
-        
-        } else if (Objects.equals(tokens.getFirst(), "group")) {
-
-            checkTokenSize(tokens, 3);
-            DeviceGroup group = groupMap.get(tokens.get(1));
-            if(group == null) {
-                throw new RuleParsingException("Group not found");
-            }
-
-            boolean state = checkTokenOnOff(tokens.get(2));
-
-            return new Rule(-1, false, state, !state, false, 0, group.getGroupName(), state, !state, "", false, false, "", false, false);
-
-        } else if (Objects.equals(tokens.getFirst(), "type")) {
-
-            checkTokenSize(tokens, 3);
-            DeviceType type = typeMap.get(tokens.get(1));
-            if(type == null) {
-                throw new RuleParsingException("Type not found");
-            }
-
-            boolean state = checkTokenOnOff(tokens.get(2));
-
-            return new Rule(-1, false, state, !state, false, 0, "", false, false, type.getTypeName(), state, !state, "", false, false);
-
-        } else if (Objects.equals(tokens.getFirst(), "location")) {
-
-            checkTokenSize(tokens, 3);
-            DeviceLocation location = locationMap.get(tokens.get(1));
-            if(location == null) {
-                throw new RuleParsingException("Location not found");
-            }
-
-            boolean state = checkTokenOnOff(tokens.get(2));
-
-            return new Rule(-1, false, state, !state, false, 0, "", false, false, "", false, false, location.getLocation(), state, !state);
-
-        } else if (Objects.equals(tokens.getFirst(), "mode")) {
-
-            checkTokenSize(tokens, 2);
-        }
-        return null;
     }
 
     public Device checkTokenForDevice(String token) {

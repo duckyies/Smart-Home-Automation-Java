@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class DeviceLocation {
 
     public enum DeviceLocationEnum {
-        LIVING_ROOM,
+        LIVINGROOM,
         BEDROOM,
         BEDROOM2,
         BEDROOM3,

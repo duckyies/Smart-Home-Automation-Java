@@ -15,7 +15,7 @@ public class DeviceType {
         HEALTH,
         ENTERTAINMENT,
         SECURITY,
-        PERSONAL_CARE,
+        PERSONALCARE,
         CONNECTIVITY,
         COOKING,
         LUXURY,

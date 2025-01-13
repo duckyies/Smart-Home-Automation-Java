@@ -14,7 +14,7 @@ public class DeviceGroup {
         FANS,
         ALARMS,
         CAMERAS,
-        AIR_CONDITIONERS,
+        AIRCONDITIONERS,
         HEATERS,
         APPLIANCES,
         GARDENING,
