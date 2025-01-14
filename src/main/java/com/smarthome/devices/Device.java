@@ -10,10 +10,12 @@ import java.util.Date;
  * The Device class represents a smart home device with various attributes such as
  * device name, type, group, location, power status, battery level, and power consumption.
  */
+
 public class Device {
 
     static int deviceNum = 0;
     private final Date date = new Date();
+
 
     private int deviceID;
     private String deviceName;
@@ -60,6 +62,10 @@ public class Device {
         this.isInteracted = false;
         this.isOnBattery = this.maxBatteryCapacity > 0;
         this.powerLevel = powerLevel;
+    }
+
+    public Device() {
+
     }
 
     /**
@@ -268,6 +274,15 @@ public class Device {
     public int getMinutesSinceTurnedOn() {
         return (int) ((new Date().getTime() - turnedOnTime) / 60000);
     }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDeviceID(int deviceID) {
+        this.deviceID = deviceID;
+    }
+
 
     @Override
     public String toString() {

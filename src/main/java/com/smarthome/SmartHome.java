@@ -5,10 +5,10 @@ import com.smarthome.datastuctures.PriorityQueue;
 import com.smarthome.devices.AirConditioner;
 import com.smarthome.devices.Device;
 import com.smarthome.enums.DeviceGroup;
-import com.smarthome.enums.DeviceLocation;
-import com.smarthome.enums.DeviceType;
 import com.smarthome.enums.DeviceGroup.DeviceGroupEnum;
+import com.smarthome.enums.DeviceLocation;
 import com.smarthome.enums.DeviceLocation.DeviceLocationEnum;
+import com.smarthome.enums.DeviceType;
 import com.smarthome.enums.DeviceType.DeviceTypeEnum;
 import com.smarthome.misc.RuleParsingException;
 import com.smarthome.tasks.LogTask;
@@ -20,7 +20,10 @@ import org.jetbrains.annotations.TestOnly;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.*;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 /**
  * Entry point for the Smart Home Automation project.
@@ -35,6 +38,7 @@ import java.util.logging.*;
  * @see Device
  */
 @SuppressWarnings({"unused", "CallToPrintStackTrace"})
+
 public class SmartHome {
 
     // ========================================================================
@@ -991,6 +995,10 @@ public class SmartHome {
 
     public boolean isSimulate() {
         return simulate;
+    }
+
+    public CopyOnWriteArrayList<Device> getPoweredOnDevices() {
+        return poweredOnDevices;
     }
 
     // ========================================================================

@@ -2,6 +2,7 @@ C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java\com\sm
 C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java\com\smarthome\devices\AirConditioner.java
 C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java\com\smarthome\datastuctures\LinkedList.java
 C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java\com\smarthome\tasks\LogTask.java
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java\com\smarthome\SmartHomeApplication.java
 C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java\com\smarthome\devices\Device.java
 C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java\com\smarthome\enums\DeviceType.java
 C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java\com\smarthome\Main.java
@@ -9,6 +10,7 @@ C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java\com\sm
 C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java\com\smarthome\misc\EmptyListAccessException.java
 C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java\com\smarthome\tasks\Task.java
 C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java\com\smarthome\enums\DeviceLocation.java
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java\com\smarthome\SmartHomeController.java
 C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java\com\smarthome\enums\DeviceGroup.java
 C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java\com\smarthome\misc\RuleParsingException.java
 C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java\com\smarthome\SmartHome.java
