@@ -3,46 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Home UI</title>
- <link rel="stylesheet" href="css/styles.css">
+  <title>Smart Home Controller</title>
+  <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
-<div class="container">
-  <h1>Smart Home Device Management</h1>
+<header>
+  <h1>Smart Home Controller</h1>
+</header>
 
-  <h2>Devices</h2>
-  <table>
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Type</th>
-      <th>Status</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody id="deviceTable">
-    <!-- Devices will be populated here -->
-    </tbody>
-  </table>
+<main>
+  <section>
+    <h2>Powered On Devices</h2>
+    <div id="powered-on-devices">
+    </div>
+  </section>
 
-  <h2>Add Device</h2>
-  <form id="addDeviceForm">
-    <label>
-      Device ID:
-      <input type="text" id="deviceId" required>
-    </label>
-    <label>
-      Type:
-      <select id="deviceType">
-        <option value="LIGHT">Light</option>
-        <option value="THERMOSTAT">Thermostat</option>
-        <option value="SECURITY_CAMERA">Security Camera</option>
+  <section>
+    <h2>Powered Off Devices</h2>
+    <div id="powered-off-devices">
+    </div>
+  </section>
+
+  <section>
+    <h2>Add Device</h2>
+    <form id="add-device-form">
+      <label for="device-name">Device Name</label>
+      <input type="text" id="device-name" name="device-name" required>
+
+      <label for="device-type">Device Type</label>
+      <select id="device-type" name="device-type" required>
+        <option value="Light">Light</option>
+        <option value="Fan">Fan</option>
+        <option value="Heater">Heater</option>
+        <option value="AC">AC</option>
       </select>
-    </label>
-    <button type="submit">Add Device</button>
-  </form>
-</div>
 
-<script src="script.js"></script>
+      <label for="device-group">Device Group</label>
+      <select id="device-group" name="device-group" required>
+        <option value="Living Room">Living Room</option>
+        <option value="Bedroom">Bedroom</option>
+        <option value="Kitchen">Kitchen</option>
+      </select>
+
+      <label for="device-location">Device Location</label>
+      <select id="device-location" name="device-location" required>
+        <option value="Room 1">Room 1</option>
+        <option value="Room 2">Room 2</option>
+        <option value="Room 3">Room 3</option>
+      </select>
+
+      <button type="submit">Add Device</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Add Location</h2>
+    <form id="add-location-form">
+      <label for="location-name">Location Name</label>
+      <input type="text" id="location-name" name="location-name" required>
+
+      <button type="submit">Add Location</button>
+    </form>
+  </section>
+</main>
+
+<script src="js/script.js">
+</script>
 </body>
 </html>

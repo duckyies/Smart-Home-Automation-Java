@@ -92,6 +92,8 @@ public class Device {
         this.powerLevel = powerLevel;
     }
 
+    public Device() {
+    }
     /**
      * Returns the power status of the device.
      *

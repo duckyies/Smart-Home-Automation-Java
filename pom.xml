@@ -15,6 +15,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
+      <compilerArgs>
+         -parameters
+      </compilerArgs>
   </properties>
 
   <dependencies>
@@ -93,7 +96,7 @@
             <artifactId>exec-maven-plugin</artifactId>
             <version>3.1.0</version>
             <configuration>
-                <mainClass>com.smarthome.Main</mainClass>
+                <mainClass>com.smarthome.SmartHomeApplication</mainClass>
             </configuration>
         </plugin>
         <plugin>
@@ -131,7 +134,9 @@
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.8.0</version>
-        </plugin>
+            <configuration>
+                <parameters>true</parameters>
+            </configuration>        </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.22.1</version>
