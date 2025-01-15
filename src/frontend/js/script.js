@@ -1,6 +1,4 @@
 const apiUrl = 'http://localhost:8080/devices';
-
-// Function to fetch and display devices
 async function fetchDevices() {
   try {
     const response = await fetch(apiUrl);
@@ -18,19 +16,19 @@ async function fetchDevices() {
 
       deviceElement.innerHTML = `
                         <div class="device-info">
-                            <p><strong>Name:</strong> ${device.name}</p>
-                            <p><strong>Type:</strong> ${device.type}</p>
+                            <p><strong>Name:</strong> ${device.deviceName}</p>
+                            <p><strong>Type:</strong> ${device.deviceType}</p>
                             <p><strong>Power Consumption:</strong> ${device.basePowerConsumption} W</p>
                             <p><strong>Power Level:</strong> ${device.powerLevel}%</p>
                         </div>
                         <div class="device-controls">
-                            <button class="${device.isPoweredOn ? 'off' : 'on'}" onclick="toggleDevice(${device.id}, ${device.isPoweredOn})">
-                                Turn ${device.isPoweredOn ? 'Off' : 'On'}
+                            <button class="${device.isTurnedOn ? 'off' : 'on'}" onclick="toggleDevice(${device.deviceID}, ${device.isTurnedOn})">
+                                Turn ${device.isTurnedOn ? 'Off' : 'On'}
                             </button>
                         </div>
                     `;
 
-      if (device.isPoweredOn) {
+      if (device.isTurnedOn) {
         poweredOnContainer.appendChild(deviceElement);
       } else {
         poweredOffContainer.appendChild(deviceElement);
@@ -41,7 +39,6 @@ async function fetchDevices() {
   }
 }
 
-// Function to toggle device power state
 async function toggleDevice(id, isPoweredOn) {
   try {
     const endpoint = `${apiUrl}/id/${id}/${isPoweredOn ? 'off' : 'on'}`;
@@ -56,12 +53,16 @@ async function toggleDevice(id, isPoweredOn) {
 document.getElementById('add-device-form').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const name = document.getElementById('device-name').value;
-  const type = document.getElementById('device-type').value;
-  const group = document.getElementById('device-group').value;
+  const deviceName = document.getElementById('device-name').value;
+  const deviceType = document.getElementById('device-type').value;
+  const deviceGroup = document.getElementById('device-group').value;
   const location = document.getElementById('device-location').value;
-
-  const newDevice = { name, type, group, location };
+  const basePowerConsumption = document.getElementById('device-power-consumption').value;
+  const isTurnedOn = true;
+  const powerLevel = document.getElementById('device-power-level').value;
+  const maxBatteryCapacity = document.getElementById('device-max-battery-capacity').value;
+  const batteryLevel = 100;
+  const newDevice = { deviceName, deviceType, deviceGroup, location, isTurnedOn, batteryLevel, basePowerConsumption, maxBatteryCapacity, powerLevel };
 
   try {
     await fetch(apiUrl, {
@@ -70,7 +71,7 @@ document.getElementById('add-device-form').addEventListener('submit', async (e) 
       body: JSON.stringify(newDevice)
     });
 
-    fetchDevices();
+    await fetchDevices();
   } catch (error) {
     console.error('Error adding device:', error);
   }

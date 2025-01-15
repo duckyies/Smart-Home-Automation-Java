@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Home Controller</title>
   <link rel="stylesheet" href="./css/styles.css">
+  <style>
+
+  </style>
 </head>
 <body>
 <header>
@@ -32,42 +35,98 @@
 
       <label for="device-type">Device Type</label>
       <select id="device-type" name="device-type" required>
-        <option value="Light">Light</option>
-        <option value="Fan">Fan</option>
-        <option value="Heater">Heater</option>
-        <option value="AC">AC</option>
+        <option value="DECORATIVE">Decorative</option>
+        <option value="NECESSARY">Necessary</option>
+        <option value="HEALTH">Health</option>
+        <option value="ENTERTAINMENT">Entertainment</option>
+        <option value="SECURITY">Security</option>
+        <option value="PERSONALCARE">Personal Care</option>
+        <option value="CONNECTIVITY">Connectivity</option>
+        <option value="COOKING">Cooking</option>
+        <option value="LUXURY">Luxury</option>
+        <option value="OFFICE">Office</option>
+        <option value="OTHERS">Others</option>
       </select>
 
       <label for="device-group">Device Group</label>
       <select id="device-group" name="device-group" required>
-        <option value="Living Room">Living Room</option>
-        <option value="Bedroom">Bedroom</option>
-        <option value="Kitchen">Kitchen</option>
+        <option value="LIGHTS">Lights</option>
+        <option value="FANS">Fans</option>
+        <option value="ALARMS">Alarms</option>
+        <option value="CAMERAS">Cameras</option>
+        <option value="AIRCONDITIONERS">Air Conditioners</option>
+        <option value="HEATERS">Heaters</option>
+        <option value="APPLIANCES">Appliances</option>
+        <option value="GARDENING">Gardening</option>
+        <option value="ENTERTAINMENT">Entertainment</option>
+        <option value="CLEANING">Cleaning</option>
+        <option value="LAUNDRY">Laundry</option>
+        <option value="WEARABLES">Wearables</option>
+        <option value="BATHROOM">Bathroom</option>
+        <option value="OTHERS">Others</option>
       </select>
 
       <label for="device-location">Device Location</label>
       <select id="device-location" name="device-location" required>
-        <option value="Room 1">Room 1</option>
-        <option value="Room 2">Room 2</option>
-        <option value="Room 3">Room 3</option>
+        <option value="LIVINGROOM">Living Room</option>
+        <option value="BEDROOM">Bedroom</option>
+        <option value="BEDROOM2">Bedroom 2</option>
+        <option value="BEDROOM3">Bedroom 3</option>
+        <option value="BEDROOM4">Bedroom 4</option>
+        <option value="GARDEN">Garden</option>
+        <option value="OFFICE">Office</option>
+        <option value="ENTRANCE">Entrance</option>
+        <option value="KITCHEN">Kitchen</option>
+        <option value="BATHROOM">Bathroom</option>
+        <option value="BATHROOM2">Bathroom 2</option>
+        <option value="BATHROOM3">Bathroom 3</option>
+        <option value="OTHERS">Others</option>
       </select>
+
+      <label for="device-power-consumption">Power Consumption (W)</label>
+      <input type="number" id="device-power-consumption" name="device-power-consumption" required>
+
+      <label for="device-max-battery-capacity">Max Battery Capacity (mAH)</label>
+      <input type="number" id="device-max-battery-capacity" name="device-max-battery-capacity" required>
+
+      <label for="device-power-level">Power Level</label>
+      <input type="number" id="device-power-level" name="device-power-level" required min="0" max="5">
 
       <button type="submit">Add Device</button>
     </form>
   </section>
 
   <section>
-    <h2>Add Location</h2>
+    <h2>Manage Location & Devices</h2>
+
+    <!-- Add Location -->
     <form id="add-location-form">
       <label for="location-name">Location Name</label>
       <input type="text" id="location-name" name="location-name" required>
-
       <button type="submit">Add Location</button>
     </form>
+
+    <!-- Add Person -->
+    <form id="add-person-form">
+      <label for="location-select">Select Location</label>
+      <select id="location-select" name="location-select" required>
+        <!-- Options to be dynamically populated via JavaScript -->
+      </select>
+
+    </form>
+
+    <!-- Remove Device -->
+    <form id="remove-device-form">
+      <label for="device-select">Select Device</label>
+      <select id="device-select" name="device-select" required>
+        <!-- Options to be dynamically populated via JavaScript -->
+      </select>
+      <button type="submit">Remove Device</button>
+    </form>
   </section>
+
 </main>
 
-<script src="js/script.js">
-</script>
+<script src="js/script.js"></script>
 </body>
 </html>

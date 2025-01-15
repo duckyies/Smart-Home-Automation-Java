@@ -93,6 +93,7 @@ public class Device {
     }
 
     public Device() {
+        this.deviceID = deviceNum++;
     }
     /**
      * Returns the power status of the device.
