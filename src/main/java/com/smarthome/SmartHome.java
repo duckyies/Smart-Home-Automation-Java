@@ -91,7 +91,7 @@ public class SmartHome {
         initialize();
     }
 
-    public void initialize() {
+    private void initialize() {
         for (DeviceGroupEnum deviceGroup : DeviceGroupEnum.values()) {
             groupMap.put(deviceGroup.name(), new DeviceGroup(deviceGroup.name()));
         }
@@ -113,7 +113,7 @@ public class SmartHome {
     // Device Management
     // ========================================================================
 
-    public void addToGroupAndType(@NotNull Device device) {
+    private void addToGroupAndType(@NotNull Device device) {
         groupMap.get(device.getDeviceGroup().name()).addDevice(device);
         typeMap.get(device.getDeviceType().name()).addDevice(device);
         locationMap.get(device.getLocation().name()).addDevice(device);
@@ -142,19 +142,31 @@ public class SmartHome {
     }
 
     public void addDevice(@NotNull Device device) {
-        if (device.isTurnedOn()) {
+
+        //AirConditioner check for REST API
+        if (Objects.equals(device.getDeviceGroup().name().toLowerCase(), "AirConditioners".toLowerCase()) && device.getClass() != AirConditioner.class) {
+            device = new AirConditioner(
+                    device.getDeviceName(), device.getDeviceType(), device.getDeviceGroup(), device.getLocation(), device.isTurnedOn(), device.getBatteryLevel(), device.getBasePowerConsumption(), (int) device.getMaxBatteryCapacity(), device.getPowerLevel(), true
+            );
+        }
+
+            if (device.isTurnedOn()) {
             poweredOnDevices.add(device);
             device.setTurnedOnTime(date.getTime());
+
             if (device.getDeviceType().getPriority() == Integer.MAX_VALUE) return;
             DeviceLocation location = locationMap.get(device.getLocation().name());
+
             deviceQueue.enqueue(new Task<>(device, device.getDeviceType().getPriority() + device.getDeviceGroup().getPriority() + (location.getPeople() * 10)));
         } else {
             poweredOffDevices.add(device);
         }
         addToGroupAndType(device);
+
         if (device.getPowerLevel() != 0) {
             if (device.getDeviceType().getPriority() == Integer.MAX_VALUE) return;
             DeviceLocation location = locationMap.get(device.getLocation().name());
+
             powerReducibleDevices.enqueue(new Task<>(device, device.getDeviceType().getPriority() + device.getDeviceGroup().getPriority() + (location.getPeople() * 10)));
         }
     }
@@ -935,6 +947,18 @@ public class SmartHome {
         return groupMap.get(groupName).getDevices();
     }
 
+    public ConcurrentHashMap<String, DeviceGroup> getDeviceGroups() {
+        return groupMap;
+    }
+
+    public ConcurrentHashMap<String, DeviceType> getDeviceTypes() {
+        return typeMap;
+    }
+
+    public ConcurrentHashMap<String, DeviceLocation> getDeviceLocations() {
+        return locationMap;
+    }
+
     public List<Device> getDevicesByType(String typeName) {
         return typeMap.get(typeName).getDevices();
     }
@@ -943,7 +967,7 @@ public class SmartHome {
         return locationMap.get(locationName).getDevices();
     }
 
-    public Device checkTokenForDevice(String token) {
+    private Device checkTokenForDevice(String token) {
         Device device;
         if(isNumeric(token)) {
             device = getDevice(Integer.parseInt(token));
@@ -957,13 +981,13 @@ public class SmartHome {
         return device;
     }
 
-    public void checkTokenSize(@NotNull ArrayList<String> tokens, int size) {
+    private void checkTokenSize(@NotNull ArrayList<String> tokens, int size) {
         if(tokens.size() != size) {
             throw new RuleParsingException("Invalid number of arguments for rule");
         }
     }
 
-    public boolean checkTokenOnOff(String token) {
+    private boolean checkTokenOnOff(String token) {
         if (Objects.equals(token, "on")) {
             return true;
         } else if (Objects.equals(token, "off")) {

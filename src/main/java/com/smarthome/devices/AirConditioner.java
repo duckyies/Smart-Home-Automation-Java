@@ -1,13 +1,22 @@
 package com.smarthome.devices;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smarthome.enums.DeviceGroup.DeviceGroupEnum;
 import com.smarthome.enums.DeviceLocation.DeviceLocationEnum;
 import com.smarthome.enums.DeviceType.DeviceTypeEnum;
+import jdk.jfr.Category;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+@Category("AirConditioner")
+@Component
 public class AirConditioner extends Device {
+
+    @JsonProperty("mode")
     private boolean mode;
+    private long simulationTempChangeTime;
 
     /**
      * Constructor to initialize a new Device object with the specified attributes.
@@ -23,7 +32,7 @@ public class AirConditioner extends Device {
      * @param powerLevel         the current power level of the device
      */
 
-    private long simulationTempChangeTime;
+    @Autowired
     public AirConditioner(String deviceName, DeviceTypeEnum deviceType, DeviceGroupEnum deviceGroup, DeviceLocationEnum location, Boolean isTurnedOn, double batteryLevel, double powerConsumption, int maxBatteryCapacity, int powerLevel, boolean mode) {
         super(deviceName, deviceType, deviceGroup, location, isTurnedOn, batteryLevel, powerConsumption, maxBatteryCapacity, powerLevel);
 

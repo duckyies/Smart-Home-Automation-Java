@@ -1,8 +1,12 @@
 package com.smarthome.devices;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smarthome.enums.DeviceGroup.DeviceGroupEnum;
 import com.smarthome.enums.DeviceLocation.DeviceLocationEnum;
 import com.smarthome.enums.DeviceType.DeviceTypeEnum;
+import jdk.jfr.Category;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
@@ -11,6 +15,8 @@ import java.util.Date;
  * device name, type, group, location, power status, battery level, and power consumption.
  */
 
+@Category("Device")
+@Component
 public class Device {
 
     static int deviceNum = 0;
@@ -18,20 +24,41 @@ public class Device {
 
 
     private int deviceID;
+
+    @JsonProperty("deviceName")
     private String deviceName;
+
+    @JsonProperty("deviceType")
     private DeviceTypeEnum deviceType;
+
+    @JsonProperty("location")
     private DeviceLocationEnum location;
+
+    @JsonProperty("deviceGroup")
     private DeviceGroupEnum deviceGroup;
 
-
+    @JsonProperty("batteryLevel")
     private double batteryLevel;
+
+    @JsonProperty("maxBatteryCapacity")
     private int maxBatteryCapacity;
+
+    @JsonProperty("currentBatteryCapacity")
     private double currentBatteryCapacity;
+
+    @JsonProperty("isOnBattery")
     private boolean isOnBattery;
 
+    @JsonProperty("isTurnedOn")
     private Boolean isTurnedOn = false;
+
+    @JsonProperty("basePowerConsumption")
     private double basePowerConsumption;
+
+    @JsonProperty("powerLevel")
     private int powerLevel;
+
+    @JsonProperty("turnedOnTime")
     private long turnedOnTime;
 
     private boolean isInteracted = false;
@@ -48,6 +75,7 @@ public class Device {
      * @param maxBatteryCapacity the maximum battery capacity of the device
      * @param powerLevel        the current power level of the device
      */
+    @Autowired
     public Device(String deviceName, DeviceTypeEnum deviceType, DeviceGroupEnum deviceGroup, DeviceLocationEnum location, Boolean isTurnedOn, double batteryLevel, double powerConsumption, int maxBatteryCapacity, int powerLevel) {
         this.deviceName = deviceName;
         this.deviceID = deviceNum++;
@@ -62,10 +90,6 @@ public class Device {
         this.isInteracted = false;
         this.isOnBattery = this.maxBatteryCapacity > 0;
         this.powerLevel = powerLevel;
-    }
-
-    public Device() {
-
     }
 
     /**
