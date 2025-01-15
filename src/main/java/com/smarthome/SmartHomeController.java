@@ -21,6 +21,16 @@ public class SmartHomeController {
         return smartHome.getPoweredOnDevices();
     }
 
+    @GetMapping("/off")
+    public Collection<Device> getOffDevices() {
+        return smartHome.getPoweredOffDevices();
+    }
+
+    @GetMapping("/all")
+    public Collection<Device> getAllDevices() {
+        return smartHome.getDevices();
+    }
+
     @GetMapping("/id/{id}")
     public Device getDeviceByID(@PathVariable String id) {
         return smartHome.getDeviceByID(Integer.parseInt(id));
@@ -106,6 +116,16 @@ public class SmartHomeController {
         return smartHome.getDeviceByID(Integer.parseInt(id)).getMaxBatteryCapacity();
     }
 
+    @GetMapping("/name/{name}/power_consumption")
+    public double getPowerConsumptionByName(@PathVariable String name) {
+        return smartHome.getDeviceByName(name).getBasePowerConsumption();
+    }
+
+    @GetMapping("/id/{id}/power_consumption")
+    public double getPowerConsumptionByID(@PathVariable String id) {
+        return smartHome.getDeviceByID(Integer.parseInt(id)).getBasePowerConsumption();
+    }
+
     // ========================================================================
     //POST REQUESTS
     // ========================================================================
@@ -167,6 +187,18 @@ public class SmartHomeController {
     public String setPowerLevelByName(@PathVariable String name, @PathVariable String power_level) {
         smartHome.addRule(smartHome.parseRule(String.format("set %s %s", name, power_level)));
         return "Power level set successfully";
+    }
+
+    @PutMapping("/location/{location}/add_person")
+    public String addPersonToLocation(@PathVariable String location) {
+        smartHome.addPerson(smartHome.getLocation(location));
+        return "Person added successfully";
+    }
+
+    @PutMapping("/location/{location}/remove_person")
+    public String removePersonFromLocation(@PathVariable String location) {
+        smartHome.removePerson(smartHome.getLocation(location));
+        return "Person removed successfully";
     }
 
 

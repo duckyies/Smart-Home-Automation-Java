@@ -1025,6 +1025,30 @@ public class SmartHome {
         return poweredOnDevices;
     }
 
+    public CopyOnWriteArrayList<Device> getPoweredOffDevices() {
+        return poweredOffDevices;
+    }
+
+    public CopyOnWriteArrayList<Device> getDevices() {
+        CopyOnWriteArrayList<Device> devices = new CopyOnWriteArrayList<>();
+        devices.addAll(poweredOnDevices);
+        devices.addAll(poweredOffDevices);
+        return devices;
+    }
+
+    public DeviceLocation getLocation(String location) {
+        return locationMap.get(location);
+    }
+
+    public DeviceGroup getGroup(String group) {
+        return groupMap.get(group);
+    }
+
+    public DeviceType getType(String type) {
+        return typeMap.get(type);
+    }
+
+
     // ========================================================================
     // Test Methods
     // ========================================================================
