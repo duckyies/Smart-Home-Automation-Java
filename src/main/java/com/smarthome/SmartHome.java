@@ -75,7 +75,7 @@ public class SmartHome {
     private final LinkedList<Rule> ruleList = new LinkedList<>();
 
     private double powerConsumption = 1;
-    private int threshold;
+    private double threshold;
     private int idealTemp;
     private String mode = "Normal";
     private boolean simulate;
@@ -997,7 +997,7 @@ public class SmartHome {
         }
     }
 
-    public void setThreshold(int threshold) {
+    public void setThreshold(double threshold) {
         this.threshold = threshold;
     }
 
@@ -1009,7 +1009,7 @@ public class SmartHome {
         this.simulate = simulate;
     }
 
-    public int getThreshold() {
+    public double getThreshold() {
         return threshold;
     }
 
@@ -1032,5 +1032,20 @@ public class SmartHome {
     @TestOnly
     public Device getDeviceByLocation(String location, String name) {
         return locationMap.get(location).getDeviceByName(name);
+    }
+
+    @TestOnly
+    public void setTickCount(int tickCount) {
+        this.tickCount = tickCount;
+    }
+
+    @TestOnly
+    public void setPowerConsumption(double powerConsumption) {
+        this.powerConsumption = powerConsumption;
+    }
+
+    @TestOnly
+    public void setScheduler(ScheduledExecutorService scheduler) {
+        this.scheduler = scheduler;
     }
 }

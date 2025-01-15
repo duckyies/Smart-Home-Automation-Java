@@ -31,7 +31,7 @@ public class SmartHomeController {
         return smartHome.getDeviceByName(name);
     }
 
-    @GetMapping("/powerConsumption")
+    @GetMapping("/power_consumption")
     public double getPowerConsumption() {
         return smartHome.getPowerConsumption();
     }
@@ -41,7 +41,7 @@ public class SmartHomeController {
         return smartHome.getThreshold();
     }
 
-    @GetMapping("/idealtemp")
+    @GetMapping("/ideal_temp")
     public int getIdealTemperature() {
         return smartHome.getIdealTemp();
     }
@@ -76,6 +76,35 @@ public class SmartHomeController {
         return smartHome.getDevicesByType(type);
     }
 
+    @GetMapping("/name/{name}/power_level")
+    public int getPowerLevelByName(@PathVariable String name) {
+        return smartHome.getDeviceByName(name).getPowerLevel();
+    }
+
+    @GetMapping("/id/{id}/power_level")
+    public int getPowerLevelByID(@PathVariable String id) {
+        return smartHome.getDeviceByID(Integer.parseInt(id)).getPowerLevel();
+    }
+
+    @GetMapping("/name/{name}/battery_level")
+    public double getBatteryLevelByName(@PathVariable String name) {
+        return smartHome.getDeviceByName(name).getBatteryLevel();
+    }
+
+    @GetMapping("/id/{id}/battery_level")
+    public double getBatteryLevelByID(@PathVariable String id) {
+        return smartHome.getDeviceByID(Integer.parseInt(id)).getBatteryLevel();
+    }
+
+    @GetMapping("/name/{name}/max_battery_capacity")
+    public double getMaxBatteryCapacityByName(@PathVariable String name) {
+        return smartHome.getDeviceByName(name).getMaxBatteryCapacity();
+    }
+
+    @GetMapping("/id/{id}/max_battery_capacity")
+    public double getMaxBatteryCapacityByID(@PathVariable String id) {
+        return smartHome.getDeviceByID(Integer.parseInt(id)).getMaxBatteryCapacity();
+    }
 
     // ========================================================================
     //POST REQUESTS
@@ -116,10 +145,28 @@ public class SmartHomeController {
         return "Device turned on successfully";
     }
 
-    @DeleteMapping("/id/{id}")
-    public String removeDeviceByID(@PathVariable String id) {
-        smartHome.removeDevice(smartHome.getDeviceByID(Integer.parseInt(id)));
-        return "Device removed successfully";
+    @PutMapping("/threshold/{threshold}")
+    public String setPowerConsumptionThreshold(@PathVariable String threshold) {
+        smartHome.setThreshold(Double.parseDouble(threshold));
+        return "Threshold set successfully";
+    }
+
+    @PutMapping("/ideal_temp/{idealTemp}")
+    public String setIdealTemperature(@PathVariable String idealTemp) {
+        smartHome.setIdealTemp(Integer.parseInt(idealTemp));
+        return "Ideal temperature set successfully";
+    }
+
+    @PutMapping("/id/{id}/power_level/{power_level}")
+    public String setPowerLevelByID(@PathVariable String id, @PathVariable String power_level) {
+        smartHome.addRule(smartHome.parseRule(String.format("set %s %s", id, power_level)));
+        return "Power level set successfully";
+    }
+
+    @PutMapping("/name/{name}/power_level/{power_level}")
+    public String setPowerLevelByName(@PathVariable String name, @PathVariable String power_level) {
+        smartHome.addRule(smartHome.parseRule(String.format("set %s %s", name, power_level)));
+        return "Power level set successfully";
     }
 
 
@@ -128,10 +175,17 @@ public class SmartHomeController {
     // ========================================================================
 
 
-    @DeleteMapping("/name/name}")
+    @DeleteMapping("/name/{name}")
     public String removeDeviceByName(@PathVariable String name) {
         smartHome.removeDevice(smartHome.getDeviceByName(name));
         return "Device removed successfully";
     }
+
+    @DeleteMapping("/id/{id}")
+    public String removeDeviceByID(@PathVariable String id) {
+        smartHome.removeDevice(smartHome.getDeviceByID(Integer.parseInt(id)));
+        return "Device removed successfully";
+    }
+
 }
 
