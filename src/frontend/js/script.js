@@ -22,7 +22,7 @@ async function fetchDevices() {
                     <p><strong>Name:</strong> ${device.deviceName}</p>
                     <p><strong>Type:</strong> ${device.deviceType}</p>
                     <p><strong>Location:</strong> ${device.location}</p>
-                    <p><strong>Power Consumption:</strong> ${device.basePowerConsumption.toFixed(2)} W</p>
+                    <p><strong>Power Consumption:</strong> ${device.basePowerConsumption.toFixed(3)} W</p>
                     <p><strong>Power Level:</strong> ${device.powerLevel}</p>
                 </div>
                 <div class="device-controls">
@@ -93,20 +93,18 @@ document.getElementById('add-device-form').addEventListener('submit', async (e) 
     });
 
     fetchDevices();
-    e.target.reset(); // Clear the form
+    e.target.reset();
   } catch (error) {
     console.error('Error adding device:', error);
   }
 });
 
-// Handle Remove Device form submission
 document.getElementById('remove-device-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const deviceId = document.getElementById('device-select').value;
   removeDevice(deviceId);
 });
 
-// Remove a device
 async function removeDevice(deviceId) {
   try {
     await fetch(`${apiUrl}/id/${deviceId}`, { method: 'DELETE' });
@@ -116,7 +114,6 @@ async function removeDevice(deviceId) {
   }
 }
 
-// Populate a select element with options
 async function populateSelectWithOptions(selectElement, options, valueKey, textKey) {
   selectElement.innerHTML = '';
   options.forEach(option => {
@@ -127,7 +124,6 @@ async function populateSelectWithOptions(selectElement, options, valueKey, textK
   });
 }
 
-// Fetch locations and populate select elements
 async function fetchLocations() {
   try {
     const response = await fetch(`${apiUrl}/locations`);
@@ -145,7 +141,6 @@ async function fetchLocations() {
   }
 }
 
-// Add a location
 async function addLocation(locationName) {
   try {
     const response = await fetch(`${apiUrl}/locations`, {
@@ -165,7 +160,6 @@ async function addLocation(locationName) {
   }
 }
 
-// Remove a location
 async function removeLocation(locationName) {
   try {
     const response = await fetch(`${apiUrl}/locations/${locationName}`, { method: 'DELETE' });
@@ -181,22 +175,14 @@ async function removeLocation(locationName) {
   }
 }
 
-// Handle Add Location form submission
-document.getElementById('add-location-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const locationName = document.getElementById('location-name').value;
-  addLocation(locationName);
-  e.target.reset();
-});
 
-// Handle Remove Location form submission
+
 document.getElementById('remove-location-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const locationName = document.getElementById('location-remove-select').value;
   removeLocation(locationName);
 });
 
-// Add a person to a location
 async function addPersonToLocation(locationName) {
   try {
     const response = await fetch(`${apiUrl}/location/${locationName}/add_person`, { method: 'PUT' });
@@ -211,7 +197,6 @@ async function addPersonToLocation(locationName) {
   }
 }
 
-// Remove a person from a location
 async function removePersonFromLocation(locationName) {
   try {
     const response = await fetch(`${apiUrl}/location/${locationName}/remove_person`, { method: 'PUT' });
@@ -226,20 +211,17 @@ async function removePersonFromLocation(locationName) {
   }
 }
 
-// Handle Add Person form submission
 document.getElementById('add-person-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const locationName = document.getElementById('location-add-person-select').value;
   addPersonToLocation(locationName);
 });
 
-// Handle Remove Person form submission
 document.getElementById('remove-person-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const locationName = document.getElementById('location-remove-person-select').value;
   removePersonFromLocation(locationName);
 });
 
-// Initial function calls
 fetchDevices();
 fetchLocations();

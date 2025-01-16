@@ -45,6 +45,8 @@ form {
 form label {
   font-weight: bold;
   color: #bdbdbd;
+  padding-top: 10px;
+  padding-bottom: 1px;
 }
 
 form input,

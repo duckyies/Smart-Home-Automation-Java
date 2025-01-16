@@ -189,6 +189,31 @@ public class PriorityQueue<T> {
         }
     }
 
+    public void removeTask(Task<T> task) {
+        lock.lock();
+        try {
+            queue.remove(task);
+        }
+        finally {
+            lock.unlock();
+        }
+    }
+
+    public void removeTask(T task) {
+        lock.lock();
+        try {
+            for (Task<T> task1 : queue) {
+                if (task1.getTask().equals(task)) {
+                    queue.remove(task1);
+                    break;
+                }
+            }
+        }
+        finally {
+            lock.unlock();
+        }
+    }
+
     public Task<T> getTask(T task) {
         lock.lock();
         try {

@@ -158,32 +158,49 @@ public class SmartHome {
             DeviceLocation location = locationMap.get(device.getLocation().name());
 
             deviceQueue.enqueue(new Task<>(device, device.getDeviceType().getPriority() + device.getDeviceGroup().getPriority() + (location.getPeople() * 10)));
+
+            if (device.getPowerLevel() != 0) {
+                if (device.getDeviceType().getPriority() == Integer.MAX_VALUE) return;
+                location = locationMap.get(device.getLocation().name());
+
+                powerReducibleDevices.enqueue(new Task<>(device, device.getDeviceType().getPriority() + device.getDeviceGroup().getPriority() + (location.getPeople() * 10)));
+            }
+
         } else {
             poweredOffDevices.add(device);
         }
         addToGroupAndType(device);
+    }
 
+    public void turnOnDevice(@NotNull Device device) {
+        device.setTurnedOn(true);
+
+        if(!poweredOnDevices.contains(device)) {
+            poweredOnDevices.add(device);
+            device.setTurnedOnTime(date.getTime());
+        }
+
+        poweredOffDevices.remove(device);
+        if (device.getDeviceType().getPriority() == Integer.MAX_VALUE) return;
+        DeviceLocation location = locationMap.get(device.getLocation().name());
+
+        deviceQueue.enqueue(new Task<>(device, device.getDeviceType().getPriority() + device.getDeviceGroup().getPriority() + (location.getPeople() * 10)));
         if (device.getPowerLevel() != 0) {
             if (device.getDeviceType().getPriority() == Integer.MAX_VALUE) return;
-            DeviceLocation location = locationMap.get(device.getLocation().name());
+            location = locationMap.get(device.getLocation().name());
 
             powerReducibleDevices.enqueue(new Task<>(device, device.getDeviceType().getPriority() + device.getDeviceGroup().getPriority() + (location.getPeople() * 10)));
         }
     }
 
-    public void turnOnDevice(@NotNull Device device) {
-        device.setTurnedOn(true);
-        if(!poweredOnDevices.contains(device)) {
-            poweredOnDevices.add(device);
-            device.setTurnedOnTime(date.getTime());
-        }
-        poweredOffDevices.remove(device);
-    }
-
     public void turnOffDevice(@NotNull Device device) {
         device.setTurnedOn(false);
+
         if(!poweredOffDevices.contains(device)) poweredOffDevices.add(device);
+
         poweredOnDevices.remove(device);
+        deviceQueue.removeTask(device);
+        powerReducibleDevices.removeTask(device);
     }
 
     public void removeDevice(@NotNull Device device) {
@@ -284,11 +301,14 @@ public class SmartHome {
     }
 
     public void addPerson(@NotNull DeviceLocation location) {
+
         location.addPeople(1);
+
         location.getDevices().forEach(device -> {
             if (device.isTurnedOn()) {
                 System.out.println("Old priority: " + deviceQueue.getTask(device).getPriority());
                 Task<Device> task = deviceQueue.getTask(device);
+
                 deviceQueue.updatePriority(task, task.getPriority() + 10);
                 System.out.println("New priority: " + deviceQueue.getTask(device).getPriority());
             }
@@ -296,14 +316,22 @@ public class SmartHome {
     }
 
     public void removePerson(@NotNull DeviceLocation location) {
-        location.addPeople(1);
+
+        if(location.getPeople() == 0) {
+            return;
+        }
+
+        location.removePeople(1);
         System.out.println("People in location: " + location.getDevices());
+
         location.getDevices().forEach(device -> {
             if (device.isTurnedOn()) {
                 System.out.println("Old priority: " + deviceQueue.getTask(device).getPriority());
                 Task<Device> task = deviceQueue.getTask(device);
+
                 deviceQueue.updatePriority(task, task.getPriority() - 10);
                 System.out.println("New priority: " + deviceQueue.getTask(device).getPriority());
+
             }
             else {
                 System.out.println("Device is turned off");
@@ -565,9 +593,9 @@ public class SmartHome {
 
     private void realisticPowerConsumption() {
         for (Device device : poweredOnDevices) {
-            if (random.nextDouble() >= 0.5) {
+            if (random.nextDouble() >= 0.9) {
                 device.setBasePowerConsumption(device.getBasePowerConsumption() + device.getBasePowerConsumption() * random.nextDouble());
-            } else {
+            } else if (random.nextDouble() <= 0.1) {
                 device.setBasePowerConsumption(device.getBasePowerConsumption() - device.getBasePowerConsumption() * random.nextDouble());
             }
         }
