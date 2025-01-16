@@ -6,12 +6,14 @@ import com.smarthome.enums.DeviceLocation.DeviceLocationEnum;
 import com.smarthome.enums.DeviceType.DeviceTypeEnum;
 import jdk.jfr.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Category("AirConditioner")
 @Component
+@Document(collection = "devices")
 public class AirConditioner extends Device {
 
     @JsonProperty("mode")
@@ -39,6 +41,10 @@ public class AirConditioner extends Device {
         //true = cooling, false = heating
         this.mode = mode;
         this.simulationTempChangeTime = 0;
+    }
+
+    AirConditioner() {
+        super();
     }
 
     public boolean getMode() {

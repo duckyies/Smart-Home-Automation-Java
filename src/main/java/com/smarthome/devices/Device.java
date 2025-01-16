@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smarthome.enums.DeviceGroup.DeviceGroupEnum;
 import com.smarthome.enums.DeviceLocation.DeviceLocationEnum;
 import com.smarthome.enums.DeviceType.DeviceTypeEnum;
+import jakarta.persistence.Id;
 import jdk.jfr.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -15,54 +18,69 @@ import java.util.Date;
  * device name, type, group, location, power status, battery level, and power consumption.
  */
 
-@Category("Device")
+@Document(collection = "devices")
 @Component
-
-
 public class Device {
 
     static int deviceNum = 0;
     private final Date date = new Date();
 
+    @Id
+    private String id;
 
+    @Field("deviceID")
     private int deviceID;
 
+    @Field("deviceName")
     @JsonProperty("deviceName")
     private String deviceName;
 
+    @Field("deviceType")
     @JsonProperty("deviceType")
     private DeviceTypeEnum deviceType;
 
+    @Field("location")
     @JsonProperty("location")
     private DeviceLocationEnum location;
 
+    @Field("deviceGroup")
     @JsonProperty("deviceGroup")
     private DeviceGroupEnum deviceGroup;
 
+    @Field("batteryLevel")
     @JsonProperty("batteryLevel")
     private double batteryLevel;
 
+    @Field("maxBatteryCapacity")
     @JsonProperty("maxBatteryCapacity")
     private int maxBatteryCapacity;
 
+    @Field("currentBatteryCapacity")
     @JsonProperty("currentBatteryCapacity")
     private double currentBatteryCapacity;
 
+    @Field("isOnBattery")
     @JsonProperty("isOnBattery")
     private boolean isOnBattery;
 
+    @Field("isTurnedOn")
     @JsonProperty("isTurnedOn")
     private Boolean isTurnedOn = false;
 
+    @Field("basePowerConsumption")
     @JsonProperty("basePowerConsumption")
     private double basePowerConsumption;
 
+    @Field("powerLevel")
     @JsonProperty("powerLevel")
     private int powerLevel;
 
+    @Field("turnedOnTime")
     @JsonProperty("turnedOnTime")
     private long turnedOnTime;
 
+    @Field("isInteracted")
+    @JsonProperty("isInteracted")
     private boolean isInteracted = false;
     /**
      * Constructor to initialize a new Device object with the specified attributes.
@@ -97,6 +115,13 @@ public class Device {
     public Device() {
         this.deviceID = deviceNum++;
     }
+
+    public Device(String name, DeviceTypeEnum type, DeviceGroupEnum group, DeviceLocationEnum location, Boolean status) {
+    }
+
+    public Device(String name, DeviceTypeEnum type, DeviceGroupEnum group, DeviceLocationEnum location) {
+    }
+
     /**
      * Returns the power status of the device.
      *

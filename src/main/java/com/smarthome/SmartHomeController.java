@@ -2,16 +2,18 @@ package com.smarthome;
 
 import com.smarthome.devices.Device;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Collection;
 import java.util.List;
+import com.smarthome.DeviceService;
 
-@RestController
-@RequestMapping("/devices")
-@CrossOrigin(origins = "*")
 public class SmartHomeController {
 
     public SmartHome smartHome = new SmartHome(10,25,false);
+    private final DeviceService deviceService;
+
+    public SmartHomeController(com.smarthome.DeviceService deviceService) {
+        this.deviceService = deviceService;
+    } 
 
     // ========================================================================
     //GET REQUESTS
