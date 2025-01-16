@@ -223,5 +223,44 @@ document.getElementById('remove-person-form').addEventListener('submit', async (
   removePersonFromLocation(locationName);
 });
 
+// Function to get log strings (Boilerplate - you'll need to add your logic here)
+function getInfoLogString() {
+  // Replace with your logic to fetch and return info log string
+  return "Info Log: [Timestamp] - [Log Message]";
+}
+
+function getWarningLogString() {
+  // Replace with your logic to fetch and return warning log string
+  return "Warning Log: [Timestamp] - [Log Message]";
+}
+
+function getErrorLogString() {
+  // Replace with your logic to fetch and return error log string
+  return "Error Log: [Timestamp] - [Log Message]";
+}
+
+function getDebugLogString() {
+  // Replace with your logic to fetch and return debug log string
+  return "Debug Log: [Timestamp] - [Log Message]";
+}
+
+function getVerboseLogString() {
+  // Replace with your logic to fetch and return verbose log string
+  return "Verbose Log: [Timestamp] - [Log Message]";
+}
+
+// Function to update log boxes (call this periodically to update logs)
+function updateLogBoxes() {
+  document.getElementById('info-logs').textContent = getInfoLogString();
+  document.getElementById('warning-logs').textContent = getWarningLogString();
+  document.getElementById('error-logs').textContent = getErrorLogString();
+  document.getElementById('debug-logs').textContent = getDebugLogString();
+  document.getElementById('verbose-logs').textContent = getVerboseLogString();
+}
+
 fetchDevices();
 fetchLocations();
+updateLogBoxes();
+setInterval(updateLogBoxes, 5000);
+setInterval(fetchDevices, 1000);
+setInterval(fetchLocations, 1100);

@@ -17,6 +17,8 @@ import java.util.Date;
 
 @Category("Device")
 @Component
+
+
 public class Device {
 
     static int deviceNum = 0;

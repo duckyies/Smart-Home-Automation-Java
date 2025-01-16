@@ -1,1 +1,8 @@
 com.smarthome
+com.smarthome.config
+com.smarthome.datastuctures
+com.smarthome.db
+com.smarthome.devices
+com.smarthome.enums
+com.smarthome.misc
+com.smarthome.tasks

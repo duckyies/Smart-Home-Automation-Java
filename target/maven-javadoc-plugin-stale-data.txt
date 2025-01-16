@@ -3,7 +3,7 @@
 @options
 @packages
 -classpath
-'C:/Users/lenovo/.m2/repository/org/jetbrains/annotations/26.0.1/annotations-26.0.1.jar'
+'C:/Users/lenovo/.m2/repository/org/jetbrains/annotations/26.0.1/annotations-26.0.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/spring-core/6.2.1/spring-core-6.2.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/spring-jcl/6.2.1/spring-jcl-6.2.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/spring-context/6.2.1/spring-context-6.2.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/spring-aop/6.2.1/spring-aop-6.2.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/spring-expression/6.2.1/spring-expression-6.2.1.jar;C:/Users/lenovo/.m2/repository/io/micrometer/micrometer-observation/1.14.2/micrometer-observation-1.14.2.jar;C:/Users/lenovo/.m2/repository/io/micrometer/micrometer-commons/1.14.2/micrometer-commons-1.14.2.jar;C:/Users/lenovo/.m2/repository/org/springframework/spring-beans/6.2.1/spring-beans-6.2.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/boot/spring-boot-starter-web/3.4.1/spring-boot-starter-web-3.4.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/boot/spring-boot-starter/3.4.1/spring-boot-starter-3.4.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/boot/spring-boot/3.4.1/spring-boot-3.4.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/3.4.1/spring-boot-autoconfigure-3.4.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/boot/spring-boot-starter-logging/3.4.1/spring-boot-starter-logging-3.4.1.jar;C:/Users/lenovo/.m2/repository/ch/qos/logback/logback-classic/1.5.12/logback-classic-1.5.12.jar;C:/Users/lenovo/.m2/repository/ch/qos/logback/logback-core/1.5.12/logback-core-1.5.12.jar;C:/Users/lenovo/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.24.3/log4j-to-slf4j-2.24.3.jar;C:/Users/lenovo/.m2/repository/org/apache/logging/log4j/log4j-api/2.24.3/log4j-api-2.24.3.jar;C:/Users/lenovo/.m2/repository/org/slf4j/jul-to-slf4j/2.0.16/jul-to-slf4j-2.0.16.jar;C:/Users/lenovo/.m2/repository/jakarta/annotation/jakarta.annotation-api/2.1.1/jakarta.annotation-api-2.1.1.jar;C:/Users/lenovo/.m2/repository/org/yaml/snakeyaml/2.3/snakeyaml-2.3.jar;C:/Users/lenovo/.m2/repository/org/springframework/boot/spring-boot-starter-json/3.4.1/spring-boot-starter-json-3.4.1.jar;C:/Users/lenovo/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.18.2/jackson-databind-2.18.2.jar;C:/Users/lenovo/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.18.2/jackson-annotations-2.18.2.jar;C:/Users/lenovo/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.18.2/jackson-core-2.18.2.jar;C:/Users/lenovo/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.18.2/jackson-datatype-jdk8-2.18.2.jar;C:/Users/lenovo/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.18.2/jackson-datatype-jsr310-2.18.2.jar;C:/Users/lenovo/.m2/repository/com/fasterxml/jackson/module/jackson-module-parameter-names/2.18.2/jackson-module-parameter-names-2.18.2.jar;C:/Users/lenovo/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/3.4.1/spring-boot-starter-tomcat-3.4.1.jar;C:/Users/lenovo/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/10.1.34/tomcat-embed-core-10.1.34.jar;C:/Users/lenovo/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/10.1.34/tomcat-embed-el-10.1.34.jar;C:/Users/lenovo/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/10.1.34/tomcat-embed-websocket-10.1.34.jar;C:/Users/lenovo/.m2/repository/org/springframework/spring-web/6.2.1/spring-web-6.2.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/spring-webmvc/6.2.1/spring-webmvc-6.2.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/boot/spring-boot-starter-actuator/3.4.1/spring-boot-starter-actuator-3.4.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/boot/spring-boot-actuator-autoconfigure/3.4.1/spring-boot-actuator-autoconfigure-3.4.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/boot/spring-boot-actuator/3.4.1/spring-boot-actuator-3.4.1.jar;C:/Users/lenovo/.m2/repository/io/micrometer/micrometer-jakarta9/1.14.2/micrometer-jakarta9-1.14.2.jar;C:/Users/lenovo/.m2/repository/io/micrometer/micrometer-core/1.14.2/micrometer-core-1.14.2.jar;C:/Users/lenovo/.m2/repository/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar;C:/Users/lenovo/.m2/repository/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar;C:/Users/lenovo/.m2/repository/org/springframework/boot/spring-boot-starter-data-jpa/3.4.1/spring-boot-starter-data-jpa-3.4.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/3.4.1/spring-boot-starter-jdbc-3.4.1.jar;C:/Users/lenovo/.m2/repository/com/zaxxer/HikariCP/5.1.0/HikariCP-5.1.0.jar;C:/Users/lenovo/.m2/repository/org/springframework/spring-jdbc/6.2.1/spring-jdbc-6.2.1.jar;C:/Users/lenovo/.m2/repository/org/hibernate/orm/hibernate-core/6.6.4.Final/hibernate-core-6.6.4.Final.jar;C:/Users/lenovo/.m2/repository/jakarta/persistence/jakarta.persistence-api/3.1.0/jakarta.persistence-api-3.1.0.jar;C:/Users/lenovo/.m2/repository/jakarta/transaction/jakarta.transaction-api/2.0.1/jakarta.transaction-api-2.0.1.jar;C:/Users/lenovo/.m2/repository/org/antlr/antlr4-runtime/4.13.0/antlr4-runtime-4.13.0.jar;C:/Users/lenovo/.m2/repository/org/springframework/data/spring-data-jpa/3.4.1/spring-data-jpa-3.4.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/data/spring-data-commons/3.4.1/spring-data-commons-3.4.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/spring-orm/6.2.1/spring-orm-6.2.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/spring-tx/6.2.1/spring-tx-6.2.1.jar;C:/Users/lenovo/.m2/repository/org/slf4j/slf4j-api/2.0.2/slf4j-api-2.0.2.jar;C:/Users/lenovo/.m2/repository/org/springframework/spring-aspects/6.2.1/spring-aspects-6.2.1.jar;C:/Users/lenovo/.m2/repository/org/aspectj/aspectjweaver/1.9.22.1/aspectjweaver-1.9.22.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/boot/spring-boot-starter-data-mongodb/3.4.1/spring-boot-starter-data-mongodb-3.4.1.jar;C:/Users/lenovo/.m2/repository/org/mongodb/mongodb-driver-sync/5.2.1/mongodb-driver-sync-5.2.1.jar;C:/Users/lenovo/.m2/repository/org/mongodb/bson/5.2.1/bson-5.2.1.jar;C:/Users/lenovo/.m2/repository/org/mongodb/mongodb-driver-core/5.2.1/mongodb-driver-core-5.2.1.jar;C:/Users/lenovo/.m2/repository/org/springframework/data/spring-data-mongodb/4.4.1/spring-data-mongodb-4.4.1.jar'
 -encoding
 'UTF-8'
 -protected
@@ -26,26 +26,94 @@
 -version
 -windowtitle
 'Smart-home-Automation 1.0 API'
+com.smarthome.config
+com.smarthome.datastuctures
+com.smarthome.db
+com.smarthome.devices
+com.smarthome.enums
 com.smarthome
+com.smarthome.misc
+com.smarthome.tasks
 C:\Users\lenovo\.m2\repository\org\jetbrains\annotations\26.0.1\annotations-26.0.1.jar = 1735831047404
+C:\Users\lenovo\.m2\repository\org\springframework\spring-core\6.2.1\spring-core-6.2.1.jar = 1736841435873
+C:\Users\lenovo\.m2\repository\org\springframework\spring-jcl\6.2.1\spring-jcl-6.2.1.jar = 1736841435890
+C:\Users\lenovo\.m2\repository\org\springframework\spring-context\6.2.1\spring-context-6.2.1.jar = 1736841680228
+C:\Users\lenovo\.m2\repository\org\springframework\spring-aop\6.2.1\spring-aop-6.2.1.jar = 1736841680280
+C:\Users\lenovo\.m2\repository\org\springframework\spring-expression\6.2.1\spring-expression-6.2.1.jar = 1736841680346
+C:\Users\lenovo\.m2\repository\io\micrometer\micrometer-observation\1.14.2\micrometer-observation-1.14.2.jar = 1736841680302
+C:\Users\lenovo\.m2\repository\io\micrometer\micrometer-commons\1.14.2\micrometer-commons-1.14.2.jar = 1736841680302
+C:\Users\lenovo\.m2\repository\org\springframework\spring-beans\6.2.1\spring-beans-6.2.1.jar = 1736841680397
+C:\Users\lenovo\.m2\repository\org\springframework\boot\spring-boot-starter-web\3.4.1\spring-boot-starter-web-3.4.1.jar = 1736844974761
+C:\Users\lenovo\.m2\repository\org\springframework\boot\spring-boot-starter\3.4.1\spring-boot-starter-3.4.1.jar = 1736844974787
+C:\Users\lenovo\.m2\repository\org\springframework\boot\spring-boot\3.4.1\spring-boot-3.4.1.jar = 1736844975150
+C:\Users\lenovo\.m2\repository\org\springframework\boot\spring-boot-autoconfigure\3.4.1\spring-boot-autoconfigure-3.4.1.jar = 1736844975240
+C:\Users\lenovo\.m2\repository\org\springframework\boot\spring-boot-starter-logging\3.4.1\spring-boot-starter-logging-3.4.1.jar = 1736844974810
+C:\Users\lenovo\.m2\repository\ch\qos\logback\logback-classic\1.5.12\logback-classic-1.5.12.jar = 1736844974912
+C:\Users\lenovo\.m2\repository\ch\qos\logback\logback-core\1.5.12\logback-core-1.5.12.jar = 1736844974881
+C:\Users\lenovo\.m2\repository\org\apache\logging\log4j\log4j-to-slf4j\2.24.3\log4j-to-slf4j-2.24.3.jar = 1736844974895
+C:\Users\lenovo\.m2\repository\org\apache\logging\log4j\log4j-api\2.24.3\log4j-api-2.24.3.jar = 1736844974947
+C:\Users\lenovo\.m2\repository\org\slf4j\jul-to-slf4j\2.0.16\jul-to-slf4j-2.0.16.jar = 1736844974934
+C:\Users\lenovo\.m2\repository\jakarta\annotation\jakarta.annotation-api\2.1.1\jakarta.annotation-api-2.1.1.jar = 1736844974951
+C:\Users\lenovo\.m2\repository\org\yaml\snakeyaml\2.3\snakeyaml-2.3.jar = 1736844975061
+C:\Users\lenovo\.m2\repository\org\springframework\boot\spring-boot-starter-json\3.4.1\spring-boot-starter-json-3.4.1.jar = 1736844974970
+C:\Users\lenovo\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.18.2\jackson-databind-2.18.2.jar = 1736844975260
+C:\Users\lenovo\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.18.2\jackson-annotations-2.18.2.jar = 1736844975040
+C:\Users\lenovo\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.18.2\jackson-core-2.18.2.jar = 1736844975230
+C:\Users\lenovo\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jdk8\2.18.2\jackson-datatype-jdk8-2.18.2.jar = 1736844975104
+C:\Users\lenovo\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jsr310\2.18.2\jackson-datatype-jsr310-2.18.2.jar = 1736844975172
+C:\Users\lenovo\.m2\repository\com\fasterxml\jackson\module\jackson-module-parameter-names\2.18.2\jackson-module-parameter-names-2.18.2.jar = 1736844975186
+C:\Users\lenovo\.m2\repository\org\springframework\boot\spring-boot-starter-tomcat\3.4.1\spring-boot-starter-tomcat-3.4.1.jar = 1736844975201
+C:\Users\lenovo\.m2\repository\org\apache\tomcat\embed\tomcat-embed-core\10.1.34\tomcat-embed-core-10.1.34.jar = 1736844975516
+C:\Users\lenovo\.m2\repository\org\apache\tomcat\embed\tomcat-embed-el\10.1.34\tomcat-embed-el-10.1.34.jar = 1736844975275
+C:\Users\lenovo\.m2\repository\org\apache\tomcat\embed\tomcat-embed-websocket\10.1.34\tomcat-embed-websocket-10.1.34.jar = 1736844975298
+C:\Users\lenovo\.m2\repository\org\springframework\spring-web\6.2.1\spring-web-6.2.1.jar = 1736844584703
+C:\Users\lenovo\.m2\repository\org\springframework\spring-webmvc\6.2.1\spring-webmvc-6.2.1.jar = 1736844584608
+C:\Users\lenovo\.m2\repository\org\springframework\boot\spring-boot-starter-actuator\3.4.1\spring-boot-starter-actuator-3.4.1.jar = 1736856560927
+C:\Users\lenovo\.m2\repository\org\springframework\boot\spring-boot-actuator-autoconfigure\3.4.1\spring-boot-actuator-autoconfigure-3.4.1.jar = 1736856561566
+C:\Users\lenovo\.m2\repository\org\springframework\boot\spring-boot-actuator\3.4.1\spring-boot-actuator-3.4.1.jar = 1736856561474
+C:\Users\lenovo\.m2\repository\io\micrometer\micrometer-jakarta9\1.14.2\micrometer-jakarta9-1.14.2.jar = 1736856561032
+C:\Users\lenovo\.m2\repository\io\micrometer\micrometer-core\1.14.2\micrometer-core-1.14.2.jar = 1736856561339
+C:\Users\lenovo\.m2\repository\com\mysql\mysql-connector-j\8.0.33\mysql-connector-j-8.0.33.jar = 1736858467756
+C:\Users\lenovo\.m2\repository\com\google\protobuf\protobuf-java\3.21.9\protobuf-java-3.21.9.jar = 1736858468512
+C:\Users\lenovo\.m2\repository\org\springframework\boot\spring-boot-starter-data-jpa\3.4.1\spring-boot-starter-data-jpa-3.4.1.jar = 1736858467805
+C:\Users\lenovo\.m2\repository\org\springframework\boot\spring-boot-starter-jdbc\3.4.1\spring-boot-starter-jdbc-3.4.1.jar = 1736858467777
+C:\Users\lenovo\.m2\repository\com\zaxxer\HikariCP\5.1.0\HikariCP-5.1.0.jar = 1736858467881
+C:\Users\lenovo\.m2\repository\org\springframework\spring-jdbc\6.2.1\spring-jdbc-6.2.1.jar = 1736844584392
+C:\Users\lenovo\.m2\repository\org\hibernate\orm\hibernate-core\6.6.4.Final\hibernate-core-6.6.4.Final.jar = 1736858469940
+C:\Users\lenovo\.m2\repository\jakarta\persistence\jakarta.persistence-api\3.1.0\jakarta.persistence-api-3.1.0.jar = 1736858467829
+C:\Users\lenovo\.m2\repository\jakarta\transaction\jakarta.transaction-api\2.0.1\jakarta.transaction-api-2.0.1.jar = 1736858467846
+C:\Users\lenovo\.m2\repository\org\antlr\antlr4-runtime\4.13.0\antlr4-runtime-4.13.0.jar = 1736858468444
+C:\Users\lenovo\.m2\repository\org\springframework\data\spring-data-jpa\3.4.1\spring-data-jpa-3.4.1.jar = 1736858468927
+C:\Users\lenovo\.m2\repository\org\springframework\data\spring-data-commons\3.4.1\spring-data-commons-3.4.1.jar = 1736858468818
+C:\Users\lenovo\.m2\repository\org\springframework\spring-orm\6.2.1\spring-orm-6.2.1.jar = 1736844584513
+C:\Users\lenovo\.m2\repository\org\springframework\spring-tx\6.2.1\spring-tx-6.2.1.jar = 1736844584429
+C:\Users\lenovo\.m2\repository\org\slf4j\slf4j-api\2.0.2\slf4j-api-2.0.2.jar = 1736858468597
+C:\Users\lenovo\.m2\repository\org\springframework\spring-aspects\6.2.1\spring-aspects-6.2.1.jar = 1736844868515
+C:\Users\lenovo\.m2\repository\org\aspectj\aspectjweaver\1.9.22.1\aspectjweaver-1.9.22.1.jar = 1736844868549
+C:\Users\lenovo\.m2\repository\org\springframework\boot\spring-boot-starter-data-mongodb\3.4.1\spring-boot-starter-data-mongodb-3.4.1.jar = 1737028887914
+C:\Users\lenovo\.m2\repository\org\mongodb\mongodb-driver-sync\5.2.1\mongodb-driver-sync-5.2.1.jar = 1737028887897
+C:\Users\lenovo\.m2\repository\org\mongodb\bson\5.2.1\bson-5.2.1.jar = 1737028888141
+C:\Users\lenovo\.m2\repository\org\mongodb\mongodb-driver-core\5.2.1\mongodb-driver-core-5.2.1.jar = 1737028888119
+C:\Users\lenovo\.m2\repository\org\springframework\data\spring-data-mongodb\4.4.1\spring-data-mongodb-4.4.1.jar = 1737028888982
 C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\src\main\java = 1735477156738
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\allclasses-index.html = 1736221080368
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\allpackages-index.html = 1736221080370
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\copy.svg = 1736221080402
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\element-list = 1736221080302
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\help-doc.html = 1736221080399
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\index-all.html = 1736221080389
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\index.html = 1736221080394
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\link.svg = 1736221080404
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\member-search-index.js = 1736221080374
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\module-search-index.js = 1736221080371
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\overview-tree.html = 1736221080354
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\package-search-index.js = 1736221080372
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\script.js = 1736221080401
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\search-page.js = 1736221080406
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\search.html = 1736221080392
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\search.js = 1736221080405
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\serialized-form.html = 1736221080320
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\stylesheet.css = 1736221080400
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\tag-search-index.js = 1736221080375
-C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\type-search-index.js = 1736221080373
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\allclasses-index.html = 1737032153634
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\allpackages-index.html = 1737032153636
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\copy.svg = 1737032153673
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\element-list = 1737032153470
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\help-doc.html = 1737032153670
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\index-all.html = 1737032153661
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\index.html = 1737032153611
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\link.svg = 1737032153674
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\member-search-index.js = 1737032153640
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\module-search-index.js = 1737032153637
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\overview-summary.html = 1737032153666
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\overview-tree.html = 1737032153607
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\package-search-index.js = 1737032153637
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\script.js = 1737032153672
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\search-page.js = 1737032153679
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\search.html = 1737032153664
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\search.js = 1737032153677
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\serialized-form.html = 1737032153516
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\stylesheet.css = 1737032153671
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\tag-search-index.js = 1737032153640
+C:\Users\lenovo\Documents\GitHub\Smart-Home-Automation-Java\docs\apidocs\type-search-index.js = 1737032153638
