@@ -13,7 +13,7 @@ public class SmartHomeController {
 
     public SmartHomeController(com.smarthome.DeviceService deviceService) {
         this.deviceService = deviceService;
-    } 
+    }
 
     // ========================================================================
     //GET REQUESTS
