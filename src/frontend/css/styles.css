@@ -1,5 +1,5 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
   background-color: #121212;
@@ -11,6 +11,7 @@ header {
   color: white;
   text-align: center;
   padding: 1rem 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
 }
 
 main {
@@ -24,7 +25,7 @@ section {
   background: #1c1c1c;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   border-radius: 8px;
-  padding: 1rem;
+  padding: 1.5rem;
   flex: 1;
   min-width: 300px;
 }
@@ -32,6 +33,7 @@ section {
 section h2 {
   margin-top: 0;
   color: #4fc3f7;
+  font-size: 1.5rem;
 }
 
 form {
@@ -48,7 +50,7 @@ form label {
 form input,
 form select,
 form button {
-  padding: 0.5rem;
+  padding: 0.7rem;
   font-size: 1rem;
   border: 1px solid #424242;
   border-radius: 4px;
@@ -67,8 +69,65 @@ form button {
   color: white;
   border: none;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 form button:hover {
   background-color: #1565c0;
+}
+
+.device {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #282828;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.device-info {
+  flex-grow: 1;
+}
+
+.device-controls button {
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.device-controls button.on {
+  background-color: #4caf50;
+}
+
+.device-controls button.off:hover {
+  background-color: #d84315;
+}
+
+.device-controls button.on:hover {
+  background-color: #388e3c;
+}
+
+.device-info p {
+  margin: 0.5rem 0;
+}
+
+#manage-location-devices {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  main {
+    flex-direction: column;
+  }
+
+  section {
+    min-width: 100%;
+  }
 }

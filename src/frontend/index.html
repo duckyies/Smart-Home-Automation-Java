@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Home Controller</title>
   <link rel="stylesheet" href="./css/styles.css">
-  <style>
-
-  </style>
 </head>
 <body>
 <header>
@@ -31,7 +28,7 @@
     <h2>Add Device</h2>
     <form id="add-device-form">
       <label for="device-name">Device Name</label>
-      <input type="text" id="device-name" name="device-name" required>
+      <input type="text" id="device-name" name="device-name" placeholder="Enter device name" required>
 
       <label for="device-type">Device Type</label>
       <select id="device-type" name="device-type" required>
@@ -84,47 +81,65 @@
       </select>
 
       <label for="device-power-consumption">Power Consumption (W)</label>
-      <input type="number" id="device-power-consumption" name="device-power-consumption" required>
+      <input type="number" id="device-power-consumption" name="device-power-consumption" placeholder="Enter power consumption" required>
 
       <label for="device-max-battery-capacity">Max Battery Capacity (mAH)</label>
-      <input type="number" id="device-max-battery-capacity" name="device-max-battery-capacity" required>
+      <input type="number" id="device-max-battery-capacity" name="device-max-battery-capacity" placeholder="Enter max battery capacity" required>
 
       <label for="device-power-level">Power Level</label>
-      <input type="number" id="device-power-level" name="device-power-level" required min="0" max="5">
+      <input type="number" id="device-power-level" name="device-power-level" placeholder="Enter power level (0-5)" required min="0" max="5">
 
       <button type="submit">Add Device</button>
     </form>
   </section>
+  <div id="manage-location-devices">
+    <section>
+      <h2>Manage Location & Devices</h2>
 
-  <section>
-    <h2>Manage Location & Devices</h2>
+      <!-- Add Location -->
+      <form id="add-location-form">
+        <label for="location-name">Location Name</label>
+        <input type="text" id="location-name" name="location-name" placeholder="Enter location name" required>
+        <button type="submit">Add Location</button>
+      </form>
 
-    <!-- Add Location -->
-    <form id="add-location-form">
-      <label for="location-name">Location Name</label>
-      <input type="text" id="location-name" name="location-name" required>
-      <button type="submit">Add Location</button>
-    </form>
+      <!-- Remove Location -->
+      <form id="remove-location-form">
+        <label for="location-remove-select">Select Location to Remove</label>
+        <select id="location-remove-select" name="location-remove-select" required>
+          <!-- Options to be dynamically populated via JavaScript -->
+        </select>
+        <button type="submit">Remove Location</button>
+      </form>
 
-    <!-- Add Person -->
-    <form id="add-person-form">
-      <label for="location-select">Select Location</label>
-      <select id="location-select" name="location-select" required>
-        <!-- Options to be dynamically populated via JavaScript -->
-      </select>
+      <!-- Add Person -->
+      <form id="add-person-form">
+        <label for="location-add-person-select">Select Location to Add Person</label>
+        <select id="location-add-person-select" name="location-add-person-select" required>
+          <!-- Options to be dynamically populated via JavaScript -->
+        </select>
+        <button type="submit">Add Person</button>
+      </form>
 
-    </form>
+      <!-- Remove Person -->
+      <form id="remove-person-form">
+        <label for="location-remove-person-select">Select Location to Remove Person</label>
+        <select id="location-remove-person-select" name="location-remove-person-select" required>
+          <!-- Options to be dynamically populated via JavaScript -->
+        </select>
+        <button type="submit">Remove Person</button>
+      </form>
 
-    <!-- Remove Device -->
-    <form id="remove-device-form">
-      <label for="device-select">Select Device</label>
-      <select id="device-select" name="device-select" required>
-        <!-- Options to be dynamically populated via JavaScript -->
-      </select>
-      <button type="submit">Remove Device</button>
-    </form>
-  </section>
-
+      <!-- Remove Device -->
+      <form id="remove-device-form">
+        <label for="device-select">Select Device to Remove</label>
+        <select id="device-select" name="device-select" required>
+          <!-- Options to be dynamically populated via JavaScript -->
+        </select>
+        <button type="submit">Remove Device</button>
+      </form>
+    </section>
+  </div>
 </main>
 
 <script src="js/script.js"></script>
