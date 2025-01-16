@@ -129,11 +129,9 @@ async function fetchLocations() {
     const response = await fetch(`${apiUrl}/locations`);
     const locations = await response.json();
 
-    const locationRemoveSelect = document.getElementById('location-remove-select');
     const locationAddPersonSelect = document.getElementById('location-add-person-select');
     const locationRemovePersonSelect = document.getElementById('location-remove-person-select');
 
-    await populateSelectWithOptions(locationRemoveSelect, locations, null, option => option);
     await populateSelectWithOptions(locationAddPersonSelect, locations, null, option => option);
     await populateSelectWithOptions(locationRemovePersonSelect, locations, null, option => option);
   } catch (error) {

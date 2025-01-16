@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.List;
 import com.smarthome.DeviceService;
 
+@RestController
+@RequestMapping("/devices")
+@CrossOrigin(origins = "*")
 public class SmartHomeController {
 
     public SmartHome smartHome = new SmartHome(10,25,false);
@@ -136,6 +139,7 @@ public class SmartHomeController {
     @PostMapping
     public String addDevice(@RequestBody Device device) {
         smartHome.addDevice(device);
+        deviceService.addDevice(device);
         return "Device added successfully";
     }
 
