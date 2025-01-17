@@ -80,6 +80,12 @@ public class SmartHome {
     private String mode = "Normal";
     private boolean simulate;
 
+    private ArrayList<String> infoTasks = new ArrayList<>();
+    private ArrayList<String> warningTasks = new ArrayList<>();
+    private ArrayList<String> severeTasks = new ArrayList<>();
+    private ArrayList<String> powerConsumptionTasks = new ArrayList<>();
+    private ArrayList<String> deviceBatteryTasks = new ArrayList<>();
+
     // ========================================================================
     // Constructors and Initializers
     // ========================================================================
@@ -545,11 +551,19 @@ public class SmartHome {
     }
 
     private void addLog(Level logLevel, String message) {
+        if (logLevel == Level.INFO) {
+            infoTasks.add(message);
+        } else if (logLevel == Level.WARNING) {
+            warningTasks.add(message);
+        } else if (logLevel == Level.SEVERE) {
+            severeTasks.add(message);
+        }
         loggingList.addEnd(new LogTask(logLevel, message));
     }
 
     private void addPowerLog(Level logLevel, String message) {
         powerConsumptionLogList.addEnd(new LogTask(logLevel, message));
+        powerConsumptionTasks.add(message);
         if (!logLevel.equals(Level.INFO)) {
             addLog(logLevel, message);
         }
@@ -557,6 +571,7 @@ public class SmartHome {
 
     private void addBatteryLog(Level logLevel, String message) {
         deviceBatteryLogList.addEnd(new LogTask(logLevel, message));
+        deviceBatteryTasks.add(message);
         if (!logLevel.equals(Level.INFO)) {
             addLog(logLevel, message);
         }
@@ -608,6 +623,13 @@ public class SmartHome {
 
     private void reduceBatteryTick() {
         for (Device device : poweredOnDevices) {
+
+            //stupid ui
+            if(device.getMaxBatteryCapacity() > 0) {
+                device.setOnBattery(true);
+                device.setBatteryLevel(100);
+                device.setCurrentBatteryCapacity(device.getBatteryCapacity());
+            }
             if (device.isOnBattery()) {
                 boolean toLog = reduceBatteryLevel(device);
                 if (device.getBatteryLevel() < 20) {
@@ -617,6 +639,11 @@ public class SmartHome {
                 } else if (!toLog) {
                     addBatteryLog(Level.INFO, String.format("Battery level of %s is now %s", device.getDeviceName(), device.getBatteryLevel()));
                 }
+
+                if (device.getBatteryLevel() <= 0) {
+                    addBatteryLog(Level.SEVERE, String.format("Battery of %s has run out! Plug it in!", device.getDeviceName()));
+                   turnOffDevice(device);
+               }
             }
         }
     }

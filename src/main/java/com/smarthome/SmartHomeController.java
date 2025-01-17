@@ -18,6 +18,8 @@ public class SmartHomeController {
         this.deviceService = deviceService;
     }
 
+
+
     // ========================================================================
     //GET REQUESTS
     // ========================================================================
@@ -139,7 +141,12 @@ public class SmartHomeController {
     @PostMapping
     public String addDevice(@RequestBody Device device) {
         smartHome.addDevice(device);
-        deviceService.addDevice(device);
+
+
+        //deviceService.addDevice(device);
+        //just adds directly to devices
+        //plan to conver to user collection
+
         return "Device added successfully";
     }
 

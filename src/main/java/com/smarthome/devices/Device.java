@@ -305,6 +305,10 @@ public class Device {
         return isOnBattery;
     }
 
+    public void setOnBattery(boolean isOnBattery) {
+        this.isOnBattery = isOnBattery;
+    }
+
     public double getCurrentBatteryCapacity() {
         return currentBatteryCapacity;
     }

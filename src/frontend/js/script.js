@@ -24,6 +24,7 @@ async function fetchDevices() {
                     <p><strong>Location:</strong> ${device.location}</p>
                     <p><strong>Power Consumption:</strong> ${device.basePowerConsumption.toFixed(3)} W</p>
                     <p><strong>Power Level:</strong> ${device.powerLevel}</p>
+                    <p><strong>Battery Level:</strong> ${device.batteryLevel}</p>
                 </div>
                 <div class="device-controls">
                     <button class="${device.isTurnedOn ? 'off' : 'on'}" onclick="toggleDevice(${device.deviceID}, ${device.isTurnedOn})">
