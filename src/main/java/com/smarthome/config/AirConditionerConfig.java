@@ -7,9 +7,17 @@ import com.smarthome.enums.DeviceType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration class for creating AirConditioner-related beans.
+ */
 @Configuration
 public class AirConditionerConfig {
 
+    /**
+     * Creates an AirConditioner bean.
+     *
+     * @return a new AirConditioner instance
+     */
     @Bean
     public AirConditioner airConditioner() {
         return new AirConditioner(

@@ -89,8 +89,7 @@
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-starter-actuator</artifactId>
             <version>3.4.1</version>
-      </dependency>`
-
+      </dependency>
   </dependencies>
 
   <build>

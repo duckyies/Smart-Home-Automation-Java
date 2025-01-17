@@ -16,6 +16,7 @@ import com.smarthome.tasks.Rule;
 import com.smarthome.tasks.Task;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
+import org.springframework.scheduling.annotation.Async;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -591,6 +592,7 @@ public class SmartHome {
                 .sum();
     }
 
+
     private void logPowerConsumption() {
         powerConsumption = calculateCurrentPowerConsumption();
 
@@ -610,9 +612,9 @@ public class SmartHome {
     private void realisticPowerConsumption() {
         for (Device device : poweredOnDevices) {
             if (random.nextDouble() >= 0.9) {
-                device.setBasePowerConsumption(device.getBasePowerConsumption() + device.getBasePowerConsumption() * random.nextDouble());
+                device.setBasePowerConsumption(device.getBasePowerConsumption() + device.getBasePowerConsumption() * random.nextDouble(0.3, 0.5));
             } else if (random.nextDouble() <= 0.1) {
-                device.setBasePowerConsumption(device.getBasePowerConsumption() - device.getBasePowerConsumption() * random.nextDouble());
+                device.setBasePowerConsumption(device.getBasePowerConsumption() - device.getBasePowerConsumption() * random.nextDouble(0.3,0.5));
             }
         }
     }

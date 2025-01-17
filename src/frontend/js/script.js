@@ -39,7 +39,6 @@ async function fetchDevices() {
         poweredOffContainer.appendChild(deviceElement);
       }
 
-      // Add device to remove device select
       const option = document.createElement('option');
       option.value = device.deviceID;
       option.textContent = `${device.deviceName} (${device.location})`;
@@ -60,7 +59,6 @@ async function toggleDevice(id, isPoweredOn) {
   }
 }
 
-// Handle Add Device form submission
 document.getElementById('add-device-form').addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -234,11 +232,10 @@ const logUrls = [
 for (const log of logUrls) {
   try {
     const response = await fetch(apiUrl + log.url);
-    const logText = (await response.text()).replaceAll('\"', '').replaceAll("[","").replaceAll("]",""); // Replace newlines with <br> for HTML
+    const logText = (await response.text()).replaceAll('\"', '').replaceAll("[","").replaceAll("]","");
     const logBox = document.getElementById(log.id);
-    if(logText != "") logBox.textContent += logText + '\n'; // Append new log with a newline
+    if(logText != "") logBox.textContent += logText + '\n';
 
-    // Scroll to the bottom to show the latest log
     logBox.parentNode.scrollTop = logBox.parentNode.scrollHeight;
   } catch (error) {
     console.error(`Error fetching ${log.id}:`, error);
@@ -246,9 +243,6 @@ for (const log of logUrls) {
 }
 }
 
-// ... other initialization code ...
-
-// Fetch logs every second
 setInterval(updateLogBoxes, 1000);
 fetchDevices();
 fetchLocations();
