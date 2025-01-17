@@ -625,10 +625,9 @@ public class SmartHome {
         for (Device device : poweredOnDevices) {
 
             //stupid ui
-            if(device.getMaxBatteryCapacity() > 0) {
-                device.setOnBattery(true);
-                device.setBatteryLevel(100);
+            if(device.getMaxBatteryCapacity() > 0 && device.getCurrentBatteryCapacity() == 0) {
                 device.setCurrentBatteryCapacity(device.getBatteryCapacity());
+                device.setOnBattery(true);
             }
             if (device.isOnBattery()) {
                 boolean toLog = reduceBatteryLevel(device);
