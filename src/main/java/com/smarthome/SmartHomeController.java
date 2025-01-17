@@ -2,6 +2,8 @@ package com.smarthome;
 
 import com.smarthome.devices.Device;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import com.smarthome.DeviceService;
@@ -132,6 +134,41 @@ public class SmartHomeController {
     @GetMapping("/id/{id}/power_consumption")
     public double getPowerConsumptionByID(@PathVariable("id") String id) {
         return smartHome.getDeviceByID(Integer.parseInt(id)).getBasePowerConsumption();
+    }
+
+    @GetMapping("/log/info")
+    public Collection<String> getInfoLogs() {
+        ArrayList<String> logs = (ArrayList<String>) smartHome.getInfoTasks().clone();
+        smartHome.clearInfoTasks();
+        return logs;
+    }
+
+    @GetMapping("/log/warning")
+    public Collection<String> getWarningLogs() {
+        ArrayList<String> logs = (ArrayList<String>) smartHome.getWarningTasks().clone();
+        smartHome.clearWarningTasks();
+        return logs;
+    }
+
+    @GetMapping("/log/severe")
+    public Collection<String> getErrorLogs() {
+        ArrayList<String> logs = (ArrayList<String>) smartHome.getSevereTasks().clone();
+        smartHome.clearSevereTasks();
+        return logs;
+    }
+
+    @GetMapping("/log/power_consumption")
+    public Collection<String> getPowerConsumptionLogs() {
+        ArrayList<String> logs = (ArrayList<String>) smartHome.getPowerConsumptionTasks().clone();
+        smartHome.clearPowerConsumptionTasks();
+        return logs;
+    }
+
+    @GetMapping("/log/battery")
+    public Collection<String> getBatteryLogs() {
+        ArrayList<String> logs = (ArrayList<String>) smartHome.getDeviceBatteryTasks().clone();
+        smartHome.clearDeviceBatteryTasks();
+        return logs;
     }
 
     // ========================================================================

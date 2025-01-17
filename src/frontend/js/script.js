@@ -222,41 +222,34 @@ document.getElementById('remove-person-form').addEventListener('submit', async (
   removePersonFromLocation(locationName);
 });
 
-// Function to get log strings (Boilerplate - you'll need to add your logic here)
-function getInfoLogString() {
-  // Replace with your logic to fetch and return info log string
-  return "Info Log: [Timestamp] - [Log Message]";
+async function updateLogBoxes() {
+const logUrls = [
+  { id: 'info-logs', url: '/log/info' },
+  { id: 'warning-logs', url: '/log/warning' },
+  { id: 'error-logs', url: '/log/severe' },
+  { id: 'debug-logs', url: '/log/battery' },
+  { id: 'verbose-logs', url: '/log/power_consumption' },
+];
+
+for (const log of logUrls) {
+  try {
+    const response = await fetch(apiUrl + log.url);
+    const logText = (await response.text()).replaceAll('\"', '').replaceAll("[","").replaceAll("]",""); // Replace newlines with <br> for HTML
+    const logBox = document.getElementById(log.id);
+    if(logText != "") logBox.textContent += logText + '\n'; // Append new log with a newline
+
+    // Scroll to the bottom to show the latest log
+    logBox.parentNode.scrollTop = logBox.parentNode.scrollHeight;
+  } catch (error) {
+    console.error(`Error fetching ${log.id}:`, error);
+  }
+}
 }
 
-function getWarningLogString() {
-  // Replace with your logic to fetch and return warning log string
-  return "Warning Log: [Timestamp] - [Log Message]";
-}
+// ... other initialization code ...
 
-function getErrorLogString() {
-  // Replace with your logic to fetch and return error log string
-  return "Error Log: [Timestamp] - [Log Message]";
-}
-
-function getDebugLogString() {
-  // Replace with your logic to fetch and return debug log string
-  return "Debug Log: [Timestamp] - [Log Message]";
-}
-
-function getVerboseLogString() {
-  // Replace with your logic to fetch and return verbose log string
-  return "Verbose Log: [Timestamp] - [Log Message]";
-}
-
-// Function to update log boxes (call this periodically to update logs)
-function updateLogBoxes() {
-  document.getElementById('info-logs').textContent = getInfoLogString();
-  document.getElementById('warning-logs').textContent = getWarningLogString();
-  document.getElementById('error-logs').textContent = getErrorLogString();
-  document.getElementById('debug-logs').textContent = getDebugLogString();
-  document.getElementById('verbose-logs').textContent = getVerboseLogString();
-}
-
+// Fetch logs every second
+setInterval(updateLogBoxes, 1000);
 fetchDevices();
 fetchLocations();
 updateLogBoxes();

@@ -77,14 +77,14 @@ public class SmartHome {
     private double powerConsumption = 1;
     private double threshold;
     private int idealTemp;
-    private String mode = "Normal";
+    private final String mode = "Normal";
     private boolean simulate;
 
-    private ArrayList<String> infoTasks = new ArrayList<>();
-    private ArrayList<String> warningTasks = new ArrayList<>();
-    private ArrayList<String> severeTasks = new ArrayList<>();
-    private ArrayList<String> powerConsumptionTasks = new ArrayList<>();
-    private ArrayList<String> deviceBatteryTasks = new ArrayList<>();
+    private final ArrayList<String> infoTasks = new ArrayList<>();
+    private final ArrayList<String> warningTasks = new ArrayList<>();
+    private final ArrayList<String> severeTasks = new ArrayList<>();
+    private final ArrayList<String> powerConsumptionTasks = new ArrayList<>();
+    private final ArrayList<String> deviceBatteryTasks = new ArrayList<>();
 
     // ========================================================================
     // Constructors and Initializers
@@ -649,7 +649,7 @@ public class SmartHome {
     }
 
 
-    private boolean reduceBatteryLevel(Device device) {
+    private boolean reduceBatteryLevel(@NotNull Device device) {
         int currentBattery = (int) device.getBatteryLevel();
         device.setCurrentBatteryCapacity(device.getCurrentBatteryCapacity() - (device.getBasePowerConsumption() * device.getPowerLevel()));
         device.setBatteryLevel((int) (device.getCurrentBatteryCapacity() / device.getMaxBatteryCapacity() * 100));
@@ -1102,6 +1102,46 @@ public class SmartHome {
 
     public DeviceType getType(String type) {
         return typeMap.get(type);
+    }
+
+    public ArrayList<String> getPowerConsumptionTasks() {
+        return powerConsumptionTasks;
+    }
+
+    public ArrayList<String> getDeviceBatteryTasks() {
+        return deviceBatteryTasks;
+    }
+
+    public ArrayList<String> getInfoTasks() {
+        return infoTasks;
+    }
+
+    public ArrayList<String> getWarningTasks() {
+        return warningTasks;
+    }
+
+    public ArrayList<String> getSevereTasks() {
+        return severeTasks;
+    }
+
+    public void clearInfoTasks() {
+        infoTasks.clear();
+    }
+
+    public void clearWarningTasks() {
+        warningTasks.clear();
+    }
+
+    public void clearSevereTasks() {
+        severeTasks.clear();
+    }
+
+    public void clearPowerConsumptionTasks() {
+        powerConsumptionTasks.clear();
+    }
+
+    public void clearDeviceBatteryTasks() {
+        deviceBatteryTasks.clear();
     }
 
 
