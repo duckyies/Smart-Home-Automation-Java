@@ -2,6 +2,9 @@
 
 This project implements a smart home automation system using Java using linked list and priority queue, and asynchronous programming for device management and rule execution.  It allows for the creation, control, and monitoring of smart home devices, also power and battery management features along with logging.  A REST API is provided for interaction.
 
+## Docs
+[Documentation for the code can be found here](https://duckyies.github.io/Smart-Home-Automation-Java/)
+
 ## Setup and Running
 
 1. **Prerequisites:**
