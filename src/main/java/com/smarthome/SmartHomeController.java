@@ -1,6 +1,9 @@
 package com.smarthome;
 
 import com.smarthome.devices.Device;
+import com.smarthome.enums.DeviceGroup;
+import com.smarthome.enums.DeviceLocation;
+import com.smarthome.enums.DeviceType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -18,6 +21,20 @@ public class SmartHomeController {
 
     public SmartHomeController(com.smarthome.DeviceService deviceService) {
         this.deviceService = deviceService;
+        smartHome.addDevice(smartHome.createDevice("Living Room Light", DeviceType.DeviceTypeEnum.DECORATIVE, DeviceGroup.DeviceGroupEnum.LIGHTS, DeviceLocation.DeviceLocationEnum.LIVINGROOM, true, 100, 0.15, 5000, 1));
+        smartHome.addDevice(smartHome.createDevice("Bedroom Light", DeviceType.DeviceTypeEnum.ENTERTAINMENT, DeviceGroup.DeviceGroupEnum.LIGHTS, DeviceLocation.DeviceLocationEnum.BEDROOM, true, 100, 0.10, 4000, 1));
+        smartHome.addDevice(smartHome.createDevice("Chandelier", DeviceType.DeviceTypeEnum.DECORATIVE, DeviceGroup.DeviceGroupEnum.LIGHTS, DeviceLocation.DeviceLocationEnum.LIVINGROOM, true, 100, 0.50, 4500, 1));
+        smartHome.addDevice(smartHome.createDevice("Garden Light", DeviceType.DeviceTypeEnum.DECORATIVE, DeviceGroup.DeviceGroupEnum.LIGHTS, DeviceLocation.DeviceLocationEnum.GARDEN, true, 100, 0.20, 6000, 1));
+        smartHome.addDevice(smartHome.createDevice("Ceiling Fan (Living Room)", DeviceType.DeviceTypeEnum.HEALTH, DeviceGroup.DeviceGroupEnum.FANS, DeviceLocation.DeviceLocationEnum.LIVINGROOM, true, 100, 0.30, 10000, 1));
+        smartHome.addDevice(smartHome.createDevice("Ceiling Fan (Bedroom)", DeviceType.DeviceTypeEnum.OFFICE, DeviceGroup.DeviceGroupEnum.FANS, DeviceLocation.DeviceLocationEnum.BEDROOM, true, 100, 0.25, 10000, 1));
+        smartHome.addDevice(smartHome.createDevice("Desk Fan", DeviceType.DeviceTypeEnum.OTHERS, DeviceGroup.DeviceGroupEnum.FANS, DeviceLocation.DeviceLocationEnum.OFFICE, true, 100, 0.20, 5000, 1));
+        smartHome.addDevice(smartHome.createDevice("Smart Alarm Clock", DeviceType.DeviceTypeEnum.HEALTH, DeviceGroup.DeviceGroupEnum.ALARMS, DeviceLocation.DeviceLocationEnum.BEDROOM, true, 100, 0.05, 3000, 0));
+        smartHome.addDevice(smartHome.createDevice("Fire Alarm", DeviceType.DeviceTypeEnum.SECURITY, DeviceGroup.DeviceGroupEnum.ALARMS, DeviceLocation.DeviceLocationEnum.LIVINGROOM, true, 100, 0.03, 3000, 0));
+        smartHome.addDevice(smartHome.createDevice("Doorbell Camera", DeviceType.DeviceTypeEnum.SECURITY, DeviceGroup.DeviceGroupEnum.CAMERAS, DeviceLocation.DeviceLocationEnum.ENTRANCE, true, 100, 0.04, 3000, 0));
+        smartHome.addDevice(smartHome.createDevice("Living Room Camera", DeviceType.DeviceTypeEnum.SECURITY, DeviceGroup.DeviceGroupEnum.CAMERAS, DeviceLocation.DeviceLocationEnum.LIVINGROOM, true, 100, 0.05, 100, 0));
+        smartHome.addDevice(smartHome.createDevice("Chandelier", DeviceType.DeviceTypeEnum.DECORATIVE, DeviceGroup.DeviceGroupEnum.LIGHTS, DeviceLocation.DeviceLocationEnum.LIVINGROOM, true, 100, 0.50, 4500, 1));
+        smartHome.addDevice(smartHome.createDevice("Living Room AC", DeviceType.DeviceTypeEnum.NECESSARY, DeviceGroup.DeviceGroupEnum.AIRCONDITIONERS, DeviceLocation.DeviceLocationEnum.LIVINGROOM, true, 0, 0.20, 0, 1));
+
     }
 
 
