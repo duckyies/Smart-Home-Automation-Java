@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.smarthome.PriorityQueueTest
 -------------------------------------------------------------------------------
-Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 s - in com.smarthome.PriorityQueueTest
+Tests run: 58, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 35.364 s - in com.smarthome.PriorityQueueTest

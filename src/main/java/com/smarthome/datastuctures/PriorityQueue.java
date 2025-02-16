@@ -28,7 +28,7 @@ public class PriorityQueue<T> {
      *
      * @param task The initial task to add to the queue.
      */
-    PriorityQueue(Task<T> task) {
+    public PriorityQueue(Task<T> task) {
         this.queue = new LinkedList<Task<T>>();
         queue.addEnd(task);
     }
@@ -92,7 +92,7 @@ public class PriorityQueue<T> {
     public void print() {
         lock.lock();
         try {
-            
+
             for (int i = 0; i < queue.getSize(); i++) {
                 System.out.printf("Priority: %d, Task: %s\n", queue.get(i).getPriority(), queue.get(i).getTask());
             }
@@ -114,7 +114,7 @@ public class PriorityQueue<T> {
             if (queue.isEmpty()) {
                 return null;
             }
-            return queue.getFirst();
+            return queue.peek();
         }
         finally {
             lock.unlock();
@@ -129,7 +129,11 @@ public class PriorityQueue<T> {
     public ArrayList<Task<T>> getQueue() {
         lock.lock();
         try {
-            return new ArrayList<>(queue);
+            ArrayList<Task<T>> queueList = new ArrayList<>();
+            for (int i = 0; i < queue.getSize(); i++) {
+                queueList.add(queue.get(i));
+            }
+            return queueList;
         }
         finally {
             lock.unlock();
@@ -144,7 +148,7 @@ public class PriorityQueue<T> {
     public int size() {
         lock.lock();
         try {
-            return queue.size();
+            return queue.getSize();
         }
         finally {
             lock.unlock();
@@ -183,17 +187,12 @@ public class PriorityQueue<T> {
     public boolean contains(Task<T> task) {
         lock.lock();
         try {
-            return queue.contains(task);
-        }
-        finally {
-            lock.unlock();
-        }
-    }
-
-    public void removeTask(Task<T> task) {
-        lock.lock();
-        try {
-            queue.remove(task);
+            for (int i = 0; i < queue.getSize(); i++) {
+                if (queue.get(i).getTask().equals(task.getTask())) {
+                    return true;
+                }
+            }
+            return false;
         }
         finally {
             lock.unlock();
@@ -203,9 +202,10 @@ public class PriorityQueue<T> {
     public void removeTask(T task) {
         lock.lock();
         try {
-            for (Task<T> task1 : queue) {
-                if (task1.getTask().equals(task)) {
-                    queue.remove(task1);
+
+            for (int i = 0; i < queue.getSize(); i++) {
+                if (queue.get(i).getTask().equals(task)) {
+                    queue.removeIndex(i);
                     break;
                 }
             }
@@ -218,9 +218,10 @@ public class PriorityQueue<T> {
     public Task<T> getTask(T task) {
         lock.lock();
         try {
-            for (Task<T> task1 : queue) {
-                if (task1.getTask().equals(task)) {
-                    return task1;
+
+            for (int i = 0; i < queue.getSize(); i++) {
+                if (queue.get(i).getTask().equals(task)) {
+                    return queue.get(i);
                 }
             }
             return null;
@@ -239,9 +240,12 @@ public class PriorityQueue<T> {
     public void updatePriority(Task<T> task, int priority) {
         lock.lock();
         try {
-            if (queue.remove(task)) {
-                task.setPriority(priority);
-                enqueue(task);
+            for (int i = 0; i < queue.getSize(); i++) {
+                if (queue.get(i).getTask().equals(task.getTask())) {
+                    Task<T> newTask = new Task<>(task.getTask(), priority);
+                    queue.removeIndex(i);
+                    enqueue(newTask);
+                }
             }
         }
         finally {
@@ -258,9 +262,9 @@ public class PriorityQueue<T> {
     public int getPriority(T task) {
         lock.lock();
         try {
-            for (Task<T> task1 : queue) {
-                if (task1.getTask().equals(task)) {
-                    return task1.getPriority();
+            for (int i = 0; i < queue.getSize(); i++) {
+                if (queue.get(i).getTask().equals(task)) {
+                    return queue.get(i).getPriority();
                 }
             }
             return -1;
@@ -279,9 +283,9 @@ public class PriorityQueue<T> {
     public Task<T> getTask(int priority) {
         lock.lock();
         try {
-            for (Task<T> task1 : queue) {
-                if (task1.getPriority() == priority) {
-                    return task1;
+            for (int i = 0; i < queue.getSize(); i++) {
+                if (queue.get(i).getPriority() == priority) {
+                    return queue.get(i);
                 }
             }
             return null;

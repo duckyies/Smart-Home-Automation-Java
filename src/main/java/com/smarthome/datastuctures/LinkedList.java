@@ -1,7 +1,7 @@
 package com.smarthome.datastuctures;
 import com.smarthome.misc.EmptyListAccessException;
 import org.jetbrains.annotations.NotNull;
-
+import java.util.Comparator;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
@@ -12,10 +12,9 @@ import java.util.function.Consumer;
  *
  * @param <T> the type of elements stored in the linked list.
  */
-public class LinkedList<T> {
+public class LinkedList<T extends Comparable<T>> {
     private final ReentrantLock lock = new ReentrantLock();
     private Node<T> head;
-
 
     /**
      * A node in the linked list. Each node contains a value and a reference to the next node.
