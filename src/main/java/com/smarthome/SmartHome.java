@@ -415,6 +415,7 @@ public class SmartHome {
                 Device turnBackOnDevice = turnBackOnTask.getTask();
                 if (currPowerConsumption + (turnBackOnDevice.getBasePowerConsumption() * turnBackOnDevice.getPowerLevel()) > threshold) {
                     System.out.println("Not turning back on " + turnBackOnTask.getTask().getDeviceName());
+                    turnBackOnTask.setPriority(turnBackOnTask.getPriority() + 3);
                     turnBackOnDevices.enqueue(turnBackOnTask);
                     return;
                 }
