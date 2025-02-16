@@ -1,10 +1,10 @@
 package com.smarthome.datastuctures;
 import com.smarthome.misc.EmptyListAccessException;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
 
 
 /**
@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @param <T> the type of elements stored in the linked list.
  */
-public class LinkedList<T extends Comparable<T>> {
+public class LinkedList<T> {
     private final ReentrantLock lock = new ReentrantLock();
     private Node<T> head;
 
@@ -22,7 +22,7 @@ public class LinkedList<T extends Comparable<T>> {
      *
      * @param <U> the type of the value stored in the node.
      */
-    private class Node<U> {
+    private static class Node<U> {
 
         private U val;
         private Node<U> next;
@@ -578,7 +578,6 @@ public class LinkedList<T extends Comparable<T>> {
     /**
      * Reverses the order of the elements in the list.
      */
-    //these two should technically work synchronously but idk
     public void reverse() {
         ArrayList<T> tempArray = makeArrayList();
         List<T> temp = tempArray.reversed();
@@ -594,7 +593,7 @@ public class LinkedList<T extends Comparable<T>> {
      */
     public void sort() {
         ArrayList<T> tempArray = makeArrayList();
-        tempArray.sort(Comparator.naturalOrder());
+        tempArray.sort(null);
         clear();
 
         for (T val : tempArray) {

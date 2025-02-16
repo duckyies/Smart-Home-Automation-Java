@@ -14,13 +14,13 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class PriorityQueue<T> {
     private final ReentrantLock lock = new ReentrantLock();
-    private ArrayList<Task<T>> queue;
+    private final LinkedList<Task<T>> queue;
 
     /**
      * Constructs an empty priority queue.
      */
     public PriorityQueue() {
-        this.queue = new ArrayList<Task<T>>();
+        this.queue = new LinkedList<Task<T>>();
     }
 
     /**
@@ -29,8 +29,8 @@ public class PriorityQueue<T> {
      * @param task The initial task to add to the queue.
      */
     PriorityQueue(Task<T> task) {
-        this.queue = new ArrayList<Task<T>>();
-        queue.add(task);
+        this.queue = new LinkedList<Task<T>>();
+        queue.addEnd(task);
     }
 
     /**
@@ -42,23 +42,23 @@ public class PriorityQueue<T> {
         lock.lock();
         try {
             if (queue.isEmpty()) {
-                queue.add(newTask);
+                queue.addEnd(newTask);
                 return;
             }
 
-            if (newTask.getPriority() < queue.getFirst().getPriority()) {
-                queue.addFirst(newTask);
+            if (newTask.getPriority() < queue.peek().getPriority()) {
+                queue.addFront(newTask);
                 return;
             }
 
-            if (newTask.getPriority() >= queue.getLast().getPriority()) {
-                queue.addLast(newTask);
+            if (newTask.getPriority() >= queue.peekEnd().getPriority()) {
+                queue.addEnd(newTask);
                 return;
             }
-            for (int i = 0; i < queue.size(); i++) {
+            for (int i = 0; i < queue.getSize(); i++) {
 
                 if (queue.get(i).getPriority() > newTask.getPriority()) {
-                    queue.add(i, newTask);
+                    queue.addIndex(newTask, i);
                     break;
                 }
             }
@@ -78,7 +78,7 @@ public class PriorityQueue<T> {
             if (queue.isEmpty()) {
                 return null;
             }
-            return queue.removeFirst();
+            return queue.peekAndRemove();
         }
         finally {
             lock.unlock();
@@ -92,8 +92,9 @@ public class PriorityQueue<T> {
     public void print() {
         lock.lock();
         try {
-            for (Task<T> task : queue) {
-                System.out.printf("Priority: %d, Task: %s\n", task.getPriority(), task.getTask());
+            
+            for (int i = 0; i < queue.getSize(); i++) {
+                System.out.printf("Priority: %d, Task: %s\n", queue.get(i).getPriority(), queue.get(i).getTask());
             }
 
         }

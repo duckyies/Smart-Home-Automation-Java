@@ -8,7 +8,7 @@ import java.util.Comparator;
  *
  * @param <T> The type of the task.
  */
-public class Task<T> {
+public class Task<T> implements Comparable<Task<T>> {
 
     /**
      * The task itself.
@@ -68,6 +68,11 @@ public class Task<T> {
 
     public String toString() {
         return "Task: " + task + ", Priority: " + priority;
+    }
+
+    @Override
+    public int compareTo(@NotNull Task<T> o) {
+        return Integer.compare(this.priority, o.priority);
     }
 }
 

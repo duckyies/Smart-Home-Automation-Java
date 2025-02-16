@@ -65,7 +65,7 @@ public class Device {
 
     @Field("isTurnedOn")
     @JsonProperty("isTurnedOn")
-    private Boolean isTurnedOn = false;
+    private Boolean isTurnedOn = false; 
 
     @Field("basePowerConsumption")
     @JsonProperty("basePowerConsumption")

@@ -68,6 +68,7 @@ public class SmartHome {
     private final PriorityQueue<Device> powerReducibleDevices = new PriorityQueue<>();
     private final PriorityQueue<Device> turnBackOnDevices = new PriorityQueue<>();
     // Logging lists
+
     private final LinkedList<LogTask> loggingList = new LinkedList<>();
     private final LinkedList<LogTask> powerConsumptionLogList = new LinkedList<>();
     private final LinkedList<LogTask> deviceBatteryLogList = new LinkedList<>();
