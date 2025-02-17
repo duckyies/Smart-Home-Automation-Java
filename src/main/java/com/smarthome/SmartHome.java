@@ -1147,6 +1147,37 @@ public class SmartHome {
         deviceBatteryTasks.clear();
     }
 
+    public LinkedList<LogTask> getDeviceBatteryLogList() {
+        return deviceBatteryLogList;
+    }
+
+    public LinkedList<LogTask> getPowerConsumptionLogList() {
+        return powerConsumptionLogList;
+    }
+
+    public LinkedList<LogTask> getLoggingList() {
+        return loggingList;
+    }
+
+    public LinkedList<Rule> getRuleList() {
+        return ruleList;
+    }
+
+    public void clearDeviceBatteryLogList() {
+        deviceBatteryLogList.clear();
+    }
+
+    public PriorityQueue<Device> getDeviceQueue() {
+        return deviceQueue;
+    }
+
+    public PriorityQueue<Device> getPowerReducibleDevices() {
+        return powerReducibleDevices;
+    }
+
+    public PriorityQueue<Device> getTurnBackOnDevices() {
+        return turnBackOnDevices;
+    }
 
     // ========================================================================
     // Test Methods
@@ -1171,4 +1202,6 @@ public class SmartHome {
     public void setScheduler(ScheduledExecutorService scheduler) {
         this.scheduler = scheduler;
     }
+
+
 }

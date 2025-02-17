@@ -1,14 +1,16 @@
 package com.smarthome;
 
+import com.smarthome.datastuctures.PriorityQueue;
 import com.smarthome.devices.Device;
 import com.smarthome.enums.DeviceGroup;
 import com.smarthome.enums.DeviceLocation;
 import com.smarthome.enums.DeviceType;
+import com.smarthome.tasks.LogTask;
+import com.smarthome.tasks.Rule;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+
 import com.smarthome.DeviceService;
 
 @RestController
@@ -185,6 +187,67 @@ public class SmartHomeController {
         ArrayList<String> logs = (ArrayList<String>) smartHome.getDeviceBatteryTasks().clone();
         smartHome.clearDeviceBatteryTasks();
         return logs;
+    }
+
+    @GetMapping("/debug/linkedlists")
+    public Map<String, List<Object>> getLinkedLists() {
+        Map<String, List<Object>> linkedListsData = new HashMap<>();
+        linkedListsData.put("loggingList", convertLogTaskList(smartHome.getLoggingList()));
+        linkedListsData.put("powerConsumptionLogList", convertLogTaskList(smartHome.getPowerConsumptionLogList()));
+        linkedListsData.put("deviceBatteryLogList", convertLogTaskList(smartHome.getDeviceBatteryLogList()));
+        linkedListsData.put("ruleList", convertRuleList(smartHome.getRuleList()));
+        return linkedListsData;
+    }
+
+    @GetMapping("/debug/priorityqueues")
+    public Map<String, List<Object>> getPriorityQueues() {
+        Map<String, List<Object>> priorityQueuesData = new HashMap<>();
+        priorityQueuesData.put("deviceQueue", convertDeviceQueue(smartHome.getDeviceQueue()));
+        priorityQueuesData.put("powerReducibleDevices", convertDeviceQueue(smartHome.getPowerReducibleDevices()));
+        priorityQueuesData.put("turnBackOnDevices", convertDeviceQueue(smartHome.getTurnBackOnDevices()));
+        return priorityQueuesData;
+    }
+
+    // Helper methods to convert internal data structures to JSON-serializable forms
+    private List<Object> convertLogTaskList(com.smarthome.datastuctures.LinkedList<LogTask> list) {
+        List<Object> convertedList = new ArrayList<>();
+
+        for (int i = 0; i < list.getSize(); i++) {
+            Map<String, Object> taskMap = new HashMap<>();
+            taskMap.put("level", list.get(i).getLogLevel().toString());
+            taskMap.put("message", list.get(i).getMessage());
+            convertedList.add(taskMap);
+        }
+
+        return convertedList;
+    }
+
+    private List<Object> convertRuleList(com.smarthome.datastuctures.LinkedList<Rule> list) {
+        List<Object> convertedList = new ArrayList<>();
+        for(int i = 0; i < list.getSize(); i++) {
+            convertedList.add(list.get(i).toString());
+        }
+        return convertedList;
+    }
+
+    private  List<Object> convertDeviceQueue(PriorityQueue<Device> queue) {
+        List<Object> convertedList = new ArrayList<>();
+
+        /*queue.forEach(deviceTask -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("Name",deviceTask.getTask().getDeviceName());
+            map.put("Priority", deviceTask.getPriority());
+            convertedList.add(map);
+        });*/
+
+        for(int i = 0; i < queue.size(); i++) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("Name", queue.get(i).getTask());
+            map.put("Priority", queue.get(i).getPriority());
+            convertedList.add(map);
+        }
+
+        return convertedList;
     }
 
     // ========================================================================

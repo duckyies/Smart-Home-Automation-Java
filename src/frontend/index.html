@@ -5,184 +5,225 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Home Controller</title>
   <link rel="stylesheet" href="./css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <header>
   <div class="header-container">
     <h1>Smart Home Controller</h1>
-    <!-- Placeholder for a Header UI Element (e.g., a settings icon) -->
     <div id="header-ui-element"></div>
   </div>
+  <nav>
+    <button onclick="showPage('page1')">Device List</button>
+    <button onclick="showPage('page2')">Graphs</button>
+    <button onclick="showPage('page3')">Debug</button>
+  </nav>
 </header>
 
 <main>
-  <div class="container">
-    <section class="devices-section">
-      <h2>
-        <span class="icon">⚡️</span>
-        Powered On Devices
-      </h2>
-      <div id="powered-on-devices" class="devices-grid">
-      </div>
-    </section>
+  <div id="page1" class="page">
+    <div class="container">
+      <section class="devices-section">
+        <h2>
+          <span class="icon">⚡️</span>
+          Powered On Devices
+        </h2>
+        <div id="powered-on-devices" class="devices-grid">
+        </div>
+      </section>
 
-    <section class="devices-section">
-      <h2>
-        <span class="icon">🔌</span>
-        Powered Off Devices
-      </h2>
-      <div id="powered-off-devices" class="devices-grid">
-      </div>
-    </section>
+      <section class="devices-section">
+        <h2>
+          <span class="icon">🔌</span>
+          Powered Off Devices
+        </h2>
+        <div id="powered-off-devices" class="devices-grid">
+        </div>
+      </section>
+    </div>
+    <div class="container">
+      <section class="form-section">
+        <h2>Add Device</h2>
+        <form id="add-device-form">
+          <div class="form-group">
+            <label for="device-name">Device Name</label>
+            <input type="text" id="device-name" name="device-name" placeholder="Enter device name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="device-type">Device Type</label>
+            <select id="device-type" name="device-type" required>
+              <option value="DECORATIVE">Decorative</option>
+              <option value="NECESSARY">Necessary</option>
+              <option value="HEALTH">Health</option>
+              <option value="ENTERTAINMENT">Entertainment</option>
+              <option value="SECURITY">Security</option>
+              <option value="PERSONALCARE">Personal Care</option>
+              <option value="CONNECTIVITY">Connectivity</option>
+              <option value="COOKING">Cooking</option>
+              <option value="LUXURY">Luxury</option>
+              <option value="OFFICE">Office</option>
+              <option value="OTHERS">Others</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="device-group">Device Group</label>
+            <select id="device-group" name="device-group" required>
+              <option value="LIGHTS">Lights</option>
+              <option value="FANS">Fans</option>
+              <option value="ALARMS">Alarms</option>
+              <option value="CAMERAS">Cameras</option>
+              <option value="AIRCONDITIONERS">Air Conditioners</option>
+              <option value="HEATERS">Heaters</option>
+              <option value="APPLIANCES">Appliances</option>
+              <option value="GARDENING">Gardening</option>
+              <option value="ENTERTAINMENT">Entertainment</option>
+              <option value="CLEANING">Cleaning</option>
+              <option value="LAUNDRY">Laundry</option>
+              <option value="WEARABLES">Wearables</option>
+              <option value="BATHROOM">Bathroom</option>
+              <option value="OTHERS">Others</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="device-location">Device Location</label>
+            <select id="device-location" name="device-location" required>
+              <option value="LIVINGROOM">Living Room</option>
+              <option value="BEDROOM">Bedroom</option>
+              <option value="BEDROOM2">Bedroom 2</option>
+              <option value="BEDROOM3">Bedroom 3</option>
+              <option value="BEDROOM4">Bedroom 4</option>
+              <option value="GARDEN">Garden</option>
+              <option value="OFFICE">Office</option>
+              <option value="ENTRANCE">Entrance</option>
+              <option value="KITCHEN">Kitchen</option>
+              <option value="BATHROOM">Bathroom</option>
+              <option value="BATHROOM2">Bathroom 2</option>
+              <option value="BATHROOM3">Bathroom 3</option>
+              <option value="OTHERS">Others</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="device-power-consumption">Power Consumption (W)</label>
+            <input type="number" id="device-power-consumption" name="device-power-consumption" placeholder="Enter power consumption" required>
+          </div>
+
+          <div class="form-group">
+            <label for="device-max-battery-capacity">Max Battery Capacity (mAH)</label>
+            <input type="number" id="device-max-battery-capacity" name="device-max-battery-capacity" placeholder="Enter max battery capacity" required>
+          </div>
+
+          <div class="form-group">
+            <label for="device-power-level">Power Level</label>
+            <input type="number" id="device-power-level" name="device-power-level" placeholder="Enter power level (0-5)" required min="0" max="5">
+          </div>
+
+          <button type="submit" class="btn">Add Device</button>
+        </form>
+      </section>
+
+      <section class="form-section">
+        <h2>Manage Location & Devices</h2>
+
+        <form id="remove-location-form" class="form-group">
+        </form>
+
+        <form id="add-person-form" class="form-group">
+          <label for="location-add-person-select">Select Location to Add Person</label>
+          <select id="location-add-person-select" name="location-add-person-select" required>
+          </select>
+          <button type="submit" class="btn">Add Person</button>
+        </form>
+
+        <form id="remove-person-form" class="form-group">
+          <label for="location-remove-person-select">Select Location to Remove Person</label>
+          <select id="location-remove-person-select" name="location-remove-person-select" required>
+          </select>
+          <button type="submit" class="btn btn-danger">Remove Person</button>
+        </form>
+
+        <form id="remove-device-form" class="form-group">
+          <label for="device-select">Select Device to Remove</label>
+          <select id="device-select" name="device-select" required>
+          </select>
+          <button type="submit" class="btn btn-danger">Remove Device</button>
+        </form>
+      </section>
+    </div>
+    <div class="container">
+      <section class="logs-section">
+        <h2>Logs</h2>
+        <div class="log-boxes">
+          <div class="log-box-container" id="log-box-1">
+            <h3> ⠀  ⠀ ⠀⠀ ⠀ ⠀ ⠀ ⠀Info Logs</h3>
+            <div class="log-box">
+              <pre id="info-logs"></pre>
+            </div>
+          </div>
+          <div class="log-box-container" id="log-box-2">
+            <h3> ⠀ ⠀ ⠀ ⠀ ⠀ ⠀Warning Logs</h3>
+            <div class="log-box">
+              <pre id="warning-logs"></pre>
+            </div>
+          </div>
+          <div class="log-box-container" id="log-box-3">
+            <h3> ⠀ ⠀ ⠀ ⠀ ⠀ ⠀ ⠀Severe Logs</h3>
+            <div class="log-box">
+              <pre id="error-logs"></pre>
+            </div>
+          </div>
+          <div class="log-box-container" id="log-box-4">
+            <h3> ⠀ ⠀   ⠀ ⠀⠀Device Battery Logs</h3>
+            <div class="log-box">
+              <pre id="debug-logs"></pre>
+            </div>
+          </div>
+          <div class="log-box-container" id="log-box-5">
+            <h3>⠀ ⠀ ⠀ Power Consumption Logs</h3>
+            <div class="log-box">
+              <pre id="verbose-logs"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
-  <div class="container">
-    <section class="form-section">
-      <h2>Add Device</h2>
-      <form id="add-device-form">
-        <div class="form-group">
-          <label for="device-name">Device Name</label>
-          <input type="text" id="device-name" name="device-name" placeholder="Enter device name" required>
-        </div>
 
-        <div class="form-group">
-          <label for="device-type">Device Type</label>
-          <select id="device-type" name="device-type" required>
-            <option value="DECORATIVE">Decorative</option>
-            <option value="NECESSARY">Necessary</option>
-            <option value="HEALTH">Health</option>
-            <option value="ENTERTAINMENT">Entertainment</option>
-            <option value="SECURITY">Security</option>
-            <option value="PERSONALCARE">Personal Care</option>
-            <option value="CONNECTIVITY">Connectivity</option>
-            <option value="COOKING">Cooking</option>
-            <option value="LUXURY">Luxury</option>
-            <option value="OFFICE">Office</option>
-            <option value="OTHERS">Others</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="device-group">Device Group</label>
-          <select id="device-group" name="device-group" required>
-            <option value="LIGHTS">Lights</option>
-            <option value="FANS">Fans</option>
-            <option value="ALARMS">Alarms</option>
-            <option value="CAMERAS">Cameras</option>
-            <option value="AIRCONDITIONERS">Air Conditioners</option>
-            <option value="HEATERS">Heaters</option>
-            <option value="APPLIANCES">Appliances</option>
-            <option value="GARDENING">Gardening</option>
-            <option value="ENTERTAINMENT">Entertainment</option>
-            <option value="CLEANING">Cleaning</option>
-            <option value="LAUNDRY">Laundry</option>
-            <option value="WEARABLES">Wearables</option>
-            <option value="BATHROOM">Bathroom</option>
-            <option value="OTHERS">Others</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="device-location">Device Location</label>
-          <select id="device-location" name="device-location" required>
-            <option value="LIVINGROOM">Living Room</option>
-            <option value="BEDROOM">Bedroom</option>
-            <option value="BEDROOM2">Bedroom 2</option>
-            <option value="BEDROOM3">Bedroom 3</option>
-            <option value="BEDROOM4">Bedroom 4</option>
-            <option value="GARDEN">Garden</option>
-            <option value="OFFICE">Office</option>
-            <option value="ENTRANCE">Entrance</option>
-            <option value="KITCHEN">Kitchen</option>
-            <option value="BATHROOM">Bathroom</option>
-            <option value="BATHROOM2">Bathroom 2</option>
-            <option value="BATHROOM3">Bathroom 3</option>
-            <option value="OTHERS">Others</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="device-power-consumption">Power Consumption (W)</label>
-          <input type="number" id="device-power-consumption" name="device-power-consumption" placeholder="Enter power consumption" required>
-        </div>
-
-        <div class="form-group">
-          <label for="device-max-battery-capacity">Max Battery Capacity (mAH)</label>
-          <input type="number" id="device-max-battery-capacity" name="device-max-battery-capacity" placeholder="Enter max battery capacity" required>
-        </div>
-
-        <div class="form-group">
-          <label for="device-power-level">Power Level</label>
-          <input type="number" id="device-power-level" name="device-power-level" placeholder="Enter power level (0-5)" required min="0" max="5">
-        </div>
-
-        <button type="submit" class="btn">Add Device</button>
-      </form>
-    </section>
-
-    <section class="form-section">
-      <h2>Manage Location & Devices</h2>
-
-      <form id="remove-location-form" class="form-group">
-      </form>
-
-      <form id="add-person-form" class="form-group">
-        <label for="location-add-person-select">Select Location to Add Person</label>
-        <select id="location-add-person-select" name="location-add-person-select" required>
-        </select>
-        <button type="submit" class="btn">Add Person</button>
-      </form>
-
-      <form id="remove-person-form" class="form-group">
-        <label for="location-remove-person-select">Select Location to Remove Person</label>
-        <select id="location-remove-person-select" name="location-remove-person-select" required>
-        </select>
-        <button type="submit" class="btn btn-danger">Remove Person</button>
-      </form>
-
-      <form id="remove-device-form" class="form-group">
-        <label for="device-select">Select Device to Remove</label>
-        <select id="device-select" name="device-select" required>
-        </select>
-        <button type="submit" class="btn btn-danger">Remove Device</button>
-      </form>
-    </section>
+  <div id="page2" class="page" style="display: none;">
+    <h2>Graphs</h2>
+    <div class="chart-container">
+      <canvas id="powerConsumptionChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="deviceTypeChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="deviceLocationChart"></canvas>
+    </div>
   </div>
-  <div class="container">
-    <section class="logs-section">
-      <h2>Logs</h2>
-      <div class="log-boxes">
-        <div class="log-box-container" id="log-box-1">
-          <h3> ⠀  ⠀ ⠀⠀ ⠀ ⠀ ⠀ ⠀Info Logs</h3>
-          <div class="log-box">
-            <pre id="info-logs"></pre>
-          </div>
-        </div>
-        <div class="log-box-container" id="log-box-2">
-          <h3> ⠀ ⠀ ⠀ ⠀ ⠀ ⠀Warning Logs</h3>
-          <div class="log-box">
-            <pre id="warning-logs"></pre>
-          </div>
-        </div>
-        <div class="log-box-container" id="log-box-3">
-          <h3> ⠀ ⠀ ⠀ ⠀ ⠀ ⠀ ⠀Severe Logs</h3>
-          <div class="log-box">
-            <pre id="error-logs"></pre>
-          </div>
-        </div>
-        <div class="log-box-container" id="log-box-4">
-          <h3> ⠀ ⠀   ⠀ ⠀⠀Device Battery Logs</h3>
-          <div class="log-box">
-            <pre id="debug-logs"></pre>
-          </div>
-        </div>
-        <div class="log-box-container" id="log-box-5">
-          <h3>⠀ ⠀ ⠀ Power Consumption Logs</h3>
-          <div class="log-box">
-            <pre id="verbose-logs"></pre>
-          </div>
-        </div>
+
+  <div id="page3" class="page" style="display: none;">
+    <h2>Debug Section</h2>
+    <div id="debug-info">
+      <div id="device-details">
+        <!-- Device details will be displayed here -->
       </div>
-    </section>
+
+    </div>
+    <div class = "debug-data-structures">
+      <h3>Data Structures</h3>
+      <div id="linked-lists-info">
+        <h4>Linked Lists</h4>
+        <!-- LinkedList contents -->
+      </div>
+      <div id="priority-queues-info">
+        <h4>Priority Queues</h4>
+        <!-- PriorityQueue contents -->
+      </div>
+    </div>
   </div>
 </main>
 

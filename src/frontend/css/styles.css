@@ -236,3 +236,91 @@ select:focus {
   }
 
 }
+
+/* Existing CSS... */
+
+.chart-container {
+  width: 80%; /* Adjust as needed */
+  margin: 20px auto;
+  background-color: #282828; /* Dark background for the chart area */
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Styles for navigation */
+nav {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+nav button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+nav button:hover {
+  background-color: #3e8e41;
+}
+
+/* Make sure pages take up the full width */
+.page {
+  width: 100%;
+}
+
+/*Debug Section*/
+
+.debug-data-structures {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #282828;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.debug-data-structures h3, .debug-data-structures h4 {
+  color: #4fc3f7;
+  margin-bottom: 10px;
+}
+
+#device-details {
+  padding: 15px;
+  background-color: #333;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+#device-details p {
+  margin: 5px 0;
+  color: #e0e0e0;
+}
+#linked-lists-info, #priority-queues-info {
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #333;
+  border-radius: 8px;
+}
+
+/* Style for individual list items */
+#linked-lists-info ul, #priority-queues-info ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#linked-lists-info li, #priority-queues-info li {
+  background-color: #444;
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 4px;
+  color: #e0e0e0;
+}

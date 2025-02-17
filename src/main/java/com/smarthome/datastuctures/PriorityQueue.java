@@ -293,4 +293,13 @@ public class PriorityQueue<T> {
             lock.unlock();
         }
     }
+
+    public Task<T> get(int index) {
+        lock.lock();
+        try {
+            return queue.get(index);
+        } finally {
+            lock.unlock();
+        }
+    }
 }
