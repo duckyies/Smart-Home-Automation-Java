@@ -87,8 +87,3 @@ This project implements a smart home automation system using Java using linked l
 * **Integration with other Smart Home Platforms:**
 * **Improved UI:**
 * **Real-time data visualization**
-
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request.
