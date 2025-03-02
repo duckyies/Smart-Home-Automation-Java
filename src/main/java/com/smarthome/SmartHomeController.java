@@ -37,6 +37,7 @@ public class SmartHomeController {
         smartHome.addDevice(smartHome.createDevice("Chandelier", DeviceType.DeviceTypeEnum.DECORATIVE, DeviceGroup.DeviceGroupEnum.LIGHTS, DeviceLocation.DeviceLocationEnum.LIVINGROOM, true, 100, 0.50, 4500, 1));
         smartHome.addDevice(smartHome.createDevice("Living Room AC", DeviceType.DeviceTypeEnum.NECESSARY, DeviceGroup.DeviceGroupEnum.AIRCONDITIONERS, DeviceLocation.DeviceLocationEnum.LIVINGROOM, true, 0, 0.20, 0, 1));
 
+        System.out.println("Access the API at C:\\Users\\lenovo\\Documents\\GitHub\\Smart-Home-Automation-Java\\src\\frontend\\index.html");
     }
 
 
@@ -208,7 +209,6 @@ public class SmartHomeController {
         return priorityQueuesData;
     }
 
-    // Helper methods to convert internal data structures to JSON-serializable forms
     private List<Object> convertLogTaskList(com.smarthome.datastuctures.LinkedList<LogTask> list) {
         List<Object> convertedList = new ArrayList<>();
 

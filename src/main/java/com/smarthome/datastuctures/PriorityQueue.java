@@ -58,7 +58,7 @@ public class PriorityQueue<T> {
             for (int i = 0; i < queue.getSize(); i++) {
 
                 if (queue.get(i).getPriority() > newTask.getPriority()) {
-                    queue.addIndex(newTask, i);
+                    queue.addPosition(newTask, i);
                     break;
                 }
             }
@@ -205,7 +205,7 @@ public class PriorityQueue<T> {
 
             for (int i = 0; i < queue.getSize(); i++) {
                 if (queue.get(i).getTask().equals(task)) {
-                    queue.removeIndex(i);
+                    queue.removePosition(i);
                     break;
                 }
             }
@@ -243,7 +243,7 @@ public class PriorityQueue<T> {
             for (int i = 0; i < queue.getSize(); i++) {
                 if (queue.get(i).getTask().equals(task.getTask())) {
                     Task<T> newTask = new Task<>(task.getTask(), priority);
-                    queue.removeIndex(i);
+                    queue.removePosition(i);
                     enqueue(newTask);
                 }
             }

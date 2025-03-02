@@ -1,10 +1,7 @@
 package com.smarthome.datastuctures;
 import com.smarthome.misc.EmptyListAccessException;
-import org.jetbrains.annotations.NotNull;
-import java.util.Comparator;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Consumer;
 
 
 /**
@@ -236,16 +233,16 @@ public class LinkedList<T extends Comparable<T>> {
     }
 
     /**
-     * Adds a new element at a specific index in the list.
+     * Adds a new element at a specific position in the list.
      *
      * @param val   the value to add to the list.
-     * @param index the index at which to insert the new element.
-     * @throws IndexOutOfBoundsException if the index is out of bounds.
+     * @param position the position at which to insert the new element.
+     * @throws IndexOutOfBoundsException if the position is out of bounds.
      */
-    public void addIndex(T val, int index) {
+    public void addPosition(T val, int position) {
         Node<T> newNode = new Node<>(val);
 
-        if (index == 0) {
+        if (position == 0) {
             addFront(val);
             return;
         }
@@ -254,14 +251,14 @@ public class LinkedList<T extends Comparable<T>> {
         lock.lock();
         try {
             if (tempNode == null) {
-                throw new IndexOutOfBoundsException("Index out of bounds");
+                throw new IndexOutOfBoundsException("Position out of bounds");
             }
-            while (index != 1) {
+            while (position != 1) {
                 if (tempNode.next == null) {
-                    throw new IndexOutOfBoundsException("Index out of bounds");
+                    throw new IndexOutOfBoundsException("Position out of bounds");
                 }
                 tempNode = tempNode.next;
-                index--;
+                position--;
             }
 
             Node<T> temp = tempNode.next;
@@ -332,19 +329,19 @@ public class LinkedList<T extends Comparable<T>> {
     }
 
     /**
-     * Sets the value of the element at a specific index.
+     * Sets the value of the element at a specific position.
      *
-     * @param index the index of the element to update.
+     * @param position the position of the element to update.
      * @param value the new value for the element.
      * @throws EmptyListAccessException if the list is empty.
-     * @throws IndexOutOfBoundsException if the index is out of bounds.
+     * @throws IndexOutOfBoundsException if the position is out of bounds.
      */
-    public void set(int index, T value) {
+    public void set(int position, T value) {
         if (head == null) {
             throw new EmptyListAccessException("List is empty!");
         }
 
-        if (index == 0) {
+        if (position == 0) {
             head.val = value;
             return;
         }
@@ -352,12 +349,12 @@ public class LinkedList<T extends Comparable<T>> {
 
         lock.lock();
         try {
-            while (index != 1) {
+            while (position != 1) {
                 if (tempNode.next.next == null) {
-                    throw new IndexOutOfBoundsException("Index out of bounds");
+                    throw new IndexOutOfBoundsException("Position out of bounds");
                 }
                 tempNode = tempNode.next;
-                index--;
+                position--;
             }
 
             tempNode.next.val = value;
@@ -478,22 +475,22 @@ public class LinkedList<T extends Comparable<T>> {
     }
 
     /**
-     * Returns the index of the first occurrence of a specific value in the list.
+     * Returns the position of the first occurrence of a specific value in the list.
      *
      * @param value the value to search for.
-     * @return the index of the first occurrence of the value, or -1 if the value is not found.
+     * @return the position of the first occurrence of the value, or -1 if the value is not found.
      */
-    public int indexOf(T value) {
+    public int positionOf(T value) {
         Node<T> temp = head;
-        int index = 0;
+        int position = 0;
 
         lock.lock();
         try {
             while (temp != null) {
                 if (temp.val.equals(value)) {
-                    return index;
+                    return position;
                 }
-                index++;
+                position++;
                 temp = temp.next;
 
             }
@@ -505,36 +502,36 @@ public class LinkedList<T extends Comparable<T>> {
     }
 
     /**
-     * Returns the value of the element at a specific index.
+     * Returns the value of the element at a specific position.
      *
-     * @param index the index of the element to retrieve.
-     * @return the value of the element at the specified index.
+     * @param position the position of the element to retrieve.
+     * @return the value of the element at the specified position.
      * @throws EmptyListAccessException if the list is empty/
-     * @throws IndexOutOfBoundsException if the index is out of bounds.
+     * @throws IndexOutOfBoundsException if the position is out of bounds.
      */
-    public T get(int index) {
+    public T get(int position) {
         if (head == null) {
             throw new EmptyListAccessException("List is empty!");
         }
 
-        if (index == 0) {
+        if (position == 0) {
             return head.val;
         }
 
         Node<T> tempNode = head;
-        int currentIndex = 0;
+        int currentPosition = 0;
 
         lock.lock();
         try {
             while (tempNode != null) {
-                if (currentIndex == index) {
+                if (currentPosition == position) {
                     return tempNode.val;
                 }
                 tempNode = tempNode.next;
-                currentIndex++;
+                currentPosition++;
             }
 
-            throw new IndexOutOfBoundsException("Index out of bounds");
+            throw new IndexOutOfBoundsException("Position out of bounds");
         }
         finally {
             lock.unlock();
@@ -542,29 +539,29 @@ public class LinkedList<T extends Comparable<T>> {
     }
 
     /**
-     * Removes the element at a specific index from the list.
+     * Removes the element at a specific position from the list.
      *
-     * @param index the index of the element to remove.
-     * @throws IndexOutOfBoundsException if the index is out of bounds.
+     * @param position the position of the element to remove.
+     * @throws IndexOutOfBoundsException if the position is out of bounds.
      */
-    public void removeIndex(int index) {
+    public void removePosition(int position) {
 
-        if (index == 0) {
+        if (position == 0) {
             removeFront();
             return;
         }
         Node<T> tempNode = head;
-        int currentIndex = 0;
+        int currentPosition = 0;
 
         lock.lock();
         try {
-            while (tempNode != null && currentIndex < index - 1) {
+            while (tempNode != null && currentPosition < position - 1) {
                 tempNode = tempNode.next;
-                currentIndex++;
+                currentPosition++;
             }
 
             if (tempNode == null || tempNode.next == null) {
-                throw new IndexOutOfBoundsException("Index out of bounds");
+                throw new IndexOutOfBoundsException("Position out of bounds");
             }
 
             tempNode.next = tempNode.next.next;
