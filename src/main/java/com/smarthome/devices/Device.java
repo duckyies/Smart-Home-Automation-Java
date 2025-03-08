@@ -341,7 +341,6 @@ public class Device {
         this.deviceID = deviceID;
     }
 
-
     @Override
     public String toString() {
         return "Device ID: " + deviceID + "\n" +

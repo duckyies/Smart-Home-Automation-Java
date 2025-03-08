@@ -311,7 +311,6 @@ nav button:hover {
   border-radius: 8px;
 }
 
-/* Style for individual list items */
 #linked-lists-info ul, #priority-queues-info ul {
   list-style-type: none;
   padding: 0;

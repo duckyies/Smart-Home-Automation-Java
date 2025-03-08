@@ -34,6 +34,7 @@ import java.util.logging.SimpleFormatter;
  * @author Anirudh Jayan
  * @author Tara Samiksha
  * @author Sarvesh Ram Kumar
+ * @author Aravind S Harilal
  * @version 1.0
  * @since 2021-04-10
  * @see Device
@@ -45,6 +46,7 @@ public class SmartHome {
     // ========================================================================
     // Fields
     // ========================================================================
+
 
     int tickCount = 0;
 
@@ -162,19 +164,9 @@ public class SmartHome {
             poweredOnDevices.add(device);
             device.setTurnedOnTime(date.getTime());
 
-            if (device.getDeviceType().getPriority() == Integer.MAX_VALUE) return;
-            DeviceLocation location = locationMap.get(device.getLocation().name());
+                addToPowerReducible(device);
 
-            deviceQueue.enqueue(new Task<>(device, device.getDeviceType().getPriority() + device.getDeviceGroup().getPriority() + (location.getPeople() * 10)));
-
-            if (device.getPowerLevel() != 0) {
-                if (device.getDeviceType().getPriority() == Integer.MAX_VALUE) return;
-                location = locationMap.get(device.getLocation().name());
-
-                powerReducibleDevices.enqueue(new Task<>(device, device.getDeviceType().getPriority() + device.getDeviceGroup().getPriority() + (location.getPeople() * 10)));
-            }
-
-        } else {
+            } else {
             poweredOffDevices.add(device);
         }
         addToGroupAndType(device);
@@ -189,6 +181,10 @@ public class SmartHome {
         }
 
         poweredOffDevices.remove(device);
+        addToPowerReducible(device);
+    }
+
+    private void addToPowerReducible(@NotNull Device device) {
         if (device.getDeviceType().getPriority() == Integer.MAX_VALUE) return;
         DeviceLocation location = locationMap.get(device.getLocation().name());
 
@@ -667,8 +663,6 @@ public class SmartHome {
     public Rule parseRule(@NotNull String ruleString) {
 
         //maybe add if conditions later
-        //like samsung routines idk
-
         /*
          * FLIP - [flip deviceId/deviceName]
          * TURN - [turn deviceId/deviceName on/off]
@@ -982,17 +976,17 @@ public class SmartHome {
         toTurnOn.forEach(this::turnOnDevice);
     }
 
-    private void accidentallyturnedoncheck() {
-        // Implementation for checking accidentally turned on devices
-    }
-
-    private void roommemberscheck() {
-        // Implementation for checking room members presence
-    }
-
-    private void changeMode() {
-        // Implementation for changing device modes
-    }
+//    private void accidentallyturnedoncheck() {
+//        // Implementation for checking accidentally turned on devices
+//    }
+//
+//    private void roommemberscheck() {
+//        // Implementation for checking room members presence
+//    }
+//
+//    private void changeMode() {
+//        // Implementation for changing device modes
+//    }
 
     // ========================================================================
     // Utility and Helper Methods

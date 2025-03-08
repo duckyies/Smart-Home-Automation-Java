@@ -1,15 +1,12 @@
 const apiUrl = 'http://localhost:8080/devices';
 let powerConsumptionChart, deviceTypeChart, deviceLocationChart; // Declare chart variables globally
 
-
 // --- Page Switching Logic ---
 function showPage(pageId) {
-  // Hide all pages
   document.querySelectorAll('.page').forEach(page => {
     page.style.display = 'none';
   });
 
-  // Show the selected page
   document.getElementById(pageId).style.display = 'block';
 
   if (pageId === 'page2') {
@@ -156,8 +153,6 @@ async function updateCharts() {
     console.error('Error updating charts:', error);
   }
 }
-
-// --- Existing fetchDevices, toggleDevice, etc. functions ---
 
 async function fetchDevices() {
   try {
@@ -458,7 +453,7 @@ async function fetchAndDisplayDeviceDetails(deviceId) {
 async function fetchAndDisplayDataStructures() {
     try {
         // Fetch LinkedLists
-        const linkedListsResponse = await fetch(`${apiUrl}/debug/linkedlists`);
+        const linkedListsResponse = await fetch(`   ${apiUrl}/debug/linkedlists`);
         if (linkedListsResponse.ok) {
             const linkedLists = await linkedListsResponse.json();
             const linkedListsContainer = document.getElementById('linked-lists-info');
@@ -502,5 +497,5 @@ fetchLocations();
 updateLogBoxes();
 setInterval(updateLogBoxes, 5000);
 setInterval(fetchDevices, 1000);
-setInterval(fetchLocations, 1100);
+setInterval(fetchLocations, 10000);
 setInterval(fetchAndDisplayDataStructures, 5000);
