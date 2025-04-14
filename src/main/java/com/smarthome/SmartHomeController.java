@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-import com.smarthome.DeviceService;
 
 @RestController
 @RequestMapping("/devices")
@@ -19,10 +18,8 @@ import com.smarthome.DeviceService;
 public class SmartHomeController {
 
     public SmartHome smartHome = new SmartHome(10,25,false);
-    private final DeviceService deviceService;
 
-    public SmartHomeController(com.smarthome.DeviceService deviceService) {
-        this.deviceService = deviceService;
+    public SmartHomeController() {
         smartHome.addDevice(smartHome.createDevice("Living Room Light", DeviceType.DeviceTypeEnum.DECORATIVE, DeviceGroup.DeviceGroupEnum.LIGHTS, DeviceLocation.DeviceLocationEnum.LIVINGROOM, true, 100, 0.15, 5000, 1));
         smartHome.addDevice(smartHome.createDevice("Bedroom Light", DeviceType.DeviceTypeEnum.ENTERTAINMENT, DeviceGroup.DeviceGroupEnum.LIGHTS, DeviceLocation.DeviceLocationEnum.BEDROOM, true, 100, 0.10, 4000, 1));
         smartHome.addDevice(smartHome.createDevice("Chandelier", DeviceType.DeviceTypeEnum.DECORATIVE, DeviceGroup.DeviceGroupEnum.LIGHTS, DeviceLocation.DeviceLocationEnum.LIVINGROOM, true, 100, 0.50, 4500, 1));

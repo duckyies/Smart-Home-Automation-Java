@@ -20,7 +20,7 @@ public class PriorityQueue<T> {
      * Constructs an empty priority queue.
      */
     public PriorityQueue() {
-        this.queue = new LinkedList<Task<T>>();
+        this.queue = new LinkedList<>();
     }
 
     /**
@@ -29,7 +29,7 @@ public class PriorityQueue<T> {
      * @param task The initial task to add to the queue.
      */
     public PriorityQueue(Task<T> task) {
-        this.queue = new LinkedList<Task<T>>();
+        this.queue = new LinkedList<>();
         queue.addEnd(task);
     }
 
@@ -86,24 +86,6 @@ public class PriorityQueue<T> {
     }
 
     /**
-     * Prints the priority and task of each element in the queue to the console.
-     */
-
-    public void print() {
-        lock.lock();
-        try {
-
-            for (int i = 0; i < queue.getSize(); i++) {
-                System.out.printf("Priority: %d, Task: %s\n", queue.get(i).getPriority(), queue.get(i).getTask());
-            }
-
-        }
-        finally {
-            lock.unlock();
-        }
-    }
-
-    /**
      * Returns the highest priority task in the queue without removing it.
      *
      * @return The highest priority task, or null if the queue is empty.
@@ -115,25 +97,6 @@ public class PriorityQueue<T> {
                 return null;
             }
             return queue.peek();
-        }
-        finally {
-            lock.unlock();
-        }
-    }
-
-    /**
-     * Returns a new ArrayList containing all the tasks currently in the priority queue.
-     *
-     * @return A new ArrayList containing all the tasks in the queue.
-     */
-    public ArrayList<Task<T>> getQueue() {
-        lock.lock();
-        try {
-            ArrayList<Task<T>> queueList = new ArrayList<>();
-            for (int i = 0; i < queue.getSize(); i++) {
-                queueList.add(queue.get(i));
-            }
-            return queueList;
         }
         finally {
             lock.unlock();
@@ -205,7 +168,8 @@ public class PriorityQueue<T> {
 
             for (int i = 0; i < queue.getSize(); i++) {
                 if (queue.get(i).getTask().equals(task)) {
-                    queue.removePosition(i);
+                    updatePriority(queue.get(i), Integer.MIN_VALUE);
+                    dequeue();
                     break;
                 }
             }

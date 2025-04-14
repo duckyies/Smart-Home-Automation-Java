@@ -1,6 +1,5 @@
 package com.smarthome.datastuctures;
 import com.smarthome.misc.EmptyListAccessException;
-import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 
@@ -53,48 +52,6 @@ public class LinkedList<T extends Comparable<T>> {
     }
 
     /**
-     * Constructs a linked list with a single element.
-     *
-     * @param val the value of the first element in the list.
-     */
-    LinkedList(T val) {
-        this.head = new Node<>(val);
-    }
-
-    /**
-     * Constructs a linked list from an array of elements.
-     *
-     * @param arr the array of elements to add to the list.
-     */
-    LinkedList(T[] arr) {
-        for (T val : arr) {
-            addEnd(val);
-        }
-    }
-
-    /**
-     * Constructs a linked list from a {@link List} of elements
-     *
-     * @param arr the list of elements to add to the linked list.
-     */
-    LinkedList(List<T> arr) {
-        for (T val : arr) {
-            addEnd(val);
-        }
-    }
-
-    /**
-     * Constructs a linked list from an {@link ArrayList} of elements.
-     *
-     * @param arr the array list of elements to add to the linked list.
-     */
-    LinkedList(ArrayList<T> arr) {
-        for (T val : arr) {
-            addEnd(val);
-        }
-    }
-
-    /**
      * Adds a new element to the beginning of the list.
      *
      * @param val the value to add to the front of the list.
@@ -114,18 +71,18 @@ public class LinkedList<T extends Comparable<T>> {
      *
      * @return the value of the first element.
      */
-        public T peek() {
-            if(head == null) {
-                return null;
-            }
-            lock.lock();
-            try {
-                return head.val;
-            }
-            finally {
-                lock.unlock();
-            }
+    public T peek() {
+        if(head == null) {
+            return null;
         }
+        lock.lock();
+        try {
+            return head.val;
+        }
+        finally {
+            lock.unlock();
+        }
+    }
 
     /**
      * Retrieves and removes the value of the first element in the list.
@@ -270,42 +227,6 @@ public class LinkedList<T extends Comparable<T>> {
     }
 
     /**
-     * Prints the elements of the list to the console.
-     */
-    public void printList() {
-        Node<T> temp = head;
-
-        lock.lock();
-        try {
-            while (temp != null) {
-                System.out.print(temp.val + " ");
-                temp = temp.next;
-            }
-        }
-        finally {
-            System.out.println();
-            lock.unlock();
-        }
-    }
-
-    /**
-     * Extends the list by adding elements from an array to the end of the list.
-     *
-     * @param arr the array of elements to add.
-     */
-    public void extendFromArray(T[] arr) {
-        lock.lock();
-        try {
-            for (T val : arr) {
-                addEnd(val);
-            }
-        }
-        finally {
-            lock.unlock();
-        }
-    }
-
-    /**
      * Returns the number of elements in the list.
      *
      * @return the size of the list.
@@ -365,47 +286,6 @@ public class LinkedList<T extends Comparable<T>> {
     }
 
     /**
-     * Removes the first element from the list.
-     *
-     * @throws EmptyListAccessException if the list is empty.
-     */
-    public void removeFront() {
-        if (head == null) {
-            throw new EmptyListAccessException("List is empty!");
-        }
-        lock.lock();
-        try {
-            head = head.next;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    /**
-     * Removes the last element from the list.
-     *
-     * @throws EmptyListAccessException if the list is empty.
-     */
-    public void removeEnd() {
-        if (head == null) {
-            throw new EmptyListAccessException("List is empty!");
-        }
-
-        Node<T> temp = head;
-
-        lock.lock();
-        try {
-            while (temp.next.next != null) {
-                temp = temp.next;
-            }
-        }
-        finally {
-            lock.unlock();
-        }
-        temp.next = null;
-    }
-
-    /**
      * Checks if the list is empty.
      *
      * @return {@code true} if the list contains no elements, {@code false} otherwise.
@@ -414,27 +294,6 @@ public class LinkedList<T extends Comparable<T>> {
         return head == null;
     }
 
-    /**
-     * Creates and returns an {@link ArrayList} containing the elements of this linked list in the same order.
-     *
-     * @return an {@link ArrayList} representation of the linked list.
-     */
-    public ArrayList<T> makeArrayList() {
-        ArrayList<T> list = new ArrayList<>();
-        Node<T> temp = head;
-
-        lock.lock();
-        try {
-            while (temp != null) {
-                list.add(temp.val);
-                temp = temp.next;
-            }
-            return list;
-        }
-        finally {
-            lock.unlock();
-        }
-    }
 
     /**
      * Removes all elements from the listy.
@@ -468,33 +327,6 @@ public class LinkedList<T extends Comparable<T>> {
 
             }
             return false;
-        }
-        finally {
-            lock.unlock();
-        }
-    }
-
-    /**
-     * Returns the position of the first occurrence of a specific value in the list.
-     *
-     * @param value the value to search for.
-     * @return the position of the first occurrence of the value, or -1 if the value is not found.
-     */
-    public int positionOf(T value) {
-        Node<T> temp = head;
-        int position = 0;
-
-        lock.lock();
-        try {
-            while (temp != null) {
-                if (temp.val.equals(value)) {
-                    return position;
-                }
-                position++;
-                temp = temp.next;
-
-            }
-            return -1;
         }
         finally {
             lock.unlock();
@@ -547,7 +379,7 @@ public class LinkedList<T extends Comparable<T>> {
     public void removePosition(int position) {
 
         if (position == 0) {
-            removeFront();
+            peekAndRemove();
             return;
         }
         Node<T> tempNode = head;
@@ -568,32 +400,6 @@ public class LinkedList<T extends Comparable<T>> {
         }
         finally {
             lock.unlock();
-        }
-    }
-
-    /**
-     * Reverses the order of the elements in the list.
-     */
-    public void reverse() {
-        ArrayList<T> tempArray = makeArrayList();
-        List<T> temp = tempArray.reversed();
-        clear();
-
-        for (T val : temp) {
-            addEnd(val);
-        }
-    }
-
-    /**
-     * Sorts the elements of the list in their natural ascending order.
-     */
-    public void sort() {
-        ArrayList<T> tempArray = makeArrayList();
-        tempArray.sort(null);
-        clear();
-
-        for (T val : tempArray) {
-            addEnd(val);
         }
     }
 }

@@ -39,7 +39,7 @@ public class Main {
 
         while (true) {
             try {
-                Thread.sleep(1); // Sleep to reduce CPU usage
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

@@ -390,7 +390,7 @@ async function updateLogBoxes() {
             const response = await fetch(apiUrl + log.url);
             const logText = (await response.text()).replaceAll('"', '').replaceAll("[", "").replaceAll("]", "");
             const logBox = document.getElementById(log.id);
-            if (logText != "") logBox.textContent += logText + '\n';
+            if (logText.trim() !== "") logBox.textContent += logText + '\n';
 
             logBox.parentNode.scrollTop = logBox.parentNode.scrollHeight;
 
@@ -453,7 +453,7 @@ async function fetchAndDisplayDeviceDetails(deviceId) {
 async function fetchAndDisplayDataStructures() {
     try {
         // Fetch LinkedLists
-        const linkedListsResponse = await fetch(`   ${apiUrl}/debug/linkedlists`);
+        const linkedListsResponse = await fetch(`${apiUrl}/debug/linkedlists`);
         if (linkedListsResponse.ok) {
             const linkedLists = await linkedListsResponse.json();
             const linkedListsContainer = document.getElementById('linked-lists-info');
@@ -499,3 +499,4 @@ setInterval(updateLogBoxes, 5000);
 setInterval(fetchDevices, 1000);
 setInterval(fetchLocations, 10000);
 setInterval(fetchAndDisplayDataStructures, 5000);
+setInterval(updateCharts, 30000); // Refresh charts periodically (e.g., every 30s)
