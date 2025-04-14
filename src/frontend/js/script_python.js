@@ -1,7 +1,6 @@
 const apiUrl = 'http://localhost:8080/devices';
-let powerConsumptionChart, deviceTypeChart, deviceLocationChart; // Declare chart variables globally
+let powerConsumptionChart, deviceTypeChart, deviceLocationChart;
 
-// --- Page Switching Logic ---
 function showPage(pageId) {
     document.querySelectorAll('.page').forEach(page => {
         page.style.display = 'none';
@@ -12,25 +11,19 @@ function showPage(pageId) {
         pageElement.style.display = 'block';
     } else {
         console.error(`Page with ID ${pageId} not found.`);
-        // Optionally display a default page or an error message
-        document.getElementById('page1').style.display = 'block'; // Show page1 as fallback
+        document.getElementById('page1').style.display = 'block';
     }
-
 
     if (pageId === 'page2') {
-        updateCharts(); // Update charts when switching to the analytics page
+        updateCharts();
     }
     if (pageId === 'page3') {
-        // Optional: Trigger an initial load/refresh of debug data when switching to page 3
         fetchAndDisplayDataStructures();
-        // Clear previous device details if needed
-        // document.getElementById('device-details').innerHTML = 'Click a device to see details...';
+
     }
 }
 
-// --- Chart Initialization (Called once on initial load) ---
 function initializeCharts() {
-    // Destroy existing charts if they exist to prevent memory leaks and errors
     if (powerConsumptionChart) {
         powerConsumptionChart.destroy();
     }
@@ -44,12 +37,12 @@ function initializeCharts() {
 
     const powerCtx = document.getElementById('powerConsumptionChart').getContext('2d');
     powerConsumptionChart = new Chart(powerCtx, {
-        type: 'bar', // Or 'line', 'pie', etc.
+        type: 'bar',
         data: {
-            labels: [], // Device names or other labels
+            labels: [],
             datasets: [{
                 label: 'Power Consumption (W)',
-                data: [], // Power consumption data
+                data: [],
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1
@@ -61,20 +54,20 @@ function initializeCharts() {
                     beginAtZero: true
                 }
             },
-            responsive: true, // Ensure charts resize
-            maintainAspectRatio: false // Adjust as needed for layout
+            responsive: true,
+            maintainAspectRatio: false
         }
     });
 
 
     const typeCtx = document.getElementById('deviceTypeChart').getContext('2d');
     deviceTypeChart = new Chart(typeCtx, {
-        type: 'pie', // Use a pie chart for device types
+        type: 'pie',
         data: {
-            labels: [], // Device type names
+            labels: [],
             datasets: [{
                 label: 'Number of Devices',
-                data: [], // Count of devices per type
+                data: [],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)',
                     'rgba(255, 206, 86, 0.5)', 'rgba(75, 192, 192, 0.5)',
@@ -102,12 +95,12 @@ function initializeCharts() {
     deviceLocationChart = new Chart(locationCtx, {
         type: 'doughnut',
         data: {
-            labels: [], // Device location names
+            labels: [],
             datasets: [{
                 label: 'Number of Devices',
                 data: [],
-                backgroundColor: [], // Will be generated dynamically
-                borderColor: [],     // Will be generated dynamically
+                backgroundColor: [],
+                borderColor: [],
                 borderWidth: 1
             }]
         },
@@ -118,13 +111,11 @@ function initializeCharts() {
     });
 }
 
-// --- Chart Update Function (Called when switching to page2 or data refresh) ---
 async function updateCharts() {
-    // Ensure charts are initialized before trying to update
     if (!powerConsumptionChart || !deviceTypeChart || !deviceLocationChart) {
         console.warn("Charts not initialized yet. Initializing now.");
-        initializeCharts(); // Attempt to initialize if not already done
-        // You might need a slight delay or retry mechanism if initialization is async
+        initializeCharts();
+
     }
     try {
         const devicesResponse = await fetch(apiUrl);
@@ -134,12 +125,10 @@ async function updateCharts() {
         const devices = await devicesResponse.json();
 
         // --- Power Consumption Chart Update ---
-        // Use snake_case keys from Python JSON
         const powerData = devices.map(device =>
-            // Handle potential null/undefined power_level, default to 0 if off or not applicable
             (device.base_power_consumption || 0) * (device.power_level > 0 ? device.power_level : (device.is_turned_on ? 1 : 0)) // Simple example logic
         );
-        const powerLabels = devices.map(device => device.device_name || 'Unnamed Device'); // Use snake_case
+        const powerLabels = devices.map(device => device.device_name || 'Unnamed Device');
 
         if (powerConsumptionChart) {
             powerConsumptionChart.data.labels = powerLabels;
@@ -151,7 +140,7 @@ async function updateCharts() {
         // --- Device Type Chart Update ---
         const typeCounts = {};
         devices.forEach(device => {
-            const typeKey = device.device_type || 'Unknown Type'; // Use snake_case, handle null/undefined
+            const typeKey = device.device_type || 'Unknown Type';
             typeCounts[typeKey] = (typeCounts[typeKey] || 0) + 1;
         });
 
@@ -163,7 +152,6 @@ async function updateCharts() {
             const bgColors = deviceTypeChart.data.datasets[0].backgroundColor;
             const borderColors = deviceTypeChart.data.datasets[0].borderColor;
             while (bgColors.length < requiredColors) {
-                // Add more default colors if needed
                 bgColors.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.5)`);
                 borderColors.push(bgColors[bgColors.length - 1].replace('0.5', '1'));
             }
@@ -173,7 +161,7 @@ async function updateCharts() {
         // --- Device Location Chart Update ---
         const locationCounts = {};
         devices.forEach(device => {
-            const locKey = device.location || 'Unknown Location'; // Use snake_case (which matches 'location'), handle null/undefined
+            const locKey = device.location || 'Unknown Location';
             locationCounts[locKey] = (locationCounts[locKey] || 0) + 1;
         });
 
@@ -188,9 +176,8 @@ async function updateCharts() {
             const backgroundColors = [];
             const borderColors = [];
             for (let i = 0; i < locationLabels.length; i++) {
-                // Generate visually distinct colors (simple random approach)
                 const color = `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`; // Slightly less transparent
-                const borderColor = color.replace('0.7', '1'); // Make border solid
+                const borderColor = color.replace('0.7', '1');
                 backgroundColors.push(color);
                 borderColors.push(borderColor);
             }
@@ -256,12 +243,11 @@ async function fetchDevices() {
                 </div>
             `;
 
-            // Add click listener to show details on the debug page
             deviceElement.addEventListener('click', (event) => {
-                // Prevent the button inside from triggering this if needed
+
                 if (event.target.tagName !== 'BUTTON') {
                     fetchAndDisplayDeviceDetails(device.device_id);
-                    showPage('page3'); // Switch to the debug page
+                    showPage('page3');
                 }
             });
 
@@ -272,10 +258,9 @@ async function fetchDevices() {
                 poweredOffContainer.appendChild(deviceElement);
             }
 
-            // Populate the remove device dropdown
             const option = document.createElement('option');
-            option.value = device.device_id; // Use snake_case ID
-            option.textContent = `${device.device_name || 'Unnamed'} (${device.location || 'No Location'})`; // Use snake_case name
+            option.value = device.device_id;
+            option.textContent = `${device.device_name || 'Unnamed'} (${device.location || 'No Location'})`;
             removeDeviceSelect.appendChild(option);
         });
 
@@ -285,48 +270,42 @@ async function fetchDevices() {
 }
 
 async function toggleDevice(id, isCurrentlyOn) {
-    console.log(`Toggling device ${id}. Currently on: ${isCurrentlyOn}`); // Debug log
+    console.log(`Toggling device ${id}. Currently on: ${isCurrentlyOn}`);
     const action = isCurrentlyOn ? 'off' : 'on';
     const endpoint = `${apiUrl}/id/${id}/${action}`;
     try {
         const response = await fetch(endpoint, { method: 'PUT' });
         if (!response.ok) {
-            const errorData = await response.json(); // Try to get error details
+            const errorData = await response.json();
             throw new Error(`Failed to toggle device: ${errorData.error || response.statusText}`);
         }
         console.log(`Device ${id} toggled ${action} successfully.`);
-        fetchDevices(); // Refresh the device list
-        // Optionally update charts if power consumption changed significantly
-        // updateCharts();
+        fetchDevices();
     } catch (error) {
         console.error('Error toggling device:', error);
-        alert(`Error toggling device: ${error.message}`); // Show error to user
+        alert(`Error toggling device: ${error.message}`);
     }
 }
 
 
-// --- Add Device Form ---
 document.getElementById('add-device-form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // Get values from the form
     const device_name = document.getElementById('device-name').value;
-    const device_type = document.getElementById('device-type').value; // Assuming value is the string name like 'DECORATIVE'
-    const device_group = document.getElementById('device-group').value; // Assuming value is the string name like 'LIGHTS'
-    const location = document.getElementById('device-location').value; // Assuming value is the string name like 'Living Room'
+    const device_type = document.getElementById('device-type').value;
+    const device_group = document.getElementById('device-group').value;
+    const location = document.getElementById('device-location').value;
     const base_power_consumption = parseFloat(document.getElementById('device-power-consumption').value);
     const power_level = parseInt(document.getElementById('device-power-level').value, 10);
     const max_battery_capacity = parseInt(document.getElementById('device-max-battery-capacity').value, 10);
 
-    // Default values for new device
-    const is_turned_on = false; // Typically start off
-    const battery_level = 100.0; // Assume full battery initially
-    const current_battery_capacity = max_battery_capacity; // Assume full capacity matches max
-    const is_on_battery = false; // Assume plugged in initially unless specified otherwise
-    const is_interacted = false; // Assume not interacted initially
-    const turned_on_time = null; // Off initially
+    const is_turned_on = false;
+    const battery_level = 100.0;
+    const current_battery_capacity = max_battery_capacity;
+    const is_on_battery = false;
+    const is_interacted = false;
+    const turned_on_time = null;
 
-    // Create the payload object with snake_case keys matching Python backend expectations
     const newDevicePayload = {
         device_name,
         device_type,
@@ -336,11 +315,10 @@ document.getElementById('add-device-form').addEventListener('submit', async (e) 
         battery_level,
         base_power_consumption,
         max_battery_capacity,
-        current_battery_capacity, // Send current capacity
+        current_battery_capacity,
         power_level,
-        is_on_battery, // Send battery status
-        is_interacted // Send interaction status
-        // turned_on_time is implicitly null/not set when is_turned_on is false
+        is_on_battery,
+        is_interacted
     };
 
     console.log("Sending new device payload:", newDevicePayload); // Debug log
@@ -349,21 +327,21 @@ document.getElementById('add-device-form').addEventListener('submit', async (e) 
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newDevicePayload) // Send snake_case object
+            body: JSON.stringify(newDevicePayload)
         });
 
         if (!response.ok) {
-            const errorData = await response.json(); // Try to get error details
+            const errorData = await response.json();
             throw new Error(`Failed to add device: ${errorData.error || response.statusText}`);
         }
 
         const result = await response.json();
         console.log("Device added:", result);
 
-        fetchDevices(); // Refresh the list
-        updateCharts(); // Update charts as a new device was added
-        e.target.reset(); // Reset the form
-        alert('Device added successfully!'); // User feedback
+        fetchDevices();
+        updateCharts();
+        e.target.reset();
+        alert('Device added successfully!');
 
     } catch (error) {
         console.error('Error adding device:', error);
@@ -371,7 +349,6 @@ document.getElementById('add-device-form').addEventListener('submit', async (e) 
     }
 });
 
-// --- Remove Device Form ---
 document.getElementById('remove-device-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const deviceId = document.getElementById('device-select').value;
@@ -379,7 +356,6 @@ document.getElementById('remove-device-form').addEventListener('submit', async (
         alert("Please select a device to remove.");
         return;
     }
-    // Optional: Add a confirmation dialog
     if (confirm(`Are you sure you want to remove the selected device (ID: ${deviceId})?`)) {
         removeDevice(deviceId);
     }
@@ -389,12 +365,12 @@ async function removeDevice(deviceId) {
     try {
         const response = await fetch(`${apiUrl}/id/${deviceId}`, { method: 'DELETE' });
         if (!response.ok) {
-            const errorData = await response.json(); // Try to get error details
+            const errorData = await response.json();
             throw new Error(`Failed to remove device: ${errorData.error || response.statusText}`);
         }
         console.log(`Device ${deviceId} removed successfully.`);
-        fetchDevices(); // Refresh the device list
-        updateCharts(); // Update charts
+        fetchDevices();
+        updateCharts();
         alert('Device removed successfully!');
     } catch (error) {
         console.error('Error removing device:', error);
@@ -403,18 +379,14 @@ async function removeDevice(deviceId) {
 }
 
 
-// --- Location and Person Management ---
-
-// Helper to populate select dropdowns
 async function populateSelectWithOptions(selectElementId, endpoint, placeholder) {
     const selectElement = document.getElementById(selectElementId);
     if (!selectElement) {
         console.error(`Select element ${selectElementId} not found`);
         return;
     }
-    selectElement.innerHTML = ''; // Clear existing options
+    selectElement.innerHTML = '';
 
-    // Add placeholder
     if (placeholder) {
         const placeholderOption = document.createElement('option');
         placeholderOption.value = "";
@@ -427,13 +399,13 @@ async function populateSelectWithOptions(selectElementId, endpoint, placeholder)
     try {
         const response = await fetch(endpoint);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const optionsArray = await response.json(); // Expecting an array of strings (locations/types/groups)
+        const optionsArray = await response.json();
 
         if (Array.isArray(optionsArray)) {
             optionsArray.forEach(optionValue => {
                 const optionElement = document.createElement('option');
-                optionElement.value = optionValue; // The value sent to the server
-                optionElement.textContent = optionValue; // The text displayed to the user
+                optionElement.value = optionValue;
+                optionElement.textContent = optionValue;
                 selectElement.appendChild(optionElement);
             });
         } else {
@@ -441,7 +413,6 @@ async function populateSelectWithOptions(selectElementId, endpoint, placeholder)
         }
     } catch (error) {
         console.error(`Error fetching options for ${selectElementId} from ${endpoint}:`, error);
-        // Optionally add an error option to the dropdown
         const errorOption = document.createElement('option');
         errorOption.value = "";
         errorOption.textContent = "Error loading options";
@@ -457,28 +428,22 @@ async function fetchAndPopulateAllSelects() {
     await populateSelectWithOptions('device-group', `${apiUrl}/groups`, '-- Select Group --');
     await populateSelectWithOptions('device-location', `${apiUrl}/locations`, '-- Select Location --');
 
-    // Populate Location Management Selects
     await populateSelectWithOptions('location-add-person-select', `${apiUrl}/locations`, '-- Select Location --');
     await populateSelectWithOptions('location-remove-person-select', `${apiUrl}/locations`, '-- Select Location --');
-    // Assuming you have a remove location dropdown
 }
 
 
-// --- Location Management (Add/Remove Location - Assuming API exists, which it might not based on Python code) ---
-// NOTE: Your provided Python code does not seem to have endpoints for POST/DELETE on /locations directly.
-// The following functions assume such endpoints exist. If not, they won't work.
+
 async function addLocation(locationName) {
-    // This endpoint might not exist in your Python API
-    console.warn("Attempting to add location - ensure POST /locations endpoint exists.");
     if (!locationName || locationName.trim() === '') {
         alert("Please enter a valid location name.");
         return;
     }
     try {
-        const response = await fetch(`${apiUrl}/locations`, { // Assumes POST /locations
+        const response = await fetch(`${apiUrl}/locations`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ location_name: locationName }) // Assuming backend expects snake_case
+            body: JSON.stringify({ location_name: locationName })
         });
         if (response.ok) {
             await fetchAndPopulateAllSelects(); // Repopulate selects
@@ -494,7 +459,6 @@ async function addLocation(locationName) {
 }
 
 async function removeLocation(locationName) {
-    // This endpoint might not exist in your Python API
     console.warn("Attempting to remove location - ensure DELETE /locations/{name} endpoint exists.");
     if (!locationName) {
         alert("Please select a location to remove.");
@@ -504,7 +468,7 @@ async function removeLocation(locationName) {
         return;
     }
     try {
-        const response = await fetch(`${apiUrl}/locations/${locationName}`, { method: 'DELETE' }); // Assumes DELETE /locations/{name}
+        const response = await fetch(`${apiUrl}/locations/${locationName}`, { method: 'DELETE' });
         if (response.ok) {
             await fetchAndPopulateAllSelects(); // Repopulate selects
             alert('Location removed successfully!');
@@ -518,8 +482,7 @@ async function removeLocation(locationName) {
     }
 }
 
-// Event listener for a hypothetical Remove Location form
-document.getElementById('remove-location-form')?.addEventListener('submit', async (e) => { // Use optional chaining in case form doesn't exist
+document.getElementById('remove-location-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const locationName = document.getElementById('location-remove-select')?.value; // Use optional chaining
     if (locationName) {
@@ -529,7 +492,6 @@ document.getElementById('remove-location-form')?.addEventListener('submit', asyn
     }
 });
 
-// Event listener for a hypothetical Add Location form
 document.getElementById('add-location-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const locationName = document.getElementById('new-location-name')?.value; // Assuming input ID
@@ -618,7 +580,6 @@ async function updateLogBoxes() {
     }
 }
 
-// --- Debug Section Functions ---
 
 async function fetchAndDisplayDeviceDetails(deviceId) {
     console.log(`Fetching details for device ID: ${deviceId}`);
@@ -633,7 +594,6 @@ async function fetchAndDisplayDeviceDetails(deviceId) {
         const deviceDetailsContainer = document.getElementById('device-details');
         if (!deviceDetailsContainer) return;
 
-        // Display using snake_case keys
         deviceDetailsContainer.innerHTML = `
             <h3>Device Details: ${device.device_name || 'N/A'}</h3>
             <p><strong>ID:</strong> ${device.device_id !== undefined ? device.device_id : 'N/A'}</p>
@@ -661,8 +621,6 @@ async function fetchAndDisplayDeviceDetails(deviceId) {
     }
 }
 
-
-// Helper to format data structure content for display
 function formatDataStructureContent(data, name) {
     let content = `<h4>${name}</h4>`;
     if (!data || (Array.isArray(data) && data.length === 0)) {
@@ -670,22 +628,20 @@ function formatDataStructureContent(data, name) {
     } else if (Array.isArray(data)) {
         content += "<ul>";
         data.forEach(item => {
-            // Try to stringify nicely, limit length if necessary
             let itemString;
             try {
                 itemString = JSON.stringify(item);
-                if (itemString.length > 150) { // Limit display length
+                if (itemString.length > 150) {
                     itemString = itemString.substring(0, 150) + "... }";
                 }
             } catch {
-                itemString = String(item); // Fallback
+                itemString = String(item);
             }
             content += `<li>${itemString}</li>`;
         });
         content += "</ul>";
     } else {
-        // Fallback for non-array data
-        content += `<pre>${JSON.stringify(data, null, 2)}</pre>`; // Pretty print if object
+        content += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
     }
     return content;
 }
@@ -700,12 +656,10 @@ async function fetchAndDisplayDataStructures() {
     }
 
     try {
-        // Fetch LinkedLists
         const linkedListsResponse = await fetch(`${apiUrl}/debug/linkedlists`);
         if (linkedListsResponse.ok) {
             const linkedLists = await linkedListsResponse.json();
             let llContent = "";
-            // Use the keys returned by the Python API
             llContent += formatDataStructureContent(linkedLists.loggingList, "Logging List");
             llContent += formatDataStructureContent(linkedLists.powerConsumptionLogList, "Power Consumption Logs");
             llContent += formatDataStructureContent(linkedLists.deviceBatteryLogList, "Device Battery Logs");
@@ -715,12 +669,10 @@ async function fetchAndDisplayDataStructures() {
             linkedListsContainer.innerHTML = `<p class="error">Error loading Linked Lists: ${linkedListsResponse.status}</p>`;
         }
 
-        // Fetch PriorityQueues
         const priorityQueuesResponse = await fetch(`${apiUrl}/debug/priorityqueues`);
         if (priorityQueuesResponse.ok) {
             const priorityQueues = await priorityQueuesResponse.json();
             let pqContent = "";
-            // Use the keys returned by the Python API
             pqContent += formatDataStructureContent(priorityQueues.deviceQueue, "Device Queue");
             pqContent += formatDataStructureContent(priorityQueues.powerReducibleDevices, "Power Reducible Devices");
             pqContent += formatDataStructureContent(priorityQueues.turnBackOnDevices, "Turn Back On Devices");
@@ -737,25 +689,21 @@ async function fetchAndDisplayDataStructures() {
 }
 
 
-// --- Initial Function Calls on Page Load ---
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM fully loaded and parsed");
 
-    initializeCharts(); // Initialize charts structures first
-    fetchDevices();     // Fetch initial device list
-    fetchAndPopulateAllSelects(); // Fetch initial location/type/group lists for dropdowns
-    updateLogBoxes();   // Fetch initial logs
-    fetchAndDisplayDataStructures(); // Fetch initial debug data
+    initializeCharts();
+    fetchDevices();
+    fetchAndPopulateAllSelects();
+    updateLogBoxes();
+    fetchAndDisplayDataStructures();
 
-    // Set up intervals for periodic updates
-    // Adjust intervals based on desired refresh rate and server load capacity
+
     setInterval(updateLogBoxes, 5000);
     setInterval(fetchDevices, 1000);
     setInterval(fetchAndPopulateAllSelects, 15000);
     setInterval(fetchAndDisplayDataStructures, 5000);
-    setInterval(updateCharts, 30000); // Refresh charts periodically (e.g., every 30s)
+    setInterval(updateCharts, 10000);
 
-
-    // Show the default page
     showPage('page1');
 });

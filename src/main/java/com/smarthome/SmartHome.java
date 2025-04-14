@@ -976,17 +976,6 @@ public class SmartHome {
         toTurnOn.forEach(this::turnOnDevice);
     }
 
-//    private void accidentallyturnedoncheck() {
-//        // Implementation for checking accidentally turned on devices
-//    }
-//
-//    private void roommemberscheck() {
-//        // Implementation for checking room members presence
-//    }
-//
-//    private void changeMode() {
-//        // Implementation for changing device modes
-//    }
 
     // ========================================================================
     // Utility and Helper Methods
